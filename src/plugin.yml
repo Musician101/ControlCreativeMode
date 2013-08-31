@@ -1,0 +1,64 @@
+name: ControlCreativeMode
+main: musician101.controlcreativemode.ControlCreativeMode
+version: 1.1
+description: Change from creative and survival
+commands:
+   ccm:
+      description: Control how creative mode works.
+      permissions: ccm.use
+      usage: <command>
+      aliases: [bc]
+   creative:
+      description: Change to creative.
+      permissions: ccm.use
+      usage: <command>
+      aliases: [c]
+   survival:
+      description: Change to survival.
+      permissions: ccm.use
+      usage: <command>
+      aliases: [s]
+
+permissions:
+   ccm.*:
+      default: op
+      description: Gives access to all commands.
+      children:
+         ccm.allow.block: true
+         ccm.allow.drop: true
+         ccm.allow.openchests: true
+         ccm.allow.spawn: true
+         ccm.allow.throw: true
+         ccm.keepitems: true
+         ccm.spy: true
+         ccm.use: true
+   ccm.allow.*:
+      default: op
+      description: Allows user/group to bypass all checks.
+      children:
+         ccm.allow.block: true
+         ccm.allow.drop: true
+         ccm.allow.openchests: true
+         ccm.allow.spawn: true
+         ccm.allow.throw: true
+   ccm.allow.block:
+      default: op
+      description: Allows user/group to place all blocks.
+   ccm.allow.drop:
+      default: op
+      description: Allows user/group to drop blocks and items.
+   ccm.allow.openchests:
+      default: op
+      description: Allows user/group to open any block based inventory. (i.e. Chests)
+   ccm.allow.spawn:
+      default: op
+      description: Allows user/group to use spawn eggs.
+   ccm.allow.throw:
+      default: op
+      description: Allows user/group to throw items. (i.e. Chicken Egg, Snowball)
+   ccm.spy:
+      default: op
+      description: Allows user/group to receive warning messages.
+   ccm.use:
+      default: op
+      description: Allows user/group to interact with the plugin.

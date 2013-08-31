@@ -1,0 +1,95 @@
+# Check for updates.
+checkForUpdate: true
+
+# Prevent players from interacting with block based inventories (i.e. Chests, Dispensers, etc.).
+# Use ID's or it won't register
+# Use 0 to allow all blocks and items.
+noBlockBasedInventory:
+  - 23 # Dispenser
+  - 54 # Chest
+  - 61 # Furnace
+  - 62 # Burning Furnace
+  - 116 # Enchantment Table
+  - 130 # Ender Chest
+  - 145 # Avil
+  - 146 # Trapped Chest
+  - 154 # Hopper
+  - 158 # Dropper
+  
+# Prevent players from interacting with entity based inventories (i.e. Storage minecart, Villagers)
+# To enable all entity based mobs, use - none.
+noEntityBasedInventory:
+  - minecart_chest
+  - minecart_hopper
+  - villager
+  
+# Prevent blocks/items from being dropped. Use ID's or it won't register.
+# Use 0 to allow all blocks and items.
+noDrop:
+  - 7 # Bedrock
+  - 8 # Water Source
+  - 9 # Still Water
+  - 10 # Lava Source
+  - 11 # Still Lava
+  - 46 # TNT
+  - 51 # Fire
+  - 52 # Mob Spawner
+  - 97 # Silverfish Blocks
+  - 326 # Water Bucket
+  - 327 # Lava Bucket
+
+# Prevent block placement. Use ID's or it won't register.
+# Use 0 to allow all blocks.
+noPlace:
+  - 7 # Bedrock
+  - 8 # Water Source
+  - 9 # Still Water
+  - 10 # Lava Source
+  - 11 # Still Lava
+  - 46 # TNT
+  - 51 # Fire
+  - 52 # Mob Spawner
+  - 97 # Silverfish Blocks
+  
+# Prevent the use of spawn eggs.
+# To enable all mobs. Simple put - none.
+noSpawn:
+  - creeper
+  - skeleton
+  - spider
+  - zombie
+  - slime
+  - ghast
+  - zombiePigman
+  - enderman
+  - caveSpider
+  - silverfish
+  - blaze
+  - magmaCube
+  - bat
+  - witch
+  - pig
+  - sheep
+  - cow
+  - chicken
+  - squid
+  - wolf
+  - mooshroom
+  - snowGolem
+  - ocelot
+  - ironGolem
+  - villager
+
+# Prevent items from being thrown. (i.e. Right click with a chicken egg.)
+# Use ID's or it won't register.
+# Use 0 to allow all throwables.
+noThrow:
+  - 332
+  - 344
+  - 373
+  - 384
+
+# Prevent bucket water/lava bucket and TNT Minecart usage.
+blockWaterBucket: true
+blockLavaBucket: true
+blockTNTMinecart: true
