@@ -15,14 +15,28 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+/**
+ * Event handler for block events.
+ * 
+ * @author Musician101
+ */
 public class BlockListener implements Listener
 {
     ControlCreativeMode plugin;
+    
+    /**
+     * @param plugin References the Main class.
+     */
     public BlockListener(ControlCreativeMode plugin)
     {
         this.plugin = plugin;
     }
 
+    /**
+     * Runs when a block is placed.
+     * 
+     * @param event All info involved in the event.
+     */
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event)
     {

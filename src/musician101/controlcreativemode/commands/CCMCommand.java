@@ -7,17 +7,34 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class BC2Command implements CommandExecutor
+/**
+ * Command executor for the CCM command.
+ * 
+ * @author Musician101
+ */
+public class CCMCommand implements CommandExecutor
 {
 	ControlCreativeMode plugin;
-	public BC2Command(ControlCreativeMode plugin)
+	
+	/**
+	 * @param plugin References the main class.
+	 */
+	public CCMCommand(ControlCreativeMode plugin)
 	{
 		this.plugin = plugin;
 	}
+	
+	/**
+	 * @param sender Who sent the command.
+	 * @param command Which command was executed
+	 * @param label Alias of the command
+	 * @param args Command parameters
+	 * @return True if the command was successfully executed
+	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if (command.getName().equalsIgnoreCase(Constants.BC2))
+		if (command.getName().equalsIgnoreCase(Constants.CCM))
 		{
 			if (!sender.hasPermission(Constants.PERMISSION_USE))
 			{

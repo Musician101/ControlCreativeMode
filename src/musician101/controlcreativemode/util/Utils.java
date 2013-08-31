@@ -6,8 +6,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Various methods used so many times in so many other classes that
+ * they needed to be moved somewhere so the code stayed clean.
+ * 
+ * @author Musician101
+ */
 public class Utils
-{	
+{
+	/**
+	 * Display warning messages to all who have the ccm.spy permission node.
+	 */
 	public static void warnStaff(String warning)
 	{
 		for (Player player : Bukkit.getServer().getOnlinePlayers())
@@ -15,6 +24,12 @@ public class Utils
 				player.sendMessage(warning);
 	}
 	
+	/**
+	 * Check to see if the player's inventory empty
+	 * 
+	 * @param player Player who's inventory is being checked
+	 * @return True if the inventory (including armor slots) are empty.
+	 */
 	public static boolean isInventoryEmpty(Player player)
 	{
 		boolean isEmpty = false;

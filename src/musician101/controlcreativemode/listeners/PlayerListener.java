@@ -23,14 +23,28 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Event handler for player events.
+ * 
+ * @author Musician101
+ */
 public class PlayerListener implements Listener
 {
     ControlCreativeMode plugin;
+    
+    /**
+     * @param plugin References the Main class.
+     */
     public PlayerListener(ControlCreativeMode plugin)
     {
         this.plugin = plugin;
     }
 
+    /**
+     * Runs when a player attempts to empty a bucket.
+     * 
+     * @param event All info involved in the event.
+     */
     @EventHandler
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event)
 	{
@@ -67,6 +81,11 @@ public class PlayerListener implements Listener
 		}
 	}
     
+    /**
+     * Runs when a player drops an item.
+     * 
+     * @param event All info involved in the event.
+     */
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
@@ -88,6 +107,11 @@ public class PlayerListener implements Listener
     	}
     }
     
+    /**
+     * Runs when a player left or right clicks.
+     * 
+     * @param event All info involved in the event.
+     */
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
@@ -96,15 +120,15 @@ public class PlayerListener implements Listener
     	ItemStack item = event.getItem();
         Player player = event.getPlayer();
         
-        // Setup lists for the various checks.
+        /** Setup lists for the various checks. */
     	List<Integer> invBlockIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noBlockBasedInventory"));
     	List<Integer> railIds = new ArrayList<Integer>(Arrays.asList(Material.ACTIVATOR_RAIL.getId(), Material.DETECTOR_RAIL.getId(), Material.POWERED_RAIL.getId(), Material.RAILS.getId()));
     	List<Integer> throwableIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noThrow"));
     	
-    	// Check if a player right clicks a block
+    	/** Check if a player right clicks a block */
         if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
         {
-        	// Block Based Inventory Check
+        	/** Block Based Inventory Check */
         	if (invBlockIds.contains(block.getTypeId()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
@@ -118,7 +142,7 @@ public class PlayerListener implements Listener
         			plugin.logger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
         		}
         	}
-        	// TNT Minecart Check
+        	/** TNT Minecart Check */
         	// TODO: Find solution to double warning post
         	else if (item.getTypeId() == Material.EXPLOSIVE_MINECART.getId() && railIds.contains(block.getTypeId()) && this.plugin.getConfig().getBoolean("blockTNTMinecart"))
         	{
@@ -133,7 +157,7 @@ public class PlayerListener implements Listener
             		plugin.logger().info(Constants.getCartWarning(player, item.getType(), player.getLocation()));
         		}
         	}
-        	// Spawn Eggs Check
+        	/** Spawn Eggs Check */
         	else if (!isSpawnAllowed(item.getData().getData()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
@@ -143,11 +167,11 @@ public class PlayerListener implements Listener
         		}
         		else if (item.getTypeId() == Material.MONSTER_EGG.getId())
         		{
-        			Utils.warnStaff(Constants.getSpawnWarning(player, item, item.getData().getData(), block.getLocation()));
-        			plugin.logger().info(Constants.getSpawnWarning(player, item, item.getData().getData(), block.getLocation()));
+        			Utils.warnStaff(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
+        			plugin.logger().info(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
         		}
         	}
-        	// Throwable Items Check
+        	/** Throwable Items Check */
         	else if (throwableIds.contains(item.getTypeId()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW))
@@ -162,8 +186,9 @@ public class PlayerListener implements Listener
             	}
         	}
         }
-        // Check if a player right clicks the air
-        // Throwable Items Check
+        /** Check if a player right clicks the air
+         * Throwable Items Check
+         */
         else if (action == Action.RIGHT_CLICK_AIR && player.getGameMode() == GameMode.CREATIVE)
     	{
         	if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW) && throwableIds.contains(item.getTypeId()))
@@ -179,16 +204,21 @@ public class PlayerListener implements Listener
     	}
     }
     
+    /**
+     * Runs when a player right clicks an entity.
+     * 
+     * @param event All info involved in the event.
+     */
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event)
     {
     	Entity entity = event.getRightClicked();
     	Player player = event.getPlayer();
     	
-    	// List of entities from the plugin's config.
+    	/** List of entities from the plugin's config. */
     	List<String> entities = new ArrayList<String>(this.plugin.getConfig().getStringList("noEntityBasedInventory"));
     	
-    	// Entity based inventory check.
+    	/** Entity based inventory check. */
     	if (player.getGameMode() == GameMode.CREATIVE && entities.contains(entity.getType().toString().toLowerCase()) && !player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
     	{
     		event.setCancelled(true);
@@ -201,7 +231,12 @@ public class PlayerListener implements Listener
     	}
     }
     
-    // Check config for noSpawn
+    /**
+     * Check config for noSpawn.
+     * 
+     * @param data Damage value of the spawn egg used.
+     * @return True if the mob is not specified in the config.
+     */
     public boolean isSpawnAllowed(byte data)
     {
     	boolean allowed = true;
