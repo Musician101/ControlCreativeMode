@@ -1,13 +1,13 @@
 name: ControlCreativeMode
 main: musician101.controlcreativemode.ControlCreativeMode
-version: 1.1
+version: 1.2
 description: Change from creative and survival
 commands:
    ccm:
-      description: Control how creative mode works.
+      description: Display the plugin version.
       permissions: ccm.use
       usage: <command>
-      aliases: [bc]
+      aliases: [ccm]
    creative:
       description: Change to creative.
       permissions: ccm.use
