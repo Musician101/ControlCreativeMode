@@ -11,10 +11,13 @@ noBlockBasedInventory:
   - 62 # Burning Furnace
   - 116 # Enchantment Table
   - 130 # Ender Chest
-  - 145 # Avil
+  - 138 # Beacon
+  - 145 # Anvil
   - 146 # Trapped Chest
   - 154 # Hopper
   - 158 # Dropper
+  - 373 # Potions
+  - 383 # Spawn Eggs
   
 # Prevent players from interacting with entity based inventories (i.e. Storage minecart, Villagers)
 # To enable all entity based mobs, use - none.
@@ -84,10 +87,10 @@ noSpawn:
 # Use ID's or it won't register.
 # Use 0 to allow all throwables.
 noThrow:
-  - 332
-  - 344
-  - 373
-  - 384
+  - 332 # Snowball
+  - 344 # Egg
+  - 373 # Potions
+  - 384 # Bottle o' Enchanting
 
 # Prevent bucket water/lava bucket and TNT Minecart usage.
 blockWaterBucket: true
