@@ -30,7 +30,7 @@ public class ControlCreativeMode extends JavaPlugin
 	/**
 	 * Sets up the logger.
 	 * 
-	 * @return JavaPlugin.getLogger();
+	 * @return JavaPlugin.getLogger()
 	 */
 	public Logger logger()
 	{
