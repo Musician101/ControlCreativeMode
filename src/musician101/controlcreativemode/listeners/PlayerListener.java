@@ -129,6 +129,7 @@ public class PlayerListener implements Listener
         if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
         {
         	/** Block Based Inventory Check */
+        	// TODO: Find solution to Shift + Right Clicking on inventory warning.
         	if (invBlockIds.contains(block.getTypeId()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
