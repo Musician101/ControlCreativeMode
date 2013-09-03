@@ -4,6 +4,7 @@ import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.util.Utils;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,16 +40,18 @@ public class EntityListener implements Listener
         {
             Entity entity = event.getEntity();
             Player player = (Player) event.getDamager();
- 
-            if (!player.hasPermission(Constants.PERMISSION_ALLOW_ATTACK))
+            if (player.getGameMode() == GameMode.CREATIVE)
             {
-            	event.setCancelled(true);
-                player.sendMessage(Constants.NO_PERMISSION_ATTACK);
-            }
-            else
-            {
-            	Utils.warnStaff(Constants.getAttackWarning(player, entity, player.getLocation()));
-            	plugin.logger().info(Constants.getAttackWarning(player, entity, player.getLocation()));
+            	if (!player.hasPermission(Constants.PERMISSION_ALLOW_ATTACK))
+                {
+                	event.setCancelled(true);
+                    player.sendMessage(Constants.NO_PERMISSION_ATTACK);
+                }
+                else
+                {
+                	Utils.warnStaff(Constants.getAttackWarning(player, entity, player.getLocation()));
+                	plugin.logger().info(Constants.getAttackWarning(player, entity, player.getLocation()));
+                }
             }
         }
     }
