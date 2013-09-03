@@ -87,6 +87,6 @@ public class ControlCreativeMode extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
-        this.logger().info(Constants.PREFIX_PERMISSION + "Shutting down.");
+        logger().info(Constants.PREFIX_PERMISSION + "Shutting down.");
     }
 }
