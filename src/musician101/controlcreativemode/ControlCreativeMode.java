@@ -77,10 +77,8 @@ public class ControlCreativeMode extends JavaPlugin
 			else
 				logger().info("CCM is up to date.");
 		}
-		else if (!config.getBoolean("checkforUpdate"))
-		{
+		else if (!config.getBoolean("checkForUpdate"))
 			logger().info("Update checker is disabled.");
-		}
     }
 	
 	/** Shuts off the plugin. */
