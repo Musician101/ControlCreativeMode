@@ -26,7 +26,7 @@ public class UpdateChecker
 	
 	/**
 	 * @param plugin References the main class.
-	 * @param url The URL to the files.rss
+	 * @param url The URL to the files.rss.
 	 */
 	public UpdateChecker(ControlCreativeMode plugin, String url)
 	{
