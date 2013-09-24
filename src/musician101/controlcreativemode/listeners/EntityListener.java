@@ -50,7 +50,7 @@ public class EntityListener implements Listener
                 else
                 {
                 	CCMUtils.warnStaff(Constants.getAttackWarning(player, entity, player.getLocation()));
-                	plugin.logger().info(Constants.getAttackWarning(player, entity, player.getLocation()));
+                	plugin.getLogger().info(Constants.getAttackWarning(player, entity, player.getLocation()));
                 }
             }
         }

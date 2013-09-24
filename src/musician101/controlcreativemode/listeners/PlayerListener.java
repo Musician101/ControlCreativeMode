@@ -66,7 +66,7 @@ public class PlayerListener implements Listener
 				else
 				{
 					CCMUtils.warnStaff(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
-					plugin.logger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
+					plugin.getLogger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
 				}
 			}
 			/** 
@@ -83,7 +83,7 @@ public class PlayerListener implements Listener
 				else
 				{
 					CCMUtils.warnStaff(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
-					plugin.logger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
+					plugin.getLogger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
 				}
 			}
 		}
@@ -118,7 +118,7 @@ public class PlayerListener implements Listener
         	else if (ids.contains(item.getItemStack().getTypeId()))
         	{
         		CCMUtils.warnStaff(Constants.getItemDropWarning(player, item, player.getLocation()));
-        		plugin.logger().info(Constants.getItemDropWarning(player, item, player.getLocation()));
+        		plugin.getLogger().info(Constants.getItemDropWarning(player, item, player.getLocation()));
         	}
     	}
     }
@@ -164,7 +164,7 @@ public class PlayerListener implements Listener
         		else
         		{
         			CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
-        			plugin.logger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
+        			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
         		}
         	}
         	/** TNT Minecart Check */
@@ -183,7 +183,7 @@ public class PlayerListener implements Listener
         		else
         		{
         			CCMUtils.warnStaff(Constants.getCartWarning(player, item.getType(), player.getLocation()));
-            		plugin.logger().info(Constants.getCartWarning(player, item.getType(), player.getLocation()));
+            		plugin.getLogger().info(Constants.getCartWarning(player, item.getType(), player.getLocation()));
         		}
         	}
         	/** Spawn Eggs Check */
@@ -205,7 +205,7 @@ public class PlayerListener implements Listener
         		else if (item.getTypeId() == Material.MONSTER_EGG.getId())
         		{
         			CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
-        			plugin.logger().info(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
+        			plugin.getLogger().info(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
         		}
         	}
         	/** Throwable Items Check */
@@ -223,7 +223,7 @@ public class PlayerListener implements Listener
         		else
             	{
             		CCMUtils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
-            		plugin.logger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
+            		plugin.getLogger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
             	}
         	}
         }
@@ -249,7 +249,7 @@ public class PlayerListener implements Listener
         	else if (throwableIds.contains(item.getTypeId()))
         	{
         		CCMUtils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
-        		plugin.logger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
+        		plugin.getLogger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
         	}
     	}
     }
@@ -277,7 +277,7 @@ public class PlayerListener implements Listener
     	else if (entities.contains(entity.getType().toString().toLowerCase()))
     	{
     		CCMUtils.warnStaff(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
-    		plugin.logger().info(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
+    		plugin.getLogger().info(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
     	}
     }
     

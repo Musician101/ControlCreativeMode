@@ -66,12 +66,12 @@ public class SurvivalCommand implements CommandExecutor
 					else
 					{
 						CCMUtils.warnStaff(Constants.getItemKeptWarning(player));
-						plugin.logger().info(Constants.getItemKeptWarning(player));
+						plugin.getLogger().info(Constants.getItemKeptWarning(player));
 					}
 					player.setGameMode(GameMode.SURVIVAL);
 					player.sendMessage(Constants.getModeString(GameMode.SURVIVAL));
 					CCMUtils.warnStaff(Constants.getModeWarning(player, GameMode.SURVIVAL));
-					plugin.logger().info(Constants.getModeWarning(player, GameMode.SURVIVAL));
+					plugin.getLogger().info(Constants.getModeWarning(player, GameMode.SURVIVAL));
 				}
 				return true;
 			}
