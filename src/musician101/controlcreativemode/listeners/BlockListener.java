@@ -43,11 +43,20 @@ public class BlockListener implements Listener
         Block block = event.getBlock();
         Player player = event.getPlayer();
         List<Integer> blockIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noPlace"));
+        
+        /** 
+		 * Deprecated method Block.getTypeId() in Bukkit.
+		 * Waiting for a proper alternative before fixing.
+		 */
         if (player.getGameMode() == GameMode.CREATIVE && blockIds.contains(block.getTypeId()) && !player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
         {
         	block.setType(Material.AIR);
         	player.sendMessage(Constants.NO_PERMISSION_PLACE);
         }
+        /** 
+		 * Deprecated method Block.getTypeId() in Bukkit.
+		 * Waiting for a proper alternative before fixing.
+		 */
         else if (blockIds.contains(block.getTypeId()))
         {
         	Utils.warnStaff(Constants.getBlockWarning(player, block.getType(), block.getLocation()));

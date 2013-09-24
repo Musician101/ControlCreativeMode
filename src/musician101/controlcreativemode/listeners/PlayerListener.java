@@ -52,6 +52,10 @@ public class PlayerListener implements Listener
 		Material material = event.getBucket();
 		if (player.getGameMode() == GameMode.CREATIVE)
 		{
+			/** 
+			 * Deprecated method Material.getId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
 			if (material.getId() == Material.WATER_BUCKET.getId() && this.plugin.getConfig().getBoolean("blockWaterBucket"))
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
@@ -65,6 +69,10 @@ public class PlayerListener implements Listener
 					plugin.logger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
 				}
 			}
+			/** 
+			 * Deprecated method Material.getId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
 			else if (material.getId() == Material.LAVA_BUCKET.getId() && this.plugin.getConfig().getBoolean("blockLavaBucket"))
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
@@ -94,11 +102,19 @@ public class PlayerListener implements Listener
     	List<Integer> ids = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noDrop"));
     	if (player.getGameMode() == GameMode.CREATIVE)
     	{
+    		/** 
+			 * Deprecated method ItemStack.getTypeId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
     		if (!player.hasPermission(Constants.PERMISSION_ALLOW_DROP) && ids.contains(item.getItemStack().getTypeId()))
     		{
         		event.setCancelled(true);
         		player.sendMessage(Constants.NO_PERMISSION_DROP);
             }
+    		/** 
+			 * Deprecated method ItemStack.getTypeId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
         	else if (ids.contains(item.getItemStack().getTypeId()))
         	{
         		Utils.warnStaff(Constants.getItemDropWarning(player, item, player.getLocation()));
@@ -122,6 +138,10 @@ public class PlayerListener implements Listener
         
         /** Setup lists for the various checks. */
     	List<Integer> invBlockIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noBlockBasedInventory"));
+    	/** 
+		 * Deprecated method Material.getId() in Bukkit.
+		 * Waiting for a proper alternative before fixing.
+		 */
     	List<Integer> railIds = new ArrayList<Integer>(Arrays.asList(Material.ACTIVATOR_RAIL.getId(), Material.DETECTOR_RAIL.getId(), Material.POWERED_RAIL.getId(), Material.RAILS.getId()));
     	List<Integer> throwableIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noThrow"));
     	
@@ -130,6 +150,10 @@ public class PlayerListener implements Listener
         {
         	/** Block Based Inventory Check */
         	// TODO: Find solution to Shift + Right Clicking on inventory warning.
+        	/** 
+			 * Deprecated method Block.getTypeId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
         	if (invBlockIds.contains(block.getTypeId()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
@@ -145,6 +169,10 @@ public class PlayerListener implements Listener
         	}
         	/** TNT Minecart Check */
         	// TODO: Find solution to double warning post
+        	/** 
+			 * Deprecated method ItemStack.getTypeId() and Material.getId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
         	else if (item.getTypeId() == Material.EXPLOSIVE_MINECART.getId() && railIds.contains(block.getTypeId()) && this.plugin.getConfig().getBoolean("blockTNTMinecart"))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
@@ -159,6 +187,10 @@ public class PlayerListener implements Listener
         		}
         	}
         	/** Spawn Eggs Check */
+        	/** 
+			 * Deprecated method MaterialData.getData() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
         	else if (!isSpawnAllowed(item.getData().getData()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
@@ -166,6 +198,10 @@ public class PlayerListener implements Listener
         			event.setCancelled(true);
             		player.sendMessage(Constants.NO_PERMISSION_SPAWN);
         		}
+        		/** 
+    			 * Deprecated method ItemStack.getTypeId() in Bukkit.
+    			 * Waiting for a proper alternative before fixing.
+    			 */
         		else if (item.getTypeId() == Material.MONSTER_EGG.getId())
         		{
         			Utils.warnStaff(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
@@ -173,6 +209,10 @@ public class PlayerListener implements Listener
         		}
         	}
         	/** Throwable Items Check */
+        	/** 
+			 * Deprecated method ItemStack.getTypeId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
         	else if (throwableIds.contains(item.getTypeId()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW))
@@ -187,16 +227,25 @@ public class PlayerListener implements Listener
             	}
         	}
         }
-        /** Check if a player right clicks the air
+        /** 
+         * Check if a player right clicks the air
          * Throwable Items Check
          */
         else if (action == Action.RIGHT_CLICK_AIR && player.getGameMode() == GameMode.CREATIVE)
     	{
+        	/** 
+			 * Deprecated method ItemStack.getTypeId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
         	if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW) && throwableIds.contains(item.getTypeId()))
         	{
         		event.setCancelled(true);
         		player.sendMessage(Constants.NO_PERMISSION_THROW);
         	}
+        	/** 
+			 * Deprecated method ItemStack.getTypeId() in Bukkit.
+			 * Waiting for a proper alternative before fixing.
+			 */
         	else if (throwableIds.contains(item.getTypeId()))
         	{
         		Utils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
