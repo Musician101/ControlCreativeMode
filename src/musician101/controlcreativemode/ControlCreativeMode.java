@@ -11,8 +11,6 @@ import musician101.controlcreativemode.listeners.EntityListener;
 import musician101.controlcreativemode.listeners.PlayerListener;
 import musician101.controlcreativemode.util.UpdateChecker;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -23,7 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ControlCreativeMode extends JavaPlugin
 {
 	protected UpdateChecker updateChecker;
-	FileConfiguration config;
+	Config config;
 	
 	/** Loads the plugin's various configurations and reference files/folders. */
 	public void loadConfiguration()
@@ -34,7 +32,7 @@ public class ControlCreativeMode extends JavaPlugin
 	/** Checks if new version is available. */
 	public void versionCheck()
 	{
-		if (config.getBoolean("checkForUpdate"))
+		if (config.checkForUpdate)
 		{
 			updateChecker = new UpdateChecker(this, "http://dev.bukkit.org/bukkit-plugins/control-creative-mode/files.rss");
 			getLogger().info("Update checker is enabled.");
@@ -46,7 +44,7 @@ public class ControlCreativeMode extends JavaPlugin
 			else
 				getLogger().info("CCM is up to date.");
 		}
-		else if (!config.getBoolean("checkForUpdate"))
+		else if (!config.checkForUpdate)
 			getLogger().info("Update checker is disabled.");
 	}
 	
@@ -54,33 +52,24 @@ public class ControlCreativeMode extends JavaPlugin
 	@Override
     public void onEnable()
 	{
-		/** Listener Registers */
+		loadConfiguration();
+		config = new Config(this);
+		
 		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new EntityListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		
-		/** Command Executors */
 		getCommand(Constants.CCM).setExecutor(new CCMCommand(this));
 		getCommand(Constants.CREATIVE).setExecutor(new CreativeCommand(this));
 		getCommand(Constants.SURVIVAL).setExecutor(new SurvivalCommand(this));
 		
-		/** Check for config, create it if it's missing, and load it. */
-		loadConfiguration();
-		config = new YamlConfiguration();
-		try
-		{
-			config.load(new File(getDataFolder() + "/config.yml"));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		versionCheck();
     }
 	
 	/** Shuts off the plugin. */
 	@Override
 	public void onDisable()
 	{
-        getLogger().info(Constants.PREFIX_PERMISSION + "Shutting down.");
+        getLogger().info("Shutting down.");
     }
 }
