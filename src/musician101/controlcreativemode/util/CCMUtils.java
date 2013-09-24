@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * 
  * @author Musician101
  */
-public class Utils
+public class CCMUtils
 {
 	/**
 	 * Display warning messages to all who have the ccm.spy permission node.

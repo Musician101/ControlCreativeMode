@@ -2,7 +2,7 @@ package musician101.controlcreativemode.listeners;
 
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
-import musician101.controlcreativemode.util.Utils;
+import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
@@ -49,7 +49,7 @@ public class EntityListener implements Listener
                 }
                 else
                 {
-                	Utils.warnStaff(Constants.getAttackWarning(player, entity, player.getLocation()));
+                	CCMUtils.warnStaff(Constants.getAttackWarning(player, entity, player.getLocation()));
                 	plugin.logger().info(Constants.getAttackWarning(player, entity, player.getLocation()));
                 }
             }

@@ -2,7 +2,7 @@ package musician101.controlcreativemode.commands;
 
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
-import musician101.controlcreativemode.util.Utils;
+import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -58,19 +58,19 @@ public class SurvivalCommand implements CommandExecutor
 				}
 				else
 				{
-					if (Utils.isInventoryEmpty((Player) sender) && !player.hasPermission(Constants.PERMISSION_KEEP_ITEMS))
+					if (CCMUtils.isInventoryEmpty((Player) sender) && !player.hasPermission(Constants.PERMISSION_KEEP_ITEMS))
 					{
 						player.getInventory().clear();
 						player.getInventory().setArmorContents(null);
 					}
 					else
 					{
-						Utils.warnStaff(Constants.getItemKeptWarning(player));
+						CCMUtils.warnStaff(Constants.getItemKeptWarning(player));
 						plugin.logger().info(Constants.getItemKeptWarning(player));
 					}
 					player.setGameMode(GameMode.SURVIVAL);
 					player.sendMessage(Constants.getModeString(GameMode.SURVIVAL));
-					Utils.warnStaff(Constants.getModeWarning(player, GameMode.SURVIVAL));
+					CCMUtils.warnStaff(Constants.getModeWarning(player, GameMode.SURVIVAL));
 					plugin.logger().info(Constants.getModeWarning(player, GameMode.SURVIVAL));
 				}
 				return true;

@@ -2,7 +2,7 @@ package musician101.controlcreativemode.commands;
 
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
-import musician101.controlcreativemode.util.Utils;
+import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -49,7 +49,7 @@ public class CreativeCommand implements CommandExecutor
 				sender.sendMessage(Constants.NO_PERMISSION_COMMAND);
 				return false;
 			}
-			else if (!Utils.isInventoryEmpty((Player) sender))
+			else if (!CCMUtils.isInventoryEmpty((Player) sender))
 			{
 				sender.sendMessage(Constants.NON_EMPTY_INV);
 				return true;
@@ -63,7 +63,7 @@ public class CreativeCommand implements CommandExecutor
 				{
 					player.setGameMode(GameMode.CREATIVE);
 					player.sendMessage(Constants.getModeString(GameMode.CREATIVE));
-					Utils.warnStaff(Constants.getModeWarning(player, GameMode.CREATIVE));
+					CCMUtils.warnStaff(Constants.getModeWarning(player, GameMode.CREATIVE));
 					plugin.logger().info(Constants.getModeWarning(player, GameMode.CREATIVE));
 				}
 				return true;

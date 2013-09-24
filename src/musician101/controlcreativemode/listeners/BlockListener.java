@@ -5,7 +5,7 @@ import java.util.List;
 
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
-import musician101.controlcreativemode.util.Utils;
+import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -59,7 +59,7 @@ public class BlockListener implements Listener
 		 */
         else if (blockIds.contains(block.getTypeId()))
         {
-        	Utils.warnStaff(Constants.getBlockWarning(player, block.getType(), block.getLocation()));
+        	CCMUtils.warnStaff(Constants.getBlockWarning(player, block.getType(), block.getLocation()));
     		plugin.getLogger().info(Constants.getBlockWarning(player, block.getType(), block.getLocation()));
         }
     }
