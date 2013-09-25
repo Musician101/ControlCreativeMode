@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.util.CCMUtils;
@@ -56,7 +57,7 @@ public class PlayerListener implements Listener
 			 * Deprecated method Material.getId() in Bukkit.
 			 * Waiting for a proper alternative before fixing.
 			 */
-			if (material.getId() == Material.WATER_BUCKET.getId() && this.plugin.getConfig().getBoolean("blockWaterBucket"))
+			if (material.getId() == Material.WATER_BUCKET.getId() && Config.blockWaterBucket)
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
 				{
@@ -73,7 +74,7 @@ public class PlayerListener implements Listener
 			 * Deprecated method Material.getId() in Bukkit.
 			 * Waiting for a proper alternative before fixing.
 			 */
-			else if (material.getId() == Material.LAVA_BUCKET.getId() && this.plugin.getConfig().getBoolean("blockLavaBucket"))
+			else if (material.getId() == Material.LAVA_BUCKET.getId() && Config.blockLavaBucket)
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
 				{
@@ -99,7 +100,7 @@ public class PlayerListener implements Listener
     {
     	Player player = event.getPlayer();
     	Item item = event.getItemDrop();
-    	List<Integer> ids = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noDrop"));
+    	List<Integer> ids = new ArrayList<Integer>(Config.noDrop);
     	if (player.getGameMode() == GameMode.CREATIVE)
     	{
     		/** 
@@ -137,13 +138,13 @@ public class PlayerListener implements Listener
         Player player = event.getPlayer();
         
         /** Setup lists for the various checks. */
-    	List<Integer> invBlockIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noBlockBasedInventory"));
+    	List<Integer> invBlockIds = new ArrayList<Integer>(Config.noBlockBasedInventory);
     	/** 
 		 * Deprecated method Material.getId() in Bukkit.
 		 * Waiting for a proper alternative before fixing.
 		 */
     	List<Integer> railIds = new ArrayList<Integer>(Arrays.asList(Material.ACTIVATOR_RAIL.getId(), Material.DETECTOR_RAIL.getId(), Material.POWERED_RAIL.getId(), Material.RAILS.getId()));
-    	List<Integer> throwableIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noThrow"));
+    	List<Integer> throwableIds = new ArrayList<Integer>(Config.noThrow);
     	
     	/** Check if a player right clicks a block */
         if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
@@ -173,7 +174,7 @@ public class PlayerListener implements Listener
 			 * Deprecated method ItemStack.getTypeId() and Material.getId() in Bukkit.
 			 * Waiting for a proper alternative before fixing.
 			 */
-        	else if (item.getTypeId() == Material.EXPLOSIVE_MINECART.getId() && railIds.contains(block.getTypeId()) && this.plugin.getConfig().getBoolean("blockTNTMinecart"))
+        	else if (item.getTypeId() == Material.EXPLOSIVE_MINECART.getId() && railIds.contains(block.getTypeId()) && Config.blockTNTMinecart)
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
         		{
@@ -266,7 +267,7 @@ public class PlayerListener implements Listener
     	Player player = event.getPlayer();
     	
     	/** List of entities from the plugin's config. */
-    	List<String> entities = new ArrayList<String>(this.plugin.getConfig().getStringList("noEntityBasedInventory"));
+    	List<String> entities = new ArrayList<String>(Config.noEntityBasedInventory);
     	
     	/** Entity based inventory check. */
     	if (player.getGameMode() == GameMode.CREATIVE && entities.contains(entity.getType().toString().toLowerCase()) && !player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
@@ -317,7 +318,7 @@ public class PlayerListener implements Listener
 		else if (data == 99) mob = "ironGolem";
 		else if (data == 120) mob = "villager";
     	
-    	List<String> noSpawn = new ArrayList<String>(this.plugin.getConfig().getStringList("noSpawn"));
+    	List<String> noSpawn = new ArrayList<String>(Config.noSpawn);
     	if (noSpawn.contains(mob))
     		allowed = false;
     	

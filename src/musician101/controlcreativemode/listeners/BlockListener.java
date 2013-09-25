@@ -3,6 +3,7 @@ package musician101.controlcreativemode.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
+import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.util.CCMUtils;
@@ -42,7 +43,7 @@ public class BlockListener implements Listener
     {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        List<Integer> blockIds = new ArrayList<Integer>(this.plugin.getConfig().getIntegerList("noPlace"));
+        List<Integer> blockIds = new ArrayList<Integer>(Config.noPlace);
         
         /** 
 		 * Deprecated method Block.getTypeId() in Bukkit.
