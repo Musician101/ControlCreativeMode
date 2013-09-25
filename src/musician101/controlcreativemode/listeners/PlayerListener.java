@@ -53,11 +53,7 @@ public class PlayerListener implements Listener
 		Material material = event.getBucket();
 		if (player.getGameMode() == GameMode.CREATIVE)
 		{
-			/** 
-			 * Deprecated method Material.getId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-			if (material.getId() == Material.WATER_BUCKET.getId() && Config.blockWaterBucket)
+			if (material == Material.WATER_BUCKET && Config.blockWaterBucket)
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
 				{
@@ -70,11 +66,7 @@ public class PlayerListener implements Listener
 					plugin.getLogger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
 				}
 			}
-			/** 
-			 * Deprecated method Material.getId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-			else if (material.getId() == Material.LAVA_BUCKET.getId() && Config.blockLavaBucket)
+			else if (material == Material.LAVA_BUCKET && Config.blockLavaBucket)
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
 				{
@@ -139,11 +131,7 @@ public class PlayerListener implements Listener
         
         /** Setup lists for the various checks. */
     	List<Integer> invBlockIds = new ArrayList<Integer>(Config.noBlockBasedInventory);
-    	/** 
-		 * Deprecated method Material.getId() in Bukkit.
-		 * Waiting for a proper alternative before fixing.
-		 */
-    	List<Integer> railIds = new ArrayList<Integer>(Arrays.asList(Material.ACTIVATOR_RAIL.getId(), Material.DETECTOR_RAIL.getId(), Material.POWERED_RAIL.getId(), Material.RAILS.getId()));
+    	List<Material> railIds = new ArrayList<Material>(Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS));
     	List<Integer> throwableIds = new ArrayList<Integer>(Config.noThrow);
     	
     	/** Check if a player right clicks a block */
@@ -170,11 +158,7 @@ public class PlayerListener implements Listener
         	}
         	/** TNT Minecart Check */
         	// TODO: Find solution to double warning post
-        	/** 
-			 * Deprecated method ItemStack.getTypeId() and Material.getId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-        	else if (item.getTypeId() == Material.EXPLOSIVE_MINECART.getId() && railIds.contains(block.getTypeId()) && Config.blockTNTMinecart)
+        	else if (item.getType() == Material.EXPLOSIVE_MINECART && railIds.contains(block.getTypeId()) && Config.blockTNTMinecart)
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
         		{
@@ -188,25 +172,17 @@ public class PlayerListener implements Listener
         		}
         	}
         	/** Spawn Eggs Check */
-        	/** 
-			 * Deprecated method MaterialData.getData() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-        	else if (!isSpawnAllowed(item.getData().getData()))
+        	else if (!isSpawnAllowed(item.getDurability()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
         		{
         			event.setCancelled(true);
             		player.sendMessage(Constants.NO_PERMISSION_SPAWN);
         		}
-        		/** 
-    			 * Deprecated method ItemStack.getTypeId() in Bukkit.
-    			 * Waiting for a proper alternative before fixing.
-    			 */
-        		else if (item.getTypeId() == Material.MONSTER_EGG.getId())
+        		else if (item.getType() == Material.MONSTER_EGG)
         		{
-        			CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
-        			plugin.getLogger().info(Constants.getSpawnWarning(player, item.getData().getData(), block.getLocation()));
+        			CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+        			plugin.getLogger().info(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
         		}
         	}
         	/** Throwable Items Check */
@@ -288,7 +264,7 @@ public class PlayerListener implements Listener
      * @param data Damage value of the spawn egg used.
      * @return True if the mob is not specified in the config.
      */
-    public boolean isSpawnAllowed(byte data)
+    public boolean isSpawnAllowed(short data)
     {
     	boolean allowed = true;
     	String mob = "";

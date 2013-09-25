@@ -190,7 +190,7 @@ public class Constants
 	 * @param location The location of the player.
 	 * @return '[CCM]: Player spawned a Mob at X: x, Y: y, Z: z.'
 	 */
-	public static String getSpawnWarning(Player player, byte data, Location location)
+	public static String getSpawnWarning(Player player, short data, Location location)
 	{
 		String mob = "";
 		if (data == 50)
