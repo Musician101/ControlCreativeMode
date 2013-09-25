@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -138,19 +139,23 @@ public class PlayerListener implements Listener
         if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
         {
         	/** Block Based Inventory Check */
-        	// TODO: Find solution to Shift + Right Clicking on inventory warning.
         	/** 
 			 * Deprecated method Block.getTypeId() in Bukkit.
 			 * Waiting for a proper alternative before fixing.
 			 */
-        	if (invBlockIds.contains(block.getTypeId()))
+    		if (invBlockIds.contains(block.getTypeId()))
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
         		{
         			event.setCancelled(true);
                 	player.sendMessage(Constants.NO_PERMISSION_INVENTORY);
         		}
-        		else
+        		if (!player.isSneaking())
+        		{
+        			CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
+        			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
+        		}
+        		if (player.isSneaking() && item == null)
         		{
         			CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
         			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
@@ -270,7 +275,7 @@ public class PlayerListener implements Listener
     	String mob = "";
     	if (data == 50) mob = "creeper";
     	else if (data == 51) mob = "skeleton";
-    	else if (data  == 52) mob = "spider";
+    	else if (data == 52) mob = "spider";
 		else if (data == 54) mob = "zombie";
 		else if (data == 55) mob = "slime";
 		else if (data == 56) mob = "ghast";
