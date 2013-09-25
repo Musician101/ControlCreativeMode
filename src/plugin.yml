@@ -4,6 +4,7 @@ version: 1.3
 description: Change from creative and survival
 authors: [boardingamer, Musician101]
 maintainer: Musician101
+prefix: CCM
 
 commands:
    ccm:
