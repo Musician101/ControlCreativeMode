@@ -43,10 +43,10 @@ public class Config
 	{
 		plugin.reloadConfig();
 		final FileConfiguration config = plugin.getConfig();
-		blockLavaBucket = config.getBoolean("blockLavaBucket");
-		blockTNTMinecart = config.getBoolean("blockTNTMinecart");
-		blockWaterBucket = config.getBoolean("blockWaterBucket");
-		checkForUpdate = config.getBoolean("checkForUpdate");
+		blockLavaBucket = config.getBoolean("blockLavaBucket", true);
+		blockTNTMinecart = config.getBoolean("blockTNTMinecart", true);
+		blockWaterBucket = config.getBoolean("blockWaterBucket", true);
+		checkForUpdate = config.getBoolean("checkForUpdate", true);
 		noBlockBasedInventory = config.getIntegerList("noBlockBasedInventory");
 		noEntityBasedInventory = config.getStringList("noEntityBasedInventory");
 		noDrop = config.getIntegerList("noDrop");
