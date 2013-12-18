@@ -24,13 +24,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class BlockListener implements Listener
 {
     ControlCreativeMode plugin;
+    Config config;
     
     /**
      * @param plugin References the Main class.
      */
-    public BlockListener(ControlCreativeMode plugin)
+    public BlockListener(ControlCreativeMode plugin, Config config)
     {
         this.plugin = plugin;
+        this.config = config;
     }
 
     /**
@@ -43,7 +45,7 @@ public class BlockListener implements Listener
     {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        List<Integer> blockIds = new ArrayList<Integer>(Config.noPlace);
+        List<Integer> blockIds = new ArrayList<Integer>(config.noPlace);
         
         /** 
 		 * Deprecated method Block.getTypeId() in Bukkit.

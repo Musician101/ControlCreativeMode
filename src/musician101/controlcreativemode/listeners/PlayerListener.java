@@ -32,13 +32,15 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerListener implements Listener
 {
     ControlCreativeMode plugin;
+    Config config;
     
     /**
      * @param plugin References the Main class.
      */
-    public PlayerListener(ControlCreativeMode plugin)
+    public PlayerListener(ControlCreativeMode plugin, Config config)
     {
         this.plugin = plugin;
+        this.config = config;
     }
 
     /**
@@ -53,7 +55,7 @@ public class PlayerListener implements Listener
 		Material material = event.getBucket();
 		if (player.getGameMode() == GameMode.CREATIVE)
 		{
-			if (material == Material.WATER_BUCKET && Config.blockWaterBucket)
+			if (material == Material.WATER_BUCKET && config.blockWaterBucket)
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
 				{
@@ -66,7 +68,7 @@ public class PlayerListener implements Listener
 					plugin.getLogger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
 				}
 			}
-			else if (material == Material.LAVA_BUCKET && Config.blockLavaBucket)
+			else if (material == Material.LAVA_BUCKET && config.blockLavaBucket)
 			{
 				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
 				{
@@ -87,12 +89,12 @@ public class PlayerListener implements Listener
      * 
      * @param event All info involved in the event.
      */
-    @EventHandler
+	@EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
     	Player player = event.getPlayer();
     	Item item = event.getItemDrop();
-    	List<Integer> ids = new ArrayList<Integer>(Config.noDrop);
+    	List<Integer> ids = new ArrayList<Integer>(config.noDrop);
     	if (player.getGameMode() == GameMode.CREATIVE)
     	{
     		/** 
@@ -130,9 +132,9 @@ public class PlayerListener implements Listener
         Player player = event.getPlayer();
         
         /** Setup lists for the various checks. */
-    	List<Integer> invBlockIds = new ArrayList<Integer>(Config.noBlockBasedInventory);
-    	List<Material> railIds = new ArrayList<Material>(Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS));
-    	List<Integer> throwableIds = new ArrayList<Integer>(Config.noThrow);
+    	List<Integer> invBlockIds = new ArrayList<Integer>(config.noBlockBasedInventory);
+    	List<Material> rails = new ArrayList<Material>(Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS));
+    	List<Integer> throwableIds = new ArrayList<Integer>(config.noThrow);
     	
     	/** Check if a player right clicks a block */
         if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
@@ -160,9 +162,11 @@ public class PlayerListener implements Listener
         			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
         		}
         	}
-        	/** TNT Minecart Check */
-        	// TODO: Find solution to double warning post
-        	else if (item.getType() == Material.EXPLOSIVE_MINECART && railIds.contains(block.getTypeId()) && Config.blockTNTMinecart)
+        	/** TNT Minecart Check
+        	 * 
+        	 *  Double post message is something within the MC base code or Bukkit API, can't fix it on my end.
+        	 */
+        	else if (item.getType() == Material.EXPLOSIVE_MINECART && rails.contains(block.getType()) && config.blockTNTMinecart)
         	{
         		if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
         		{
@@ -247,7 +251,7 @@ public class PlayerListener implements Listener
     	Player player = event.getPlayer();
     	
     	/** List of entities from the plugin's config. */
-    	List<String> entities = new ArrayList<String>(Config.noEntityBasedInventory);
+    	List<String> entities = new ArrayList<String>(config.noEntityBasedInventory);
     	
     	/** Entity based inventory check. */
     	if (player.getGameMode() == GameMode.CREATIVE && entities.contains(entity.getType().toString().toLowerCase()) && !player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
@@ -298,7 +302,7 @@ public class PlayerListener implements Listener
 		else if (data == 99) mob = "ironGolem";
 		else if (data == 120) mob = "villager";
     	
-    	List<String> noSpawn = new ArrayList<String>(Config.noSpawn);
+    	List<String> noSpawn = new ArrayList<String>(config.noSpawn);
     	if (noSpawn.contains(mob))
     		allowed = false;
     	

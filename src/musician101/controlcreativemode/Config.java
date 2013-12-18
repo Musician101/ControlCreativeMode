@@ -8,16 +8,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class Config
 {
 	ControlCreativeMode plugin;
-	public static boolean blockLavaBucket;
-	public static boolean blockTNTMinecart;
-	public static boolean blockWaterBucket;
+	public boolean blockLavaBucket;
+	public boolean blockTNTMinecart;
+	public boolean blockWaterBucket;
 	public boolean checkForUpdate;
-	public static List<Integer> noBlockBasedInventory;
-	public static List<String> noEntityBasedInventory;
-	public static List<Integer> noDrop;
-	public static List<Integer> noPlace;
-	public static List<String> noSpawn;
-	public static List<Integer> noThrow;
+	public List<Integer> noBlockBasedInventory;
+	public List<String> noEntityBasedInventory;
+	public List<Integer> noDrop;
+	public List<Integer> noPlace;
+	public List<String> noSpawn;
+	public List<Integer> noThrow;
 	
 	/**
 	 * Config constructor.
