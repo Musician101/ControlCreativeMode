@@ -9,7 +9,7 @@ import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.listeners.BlockListener;
 import musician101.controlcreativemode.listeners.EntityListener;
 import musician101.controlcreativemode.listeners.PlayerListener;
-import musician101.controlcreativemode.util.UpdateChecker;
+import musician101.controlcreativemode.util.Update;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class ControlCreativeMode extends JavaPlugin
 {
-	protected UpdateChecker updateChecker;
 	Config config;
 	
 	/** Loads the plugin's various configurations and reference files/folders. */
@@ -32,18 +31,10 @@ public class ControlCreativeMode extends JavaPlugin
 	/** Checks if new version is available. */
 	public void versionCheck()
 	{
+		@SuppressWarnings("unused")
+		Update update = null;
 		if (config.checkForUpdate)
-		{
-			updateChecker = new UpdateChecker(this, "http://dev.bukkit.org/bukkit-plugins/control-creative-mode/files.rss");
-			getLogger().info("Update checker is enabled.");
-			if (updateChecker.updateNeeded())
-			{
-				getLogger().info("A new version is available: " + updateChecker.getVersion());
-				getLogger().info("Get it from: " + updateChecker.getLink());
-			}
-			else
-				getLogger().info("CCM is up to date.");
-		}
+			update = new Update(64447, "72784c134bdbc3c2216591011a29df99fac08239");
 		else if (!config.checkForUpdate)
 			getLogger().info("Update checker is disabled.");
 	}
