@@ -47,7 +47,7 @@ public class ControlCreativeMode extends JavaPlugin
 		config = new Config(this);
 		
 		getServer().getPluginManager().registerEvents(new BlockListener(this, config), this);
-		getServer().getPluginManager().registerEvents(new EntityListener(this, config), this);
+		getServer().getPluginManager().registerEvents(new EntityListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(this, config), this);
 		
 		getCommand(Constants.CCM).setExecutor(new CCMCommand(this));

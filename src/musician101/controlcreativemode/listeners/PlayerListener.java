@@ -1,8 +1,6 @@
 package musician101.controlcreativemode.listeners;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
@@ -13,7 +11,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,30 +52,20 @@ public class PlayerListener implements Listener
 		Material material = event.getBucket();
 		if (player.getGameMode() == GameMode.CREATIVE)
 		{
-			if (material == Material.WATER_BUCKET && config.blockWaterBucket)
+			if (material == Material.LAVA_BUCKET || material == Material.WATER_BUCKET)
 			{
-				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+				if (config.blockLavaBucket || config.blockWaterBucket)
 				{
-					event.setCancelled(true);
-					player.sendMessage(Constants.NO_PERMISSION_PLACE);
-				}
-				else
-				{
-					CCMUtils.warnStaff(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
-					plugin.getLogger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
-				}
-			}
-			else if (material == Material.LAVA_BUCKET && config.blockLavaBucket)
-			{
-				if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
-				{
-					event.setCancelled(true);
-					player.sendMessage(Constants.NO_PERMISSION_PLACE);
-				}
-				else
-				{
-					CCMUtils.warnStaff(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
-					plugin.getLogger().info(Constants.getBlockWarning(player, event.getBucket(), event.getBlockClicked().getLocation()));
+					if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+					{
+						event.setCancelled(true);
+						player.sendMessage(Constants.NO_PERMISSION_PLACE);
+					}
+					else
+					{
+						CCMUtils.warnStaff(Constants.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
+						plugin.getLogger().info(Constants.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
+					}
 				}
 			}
 		}
@@ -93,28 +80,19 @@ public class PlayerListener implements Listener
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
     	Player player = event.getPlayer();
-    	Item item = event.getItemDrop();
-    	List<Integer> ids = new ArrayList<Integer>(config.noDrop);
-    	if (player.getGameMode() == GameMode.CREATIVE)
+    	String material = event.getItemDrop().getItemStack().getType().toString();
+    	if (player.getGameMode() == GameMode.CREATIVE && config.noDrop.contains(material))
     	{
-    		/** 
-			 * Deprecated method ItemStack.getTypeId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-    		if (!player.hasPermission(Constants.PERMISSION_ALLOW_DROP) && ids.contains(item.getItemStack().getTypeId()))
-    		{
-        		event.setCancelled(true);
-        		player.sendMessage(Constants.NO_PERMISSION_DROP);
-            }
-    		/** 
-			 * Deprecated method ItemStack.getTypeId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-        	else if (ids.contains(item.getItemStack().getTypeId()))
-        	{
-        		CCMUtils.warnStaff(Constants.getItemDropWarning(player, item, player.getLocation()));
-        		plugin.getLogger().info(Constants.getItemDropWarning(player, item, player.getLocation()));
-        	}
+    		if (!player.hasPermission(Constants.PERMISSION_ALLOW_DROP))
+			{
+				event.setCancelled(true);
+				player.sendMessage(Constants.NO_PERMISSION_DROP);
+			}
+			else
+			{
+				CCMUtils.warnStaff(Constants.getItemDropWarning(player, material, player.getLocation()));
+        		plugin.getLogger().info(Constants.getItemDropWarning(player, material, player.getLocation()));
+			}
     	}
     }
     
@@ -130,111 +108,113 @@ public class PlayerListener implements Listener
     	Block block = event.getClickedBlock();
     	ItemStack item = event.getItem();
         Player player = event.getPlayer();
-        
-        /** Setup lists for the various checks. */
-    	List<Integer> invBlockIds = new ArrayList<Integer>(config.noBlockBasedInventory);
-    	List<Material> rails = new ArrayList<Material>(Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS));
-    	List<Integer> throwableIds = new ArrayList<Integer>(config.noThrow);
     	
-    	/** Check if a player right clicks a block */
-        if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
-        {
-        	/** Block Based Inventory Check */
-        	/** 
-			 * Deprecated method Block.getTypeId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-    		if (invBlockIds.contains(block.getTypeId()))
+    	if (player.getGameMode() == GameMode.CREATIVE)
+    	{
+    		/** Check if a player right clicks a block */
+            if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
+            {
+            	/** Block Based Inventory Check */
+        		if (config.noBlockBasedInventory.contains(block.getType().toString()))
+            	{
+            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
+            		{
+            			event.setCancelled(true);
+                    	player.sendMessage(Constants.NO_PERMISSION_INVENTORY);
+            		}
+            		else if (!player.isSneaking())
+            		{
+            			CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            		}
+            		else if (player.isSneaking())
+            		{
+            			if (item == null)
+            			{
+            				CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            				plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            			}
+            			else if (item.getType() == Material.MONSTER_EGG && !isSpawnAllowed(item.getDurability()))
+            			{
+            				if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
+            				{
+            					event.setCancelled(true);
+            					player.sendMessage(Constants.NO_PERMISSION_SPAWN);
+            				}
+            				else
+            				{
+            					CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            					plugin.getLogger().info(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            				}
+            			}
+            		}
+            	}
+        		
+            	/** TNT Minecart Check
+            	 * 
+            	 *  Double message is something with Vanilla Minecraft or Bukkit API, can't fix it on my end.
+            	 */
+            	if (item.getType() == Material.EXPLOSIVE_MINECART && Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS).contains(block.getType()) && config.blockTNTMinecart)
+            	{
+            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+            		{
+            			event.setCancelled(true);
+            			player.sendMessage(Constants.NO_PERMISSION_PLACE);
+            		}
+            		else
+            		{
+            			CCMUtils.warnStaff(Constants.getCartWarning(player, item, player.getLocation()));
+                		plugin.getLogger().info(Constants.getCartWarning(player, item, player.getLocation()));
+            		}
+            	}
+            	
+            	/** Spawn Eggs Check */
+            	if (!isSpawnAllowed(item.getDurability()))
+            	{
+            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
+            		{
+            			event.setCancelled(true);
+                		player.sendMessage(Constants.NO_PERMISSION_SPAWN);
+            		}
+            		else if (item.getType() == Material.MONSTER_EGG)
+            		{
+            			CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            			plugin.getLogger().info(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            		}
+            	}
+            	
+            	/** Throwable Items Check */
+            	if (config.noThrow.contains(item.getType()))
+            	{
+            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW))
+            		{
+            			event.setCancelled(true);
+            			player.sendMessage(Constants.NO_PERMISSION_THROW);
+            		}
+            		else
+                	{
+                		CCMUtils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
+                		plugin.getLogger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
+                	}
+            	}
+            }
+            
+            /** 
+             * Check if a player right clicks the air
+             * Throwable Items Check
+             */
+            if (action == Action.RIGHT_CLICK_AIR && config.noThrow.contains(item.getType()))
         	{
-        		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
-        		{
-        			event.setCancelled(true);
-                	player.sendMessage(Constants.NO_PERMISSION_INVENTORY);
-        		}
-        		if (!player.isSneaking())
-        		{
-        			CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
-        			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
-        		}
-        		if (player.isSneaking() && item == null)
-        		{
-        			CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
-        			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType(), block.getLocation()));
-        		}
-        	}
-        	/** TNT Minecart Check
-        	 * 
-        	 *  Double post message is something within the MC base code or Bukkit API, can't fix it on my end.
-        	 */
-        	else if (item.getType() == Material.EXPLOSIVE_MINECART && rails.contains(block.getType()) && config.blockTNTMinecart)
-        	{
-        		if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
-        		{
-        			event.setCancelled(true);
-        			player.sendMessage(Constants.NO_PERMISSION_PLACE);
-        		}
-        		else
-        		{
-        			CCMUtils.warnStaff(Constants.getCartWarning(player, item.getType(), player.getLocation()));
-            		plugin.getLogger().info(Constants.getCartWarning(player, item.getType(), player.getLocation()));
-        		}
-        	}
-        	/** Spawn Eggs Check */
-        	else if (!isSpawnAllowed(item.getDurability()))
-        	{
-        		if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
-        		{
-        			event.setCancelled(true);
-            		player.sendMessage(Constants.NO_PERMISSION_SPAWN);
-        		}
-        		else if (item.getType() == Material.MONSTER_EGG)
-        		{
-        			CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-        			plugin.getLogger().info(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-        		}
-        	}
-        	/** Throwable Items Check */
-        	/** 
-			 * Deprecated method ItemStack.getTypeId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-        	else if (throwableIds.contains(item.getTypeId()))
-        	{
-        		if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW))
-        		{
-        			event.setCancelled(true);
-        			player.sendMessage(Constants.NO_PERMISSION_THROW);
-        		}
-        		else
+            	if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW))
+            	{
+            		event.setCancelled(true);
+            		player.sendMessage(Constants.NO_PERMISSION_THROW);
+            	}
+            	else
             	{
             		CCMUtils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
             		plugin.getLogger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
             	}
-        	}
-        }
-        /** 
-         * Check if a player right clicks the air
-         * Throwable Items Check
-         */
-        else if (action == Action.RIGHT_CLICK_AIR && player.getGameMode() == GameMode.CREATIVE)
-    	{
-        	/** 
-			 * Deprecated method ItemStack.getTypeId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-        	if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW) && throwableIds.contains(item.getTypeId()))
-        	{
-        		event.setCancelled(true);
-        		player.sendMessage(Constants.NO_PERMISSION_THROW);
-        	}
-        	/** 
-			 * Deprecated method ItemStack.getTypeId() in Bukkit.
-			 * Waiting for a proper alternative before fixing.
-			 */
-        	else if (throwableIds.contains(item.getTypeId()))
-        	{
-        		CCMUtils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
-        		plugin.getLogger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
         	}
     	}
     }
@@ -250,19 +230,19 @@ public class PlayerListener implements Listener
     	Entity entity = event.getRightClicked();
     	Player player = event.getPlayer();
     	
-    	/** List of entities from the plugin's config. */
-    	List<String> entities = new ArrayList<String>(config.noEntityBasedInventory);
-    	
     	/** Entity based inventory check. */
-    	if (player.getGameMode() == GameMode.CREATIVE && entities.contains(entity.getType().toString().toLowerCase()) && !player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
+    	if (player.getGameMode() == GameMode.CREATIVE && config.noEntityBasedInventory.contains(entity.getType().toString().toLowerCase()))
     	{
-    		event.setCancelled(true);
-    		player.sendMessage(Constants.NO_PERMISSION_INVENTORY);
-    	}
-    	else if (entities.contains(entity.getType().toString().toLowerCase()))
-    	{
-    		CCMUtils.warnStaff(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
-    		plugin.getLogger().info(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
+    		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
+    		{
+    			event.setCancelled(true);
+        		player.sendMessage(Constants.NO_PERMISSION_INVENTORY);
+    		}
+    		else
+    		{
+    			CCMUtils.warnStaff(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
+        		plugin.getLogger().info(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
+    		}
     	}
     }
     
@@ -274,7 +254,6 @@ public class PlayerListener implements Listener
      */
     public boolean isSpawnAllowed(short data)
     {
-    	boolean allowed = true;
     	String mob = "";
     	if (data == 50) mob = "creeper";
     	else if (data == 51) mob = "skeleton";
@@ -302,10 +281,9 @@ public class PlayerListener implements Listener
 		else if (data == 99) mob = "ironGolem";
 		else if (data == 120) mob = "villager";
     	
-    	List<String> noSpawn = new ArrayList<String>(config.noSpawn);
-    	if (noSpawn.contains(mob))
-    		allowed = false;
+    	if (config.noSpawn.contains(mob.toLowerCase()))
+    		return false;
     	
-    	return allowed;
+    	return true;
     }
 }

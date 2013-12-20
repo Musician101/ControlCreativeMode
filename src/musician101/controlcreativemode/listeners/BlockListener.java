@@ -1,8 +1,5 @@
 package musician101.controlcreativemode.listeners;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
@@ -45,25 +42,19 @@ public class BlockListener implements Listener
     {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        List<Integer> blockIds = new ArrayList<Integer>(config.noPlace);
         
-        /** 
-		 * Deprecated method Block.getTypeId() in Bukkit.
-		 * Waiting for a proper alternative before fixing.
-		 */
-        if (player.getGameMode() == GameMode.CREATIVE && blockIds.contains(block.getTypeId()) && !player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+        if (player.getGameMode() == GameMode.CREATIVE && config.noPlace.contains(block.getType().toString()))
         {
-        	block.setType(Material.AIR);
-        	player.sendMessage(Constants.NO_PERMISSION_PLACE);
-        }
-        /** 
-		 * Deprecated method Block.getTypeId() in Bukkit.
-		 * Waiting for a proper alternative before fixing.
-		 */
-        else if (blockIds.contains(block.getTypeId()))
-        {
-        	CCMUtils.warnStaff(Constants.getBlockWarning(player, block.getType(), block.getLocation()));
-    		plugin.getLogger().info(Constants.getBlockWarning(player, block.getType(), block.getLocation()));
+        	if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+        	{
+        		block.setType(Material.AIR);
+        		player.sendMessage(Constants.NO_PERMISSION_PLACE);
+        	}
+        	else
+        	{
+        		CCMUtils.warnStaff(Constants.getBlockWarning(player, block));
+        		plugin.getLogger().warning(Constants.getBlockWarning(player, block));
+        	}
         }
     }
 }

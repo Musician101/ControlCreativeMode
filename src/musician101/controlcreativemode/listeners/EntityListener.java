@@ -1,6 +1,5 @@
 package musician101.controlcreativemode.listeners;
 
-import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.util.CCMUtils;
@@ -20,15 +19,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class EntityListener implements Listener
 {
 	ControlCreativeMode plugin;
-	Config config;
 	
 	/**
 	 * @param plugin References the Main class.
 	 */
-	public EntityListener(ControlCreativeMode plugin, Config config)
+	public EntityListener(ControlCreativeMode plugin)
 	{
 		this.plugin = plugin;
-		this.config = config;
 	}
 	
 	/**
@@ -52,8 +49,8 @@ public class EntityListener implements Listener
                 }
                 else
                 {
-                	CCMUtils.warnStaff(Constants.getAttackWarning(player, entity, player.getLocation()));
-                	plugin.getLogger().info(Constants.getAttackWarning(player, entity, player.getLocation()));
+                	CCMUtils.warnStaff(Constants.getAttackWarning(player, entity));
+                	plugin.getLogger().info(Constants.getAttackWarning(player, entity));
                 }
             }
         }
