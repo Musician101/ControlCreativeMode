@@ -118,7 +118,7 @@ public class Constants
 	}
 	
 	/** Notification message when a player uses /creative or /survival. */
-	public static String getModeString(GameMode gm)
+	public static String getModeMsg(GameMode gm)
 	{
 		return PREFIX_GAMEMODE + "You are now in " + gm.toString() + ".";
 	}
