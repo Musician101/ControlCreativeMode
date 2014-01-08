@@ -215,6 +215,6 @@ public class Constants
 	
 	/** Other */
 	public static final List<String> MOB_LIST = new ArrayList<String>(Arrays.asList("bat", "blaze", "cavespider", "chicken", "cow", 
-			"creeper", "enderman", "ghast", "irongolem", "magmacube", "mooshroom", "pig", "skeleton", "sheep", "silverfish", "slime",
+			"creeper", "enderman", "ghast", "irongolem", "magmacube", "mooshroom", "ocelot", "pig", "skeleton", "sheep", "silverfish", "slime",
 			"snowgolem", "spider", "squid", "villager", "witch", "wolf", "zombie", "zombiepigman"));
 }
