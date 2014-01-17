@@ -43,7 +43,7 @@ public class CCMCommand implements CommandExecutor
 			}
 			else
 			{
-				sender.sendMessage(Constants.PREFIX_INFO_WARNING + "Running version " + plugin.getDescription().getVersion() + " compiled with Bukkit 1.5.2-R1.0.");
+				sender.sendMessage(Constants.PREFIX_INFO_WARNING + "Running version " + plugin.getDescription().getVersion() + " compiled with Bukkit 1.6.4-R2.0.");
 				return true;
 			}
 		}
