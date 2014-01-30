@@ -1,7 +1,5 @@
 package musician101.controlcreativemode;
 
-import java.io.File;
-
 import musician101.controlcreativemode.commands.CCMCommand;
 import musician101.controlcreativemode.commands.CreativeCommand;
 import musician101.controlcreativemode.commands.SurvivalCommand;
@@ -22,19 +20,14 @@ public class ControlCreativeMode extends JavaPlugin
 {
 	Config config;
 	
-	/** Loads the plugin's various configurations and reference files/folders. */
-	public void loadConfiguration()
-	{
-		if (!new File(getDataFolder(), "config.yml").exists()) saveDefaultConfig();
-	}
-	
 	/** Checks if new version is available. */
 	public void versionCheck()
 	{
-		@SuppressWarnings("unused")
-		Update update = null;
 		if (config.checkForUpdate)
-			update = new Update(64447, "72784c134bdbc3c2216591011a29df99fac08239");
+		{
+			@SuppressWarnings("unused")
+			Update update = new Update(64447, "72784c134bdbc3c2216591011a29df99fac08239");
+		}
 		else if (!config.checkForUpdate)
 			getLogger().info("Update checker is disabled.");
 	}
@@ -43,7 +36,6 @@ public class ControlCreativeMode extends JavaPlugin
 	@Override
     public void onEnable()
 	{
-		loadConfiguration();
 		config = new Config(this);
 		
 		getServer().getPluginManager().registerEvents(new BlockListener(this, config), this);
