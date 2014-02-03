@@ -1,5 +1,6 @@
 package musician101.controlcreativemode.util;
 
+import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Commands;
 
 import org.bukkit.Bukkit;
@@ -17,8 +18,9 @@ public class CCMUtils
 	/**
 	 * Display warning messages to all who have the ccm.spy permission node.
 	 */
-	public static void warnStaff(String warning)
+	public static void warnStaff(ControlCreativeMode plugin, String warning)
 	{
+		plugin.getLogger().warning(warning.replace("[CCM] ", ""));
 		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player.hasPermission(Commands.SPY_PERM))
 				player.sendMessage(warning);

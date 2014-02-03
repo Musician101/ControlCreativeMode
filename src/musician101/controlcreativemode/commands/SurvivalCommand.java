@@ -69,14 +69,10 @@ public class SurvivalCommand implements CommandExecutor
 						player.getInventory().setArmorContents(null);
 					}
 					else
-					{
-						CCMUtils.warnStaff(WarningMessages.getItemKeptWarning(player));
-						plugin.getLogger().info(WarningMessages.getItemKeptWarning(player));
-					}
+						CCMUtils.warnStaff(plugin, WarningMessages.getItemKeptWarning(player));
 					player.setGameMode(GameMode.SURVIVAL);
 					player.sendMessage(WarningMessages.getModeMsg(GameMode.SURVIVAL));
-					CCMUtils.warnStaff(WarningMessages.getModeWarning(player, GameMode.SURVIVAL));
-					plugin.getLogger().info(WarningMessages.getModeWarning(player, GameMode.SURVIVAL));
+					CCMUtils.warnStaff(plugin, WarningMessages.getModeWarning(player, GameMode.SURVIVAL));
 				}
 				return true;
 			}

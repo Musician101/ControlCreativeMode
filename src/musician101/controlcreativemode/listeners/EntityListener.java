@@ -52,10 +52,7 @@ public class EntityListener implements Listener
                     player.sendMessage(Messages.NO_PERMISSION_ATTACK);
                 }
                 else
-                {
-                	CCMUtils.warnStaff(WarningMessages.getAttackWarning(player, entity));
-                	plugin.getLogger().info(WarningMessages.getAttackWarning(player, entity));
-                }
+                	CCMUtils.warnStaff(plugin, WarningMessages.getAttackWarning(player, entity));
             }
         }
     }

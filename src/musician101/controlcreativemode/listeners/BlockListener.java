@@ -56,10 +56,7 @@ public class BlockListener implements Listener
         		player.sendMessage(Messages.NO_PERMISSION_PLACE);
         	}
         	else
-        	{
-        		CCMUtils.warnStaff(WarningMessages.getBlockWarning(player, block));
-        		plugin.getLogger().warning(WarningMessages.getBlockWarning(player, block));
-        	}
+        		CCMUtils.warnStaff(plugin, WarningMessages.getBlockWarning(player, block));
         }
     }
 }

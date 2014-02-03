@@ -69,8 +69,7 @@ public class CreativeCommand implements CommandExecutor
 				{
 					player.setGameMode(GameMode.CREATIVE);
 					player.sendMessage(WarningMessages.getModeMsg(GameMode.CREATIVE));
-					CCMUtils.warnStaff(WarningMessages.getModeWarning(player, GameMode.CREATIVE));
-					plugin.getLogger().info(WarningMessages.getModeWarning(player, GameMode.CREATIVE));
+					CCMUtils.warnStaff(plugin, WarningMessages.getModeWarning(player, GameMode.CREATIVE));
 				}
 				return true;
 			}

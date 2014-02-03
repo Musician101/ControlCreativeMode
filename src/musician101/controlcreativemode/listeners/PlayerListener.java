@@ -67,10 +67,7 @@ public class PlayerListener implements Listener
 						player.sendMessage(Messages.NO_PERMISSION_PLACE);
 					}
 					else
-					{
-						CCMUtils.warnStaff(WarningMessages.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
-						plugin.getLogger().info(WarningMessages.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
-					}
+						CCMUtils.warnStaff(plugin, WarningMessages.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
 				}
 			}
 		}
@@ -94,10 +91,7 @@ public class PlayerListener implements Listener
 				player.sendMessage(Messages.NO_PERMISSION_DROP);
 			}
 			else
-			{
-				CCMUtils.warnStaff(WarningMessages.getItemDropWarning(player, material, player.getLocation()));
-        		plugin.getLogger().info(WarningMessages.getItemDropWarning(player, material, player.getLocation()));
-			}
+				CCMUtils.warnStaff(plugin, WarningMessages.getItemDropWarning(player, material, player.getLocation()));
     	}
     }
     
@@ -128,17 +122,11 @@ public class PlayerListener implements Listener
                     	player.sendMessage(Messages.NO_PERMISSION_INVENTORY);
             		}
             		else if (!player.isSneaking())
-            		{
-            			CCMUtils.warnStaff(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
-            			plugin.getLogger().info(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
-            		}
+            			CCMUtils.warnStaff(plugin, WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
             		else if (player.isSneaking())
             		{
             			if (item == null)
-            			{
-            				CCMUtils.warnStaff(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
-            				plugin.getLogger().info(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
-            			}
+            				CCMUtils.warnStaff(plugin, WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
             			else if (item.getType() == Material.MONSTER_EGG && !isSpawnAllowed(item.getDurability()))
             			{
             				if (!player.hasPermission(Commands.ALLOW_SPAWN_PERM))
@@ -147,10 +135,7 @@ public class PlayerListener implements Listener
             					player.sendMessage(Messages.NO_PERMISSION_SPAWN);
             				}
             				else
-            				{
-            					CCMUtils.warnStaff(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-            					plugin.getLogger().info(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-            				}
+            					CCMUtils.warnStaff(plugin, WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
             			}
             		}
             	}
@@ -167,10 +152,7 @@ public class PlayerListener implements Listener
             			player.sendMessage(Messages.NO_PERMISSION_PLACE);
             		}
             		else
-            		{
-            			CCMUtils.warnStaff(WarningMessages.getCartWarning(player, item, player.getLocation()));
-                		plugin.getLogger().info(WarningMessages.getCartWarning(player, item, player.getLocation()));
-            		}
+            			CCMUtils.warnStaff(plugin, WarningMessages.getCartWarning(player, item, player.getLocation()));
             	}
             	
             	/** Spawn Eggs Check */
@@ -182,10 +164,7 @@ public class PlayerListener implements Listener
                 		player.sendMessage(Messages.NO_PERMISSION_SPAWN);
             		}
             		else if (item.getType() == Material.MONSTER_EGG)
-            		{
-            			CCMUtils.warnStaff(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-            			plugin.getLogger().info(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-            		}
+            			CCMUtils.warnStaff(plugin, WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
             	}
             	
             	/** Throwable Items Check */
@@ -197,10 +176,7 @@ public class PlayerListener implements Listener
             			player.sendMessage(Messages.NO_PERMISSION_THROW);
             		}
             		else
-                	{
-                		CCMUtils.warnStaff(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
-                		plugin.getLogger().info(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
-                	}
+                		CCMUtils.warnStaff(plugin, WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
             	}
             }
             
@@ -216,10 +192,7 @@ public class PlayerListener implements Listener
             		player.sendMessage(Messages.NO_PERMISSION_THROW);
             	}
             	else
-            	{
-            		CCMUtils.warnStaff(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
-            		plugin.getLogger().info(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
-            	}
+            		CCMUtils.warnStaff(plugin, WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
         	}
     	}
     }
@@ -244,10 +217,7 @@ public class PlayerListener implements Listener
         		player.sendMessage(Messages.NO_PERMISSION_INVENTORY);
     		}
     		else
-    		{
-    			CCMUtils.warnStaff(WarningMessages.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
-        		plugin.getLogger().info(WarningMessages.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
-    		}
+    			CCMUtils.warnStaff(plugin, WarningMessages.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
     	}
     }
     
