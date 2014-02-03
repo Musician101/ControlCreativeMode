@@ -111,7 +111,7 @@ public class PlayerListener implements Listener
     	if (player.getGameMode() == GameMode.CREATIVE)
     	{
     		/** Check if a player right clicks a block */
-            if (action == Action.RIGHT_CLICK_BLOCK && player.getGameMode() == GameMode.CREATIVE)
+            if (action == Action.RIGHT_CLICK_BLOCK)
             {
             	/** Block Based Inventory Check */
         		if (config.noBlockBasedInventory.contains(block.getType().toString()))
