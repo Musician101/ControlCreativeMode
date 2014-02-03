@@ -1,6 +1,6 @@
 package musician101.controlcreativemode.util;
 
-import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.lib.Commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public class CCMUtils
 	public static void warnStaff(String warning)
 	{
 		for (Player player : Bukkit.getServer().getOnlinePlayers())
-			if (player.hasPermission(Constants.PERMISSION_SPY))
+			if (player.hasPermission(Commands.SPY_PERM))
 				player.sendMessage(warning);
 	}
 	

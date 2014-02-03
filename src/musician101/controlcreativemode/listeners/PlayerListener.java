@@ -4,7 +4,9 @@ import java.util.Arrays;
 
 import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
-import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.lib.Commands;
+import musician101.controlcreativemode.lib.Messages;
+import musician101.controlcreativemode.lib.WarningMessages;
 import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
@@ -32,7 +34,10 @@ public class PlayerListener implements Listener
     Config config;
     
     /**
-     * @param plugin References the Main class.
+     * Constructor.
+     * 
+     * @param plugin References instance.
+     * @param config Configuration instance.
      */
     public PlayerListener(ControlCreativeMode plugin, Config config)
     {
@@ -56,15 +61,15 @@ public class PlayerListener implements Listener
 			{
 				if (config.blockLavaBucket || config.blockWaterBucket)
 				{
-					if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+					if (!player.hasPermission(Commands.ALLOW_BLOCK_PERM))
 					{
 						event.setCancelled(true);
-						player.sendMessage(Constants.NO_PERMISSION_PLACE);
+						player.sendMessage(Messages.NO_PERMISSION_PLACE);
 					}
 					else
 					{
-						CCMUtils.warnStaff(Constants.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
-						plugin.getLogger().info(Constants.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
+						CCMUtils.warnStaff(WarningMessages.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
+						plugin.getLogger().info(WarningMessages.getBucketWarning(player, material, event.getBlockClicked().getLocation()));
 					}
 				}
 			}
@@ -83,15 +88,15 @@ public class PlayerListener implements Listener
     	String material = event.getItemDrop().getItemStack().getType().toString();
     	if (player.getGameMode() == GameMode.CREATIVE && config.noDrop.contains(material))
     	{
-    		if (!player.hasPermission(Constants.PERMISSION_ALLOW_DROP))
+    		if (!player.hasPermission(Commands.ALLOW_DROP_PERM))
 			{
 				event.setCancelled(true);
-				player.sendMessage(Constants.NO_PERMISSION_DROP);
+				player.sendMessage(Messages.NO_PERMISSION_DROP);
 			}
 			else
 			{
-				CCMUtils.warnStaff(Constants.getItemDropWarning(player, material, player.getLocation()));
-        		plugin.getLogger().info(Constants.getItemDropWarning(player, material, player.getLocation()));
+				CCMUtils.warnStaff(WarningMessages.getItemDropWarning(player, material, player.getLocation()));
+        		plugin.getLogger().info(WarningMessages.getItemDropWarning(player, material, player.getLocation()));
 			}
     	}
     }
@@ -117,34 +122,34 @@ public class PlayerListener implements Listener
             	/** Block Based Inventory Check */
         		if (config.noBlockBasedInventory.contains(block.getType().toString()))
             	{
-            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
+            		if (!player.hasPermission(Commands.ALLOW_OPEN_CHESTS_PERM))
             		{
             			event.setCancelled(true);
-                    	player.sendMessage(Constants.NO_PERMISSION_INVENTORY);
+                    	player.sendMessage(Messages.NO_PERMISSION_INVENTORY);
             		}
             		else if (!player.isSneaking())
             		{
-            			CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
-            			plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            			CCMUtils.warnStaff(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            			plugin.getLogger().info(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
             		}
             		else if (player.isSneaking())
             		{
             			if (item == null)
             			{
-            				CCMUtils.warnStaff(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
-            				plugin.getLogger().info(Constants.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            				CCMUtils.warnStaff(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
+            				plugin.getLogger().info(WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
             			}
             			else if (item.getType() == Material.MONSTER_EGG && !isSpawnAllowed(item.getDurability()))
             			{
-            				if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
+            				if (!player.hasPermission(Commands.ALLOW_SPAWN_PERM))
             				{
             					event.setCancelled(true);
-            					player.sendMessage(Constants.NO_PERMISSION_SPAWN);
+            					player.sendMessage(Messages.NO_PERMISSION_SPAWN);
             				}
             				else
             				{
-            					CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-            					plugin.getLogger().info(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            					CCMUtils.warnStaff(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            					plugin.getLogger().info(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
             				}
             			}
             		}
@@ -156,45 +161,45 @@ public class PlayerListener implements Listener
             	 */
             	if (item.getType() == Material.EXPLOSIVE_MINECART && Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS).contains(block.getType()) && config.blockTNTMinecart)
             	{
-            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+            		if (!player.hasPermission(Commands.ALLOW_BLOCK_PERM))
             		{
             			event.setCancelled(true);
-            			player.sendMessage(Constants.NO_PERMISSION_PLACE);
+            			player.sendMessage(Messages.NO_PERMISSION_PLACE);
             		}
             		else
             		{
-            			CCMUtils.warnStaff(Constants.getCartWarning(player, item, player.getLocation()));
-                		plugin.getLogger().info(Constants.getCartWarning(player, item, player.getLocation()));
+            			CCMUtils.warnStaff(WarningMessages.getCartWarning(player, item, player.getLocation()));
+                		plugin.getLogger().info(WarningMessages.getCartWarning(player, item, player.getLocation()));
             		}
             	}
             	
             	/** Spawn Eggs Check */
             	if (!isSpawnAllowed(item.getDurability()))
             	{
-            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_SPAWN))
+            		if (!player.hasPermission(Commands.ALLOW_SPAWN_PERM))
             		{
             			event.setCancelled(true);
-                		player.sendMessage(Constants.NO_PERMISSION_SPAWN);
+                		player.sendMessage(Messages.NO_PERMISSION_SPAWN);
             		}
             		else if (item.getType() == Material.MONSTER_EGG)
             		{
-            			CCMUtils.warnStaff(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
-            			plugin.getLogger().info(Constants.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            			CCMUtils.warnStaff(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
+            			plugin.getLogger().info(WarningMessages.getSpawnWarning(player, item.getDurability(), block.getLocation()));
             		}
             	}
             	
             	/** Throwable Items Check */
             	if (config.noThrow.contains(item.getType()))
             	{
-            		if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW))
+            		if (!player.hasPermission(Commands.ALLOW_THROW_PERM))
             		{
             			event.setCancelled(true);
-            			player.sendMessage(Constants.NO_PERMISSION_THROW);
+            			player.sendMessage(Messages.NO_PERMISSION_THROW);
             		}
             		else
                 	{
-                		CCMUtils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
-                		plugin.getLogger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
+                		CCMUtils.warnStaff(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
+                		plugin.getLogger().info(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
                 	}
             	}
             }
@@ -205,15 +210,15 @@ public class PlayerListener implements Listener
              */
             if (action == Action.RIGHT_CLICK_AIR && config.noThrow.contains(item.getType()))
         	{
-            	if (!player.hasPermission(Constants.PERMISSION_ALLOW_THROW))
+            	if (!player.hasPermission(Commands.ALLOW_THROW_PERM))
             	{
             		event.setCancelled(true);
-            		player.sendMessage(Constants.NO_PERMISSION_THROW);
+            		player.sendMessage(Messages.NO_PERMISSION_THROW);
             	}
             	else
             	{
-            		CCMUtils.warnStaff(Constants.getThrownItemWarning(player, item, player.getLocation()));
-            		plugin.getLogger().info(Constants.getThrownItemWarning(player, item, player.getLocation()));
+            		CCMUtils.warnStaff(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
+            		plugin.getLogger().info(WarningMessages.getThrownItemWarning(player, item, player.getLocation()));
             	}
         	}
     	}
@@ -233,15 +238,15 @@ public class PlayerListener implements Listener
     	/** Entity based inventory check. */
     	if (player.getGameMode() == GameMode.CREATIVE && config.noEntityBasedInventory.contains(entity.getType().toString().toLowerCase()))
     	{
-    		if (!player.hasPermission(Constants.PERMISSION_ALLOW_OPEN_CHESTS))
+    		if (!player.hasPermission(Commands.ALLOW_OPEN_CHESTS_PERM))
     		{
     			event.setCancelled(true);
-        		player.sendMessage(Constants.NO_PERMISSION_INVENTORY);
+        		player.sendMessage(Messages.NO_PERMISSION_INVENTORY);
     		}
     		else
     		{
-    			CCMUtils.warnStaff(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
-        		plugin.getLogger().info(Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
+    			CCMUtils.warnStaff(WarningMessages.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
+        		plugin.getLogger().info(WarningMessages.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
     		}
     	}
     }

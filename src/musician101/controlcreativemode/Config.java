@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.lib.ErrorMessages;
+import musician101.controlcreativemode.lib.Messages;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -57,7 +58,7 @@ public class Config
 			if (Material.getMaterial(material.toUpperCase()) != null)
 				noBlockBasedInventory.add(material.toUpperCase());
 			else
-				plugin.getLogger().warning(Constants.getMaterialError(material));
+				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
 		}
 		
 		for (String material : config.getStringList("noDrop"))
@@ -65,7 +66,7 @@ public class Config
 			if (Material.getMaterial(material.toUpperCase()) != null)
 				noDrop.add(material.toUpperCase());
 			else
-				plugin.getLogger().warning(Constants.getMaterialError(material));
+				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
 		}
 		
 		for (String material : config.getStringList("noPlace"))
@@ -73,15 +74,15 @@ public class Config
 			if (Material.getMaterial(material.toUpperCase()) != null)
 				noPlace.add(material.toUpperCase());
 			else
-				plugin.getLogger().warning(Constants.getMaterialError(material));
+				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
 		}
 		
 		for (String mob : config.getStringList("noSpawn"))
 		{
-			if (Constants.MOB_LIST.contains(mob.toLowerCase()))
+			if (Messages.MOB_LIST.contains(mob.toLowerCase()))
 				noSpawn.add(mob.toLowerCase());
 			else
-				plugin.getLogger().warning(Constants.getMobError(mob));
+				plugin.getLogger().warning(ErrorMessages.getMobError(mob));
 		}
 		
 		for (String material : config.getStringList("noThrow"))
@@ -89,7 +90,7 @@ public class Config
 			if (Material.getMaterial(material.toUpperCase()) != null)
 				noThrow.add(material.toUpperCase());
 			else
-				plugin.getLogger().warning(Constants.getMaterialError(material));
+				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
 		}
 	}
 }

@@ -1,7 +1,8 @@
 package musician101.controlcreativemode.commands;
 
 import musician101.controlcreativemode.ControlCreativeMode;
-import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.lib.Commands;
+import musician101.controlcreativemode.lib.Messages;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,8 +18,10 @@ public class CCMCommand implements CommandExecutor
 	ControlCreativeMode plugin;
 	
 	/**
-	 * @param plugin References the main class.
-	 */
+     * Constructor.
+     * 
+     * @param plugin References instance.
+     */
 	public CCMCommand(ControlCreativeMode plugin)
 	{
 		this.plugin = plugin;
@@ -34,16 +37,16 @@ public class CCMCommand implements CommandExecutor
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if (command.getName().equalsIgnoreCase(Constants.CCM))
+		if (command.getName().equalsIgnoreCase(Commands.CCM_CMD))
 		{
-			if (!sender.hasPermission(Constants.PERMISSION_USE))
+			if (!sender.hasPermission(Commands.USE_PERM))
 			{
-				sender.sendMessage(Constants.NO_PERMISSION_COMMAND);
+				sender.sendMessage(Messages.NO_PERMISSION_COMMAND);
 				return false;
 			}
 			else
 			{
-				sender.sendMessage(Constants.PREFIX_INFO_WARNING + "Running version " + plugin.getDescription().getVersion() + " compiled with Bukkit 1.6.4-R2.0.");
+				sender.sendMessage(Messages.PREFIX_INFO_WARNING + "Running version " + plugin.getDescription().getVersion() + " compiled with Bukkit 1.7.2-R0.2.");
 				return true;
 			}
 		}

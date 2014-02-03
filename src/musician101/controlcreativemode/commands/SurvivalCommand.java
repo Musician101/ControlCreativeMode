@@ -1,7 +1,10 @@
 package musician101.controlcreativemode.commands;
 
 import musician101.controlcreativemode.ControlCreativeMode;
-import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.lib.Commands;
+import musician101.controlcreativemode.lib.ErrorMessages;
+import musician101.controlcreativemode.lib.Messages;
+import musician101.controlcreativemode.lib.WarningMessages;
 import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
@@ -20,8 +23,10 @@ public class SurvivalCommand implements CommandExecutor
 	ControlCreativeMode plugin;
 	
 	/**
-	 * @param plugin References the main class.
-	 */
+     * Constructor.
+     * 
+     * @param plugin References instance.
+     */
 	public SurvivalCommand(ControlCreativeMode plugin)
 	{
 		this.plugin = plugin;
@@ -37,16 +42,16 @@ public class SurvivalCommand implements CommandExecutor
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if (command.getName().equalsIgnoreCase(Constants.SURVIVAL))
+		if (command.getName().equalsIgnoreCase(Commands.SURVIVAL_CMD))
 		{
 			if (!(sender instanceof Player))
 			{
-				sender.sendMessage(Constants.IS_CONSOLE);
+				sender.sendMessage(ErrorMessages.IS_CONSOLE);
 				return false;
 			}
-			else if (!sender.hasPermission(Constants.PERMISSION_USE))
+			else if (!sender.hasPermission(Commands.USE_PERM))
 			{
-				sender.sendMessage(Constants.NO_PERMISSION_COMMAND);
+				sender.sendMessage(Messages.NO_PERMISSION_COMMAND);
 				return false;
 			}
 			else
@@ -54,24 +59,24 @@ public class SurvivalCommand implements CommandExecutor
 				Player player = (Player) sender;
 				if (player.getGameMode() == GameMode.SURVIVAL)
 				{
-					player.sendMessage(Constants.getCommandError(player.getGameMode()));
+					player.sendMessage(ErrorMessages.getCommandError(player.getGameMode()));
 				}
 				else
 				{
-					if (CCMUtils.isInventoryEmpty((Player) sender) && !player.hasPermission(Constants.PERMISSION_KEEP_ITEMS))
+					if (CCMUtils.isInventoryEmpty((Player) sender) && !player.hasPermission(Commands.KEEP_ITEMS_PERM))
 					{
 						player.getInventory().clear();
 						player.getInventory().setArmorContents(null);
 					}
 					else
 					{
-						CCMUtils.warnStaff(Constants.getItemKeptWarning(player));
-						plugin.getLogger().info(Constants.getItemKeptWarning(player));
+						CCMUtils.warnStaff(WarningMessages.getItemKeptWarning(player));
+						plugin.getLogger().info(WarningMessages.getItemKeptWarning(player));
 					}
 					player.setGameMode(GameMode.SURVIVAL);
-					player.sendMessage(Constants.getModeMsg(GameMode.SURVIVAL));
-					CCMUtils.warnStaff(Constants.getModeWarning(player, GameMode.SURVIVAL));
-					plugin.getLogger().info(Constants.getModeWarning(player, GameMode.SURVIVAL));
+					player.sendMessage(WarningMessages.getModeMsg(GameMode.SURVIVAL));
+					CCMUtils.warnStaff(WarningMessages.getModeWarning(player, GameMode.SURVIVAL));
+					plugin.getLogger().info(WarningMessages.getModeWarning(player, GameMode.SURVIVAL));
 				}
 				return true;
 			}

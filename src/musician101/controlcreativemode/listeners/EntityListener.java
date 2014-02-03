@@ -1,7 +1,9 @@
 package musician101.controlcreativemode.listeners;
 
 import musician101.controlcreativemode.ControlCreativeMode;
-import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.lib.Commands;
+import musician101.controlcreativemode.lib.Messages;
+import musician101.controlcreativemode.lib.WarningMessages;
 import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
@@ -21,8 +23,10 @@ public class EntityListener implements Listener
 	ControlCreativeMode plugin;
 	
 	/**
-	 * @param plugin References the Main class.
-	 */
+     * Constructor.
+     * 
+     * @param plugin References instance.
+     */
 	public EntityListener(ControlCreativeMode plugin)
 	{
 		this.plugin = plugin;
@@ -42,15 +46,15 @@ public class EntityListener implements Listener
             Player player = (Player) event.getDamager();
             if (player.getGameMode() == GameMode.CREATIVE)
             {
-            	if (!player.hasPermission(Constants.PERMISSION_ALLOW_ATTACK))
+            	if (!player.hasPermission(Commands.ALLOW_ATTACK_PERM))
                 {
                 	event.setCancelled(true);
-                    player.sendMessage(Constants.NO_PERMISSION_ATTACK);
+                    player.sendMessage(Messages.NO_PERMISSION_ATTACK);
                 }
                 else
                 {
-                	CCMUtils.warnStaff(Constants.getAttackWarning(player, entity));
-                	plugin.getLogger().info(Constants.getAttackWarning(player, entity));
+                	CCMUtils.warnStaff(WarningMessages.getAttackWarning(player, entity));
+                	plugin.getLogger().info(WarningMessages.getAttackWarning(player, entity));
                 }
             }
         }

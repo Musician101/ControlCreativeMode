@@ -2,7 +2,9 @@ package musician101.controlcreativemode.listeners;
 
 import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
-import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.lib.Commands;
+import musician101.controlcreativemode.lib.Messages;
+import musician101.controlcreativemode.lib.WarningMessages;
 import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
@@ -24,7 +26,10 @@ public class BlockListener implements Listener
     Config config;
     
     /**
-     * @param plugin References the Main class.
+     * Constructor.
+     * 
+     * @param plugin References instance.
+     * @param config Configuration instance.
      */
     public BlockListener(ControlCreativeMode plugin, Config config)
     {
@@ -45,15 +50,15 @@ public class BlockListener implements Listener
         
         if (player.getGameMode() == GameMode.CREATIVE && config.noPlace.contains(block.getType().toString()))
         {
-        	if (!player.hasPermission(Constants.PERMISSION_ALLOW_BLOCK))
+        	if (!player.hasPermission(Commands.ALLOW_BLOCK_PERM))
         	{
         		block.setType(Material.AIR);
-        		player.sendMessage(Constants.NO_PERMISSION_PLACE);
+        		player.sendMessage(Messages.NO_PERMISSION_PLACE);
         	}
         	else
         	{
-        		CCMUtils.warnStaff(Constants.getBlockWarning(player, block));
-        		plugin.getLogger().warning(Constants.getBlockWarning(player, block));
+        		CCMUtils.warnStaff(WarningMessages.getBlockWarning(player, block));
+        		plugin.getLogger().warning(WarningMessages.getBlockWarning(player, block));
         	}
         }
     }
