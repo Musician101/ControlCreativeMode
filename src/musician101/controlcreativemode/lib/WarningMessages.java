@@ -27,7 +27,7 @@ public class WarningMessages
 	/** Warning message when a player places a block. */
 	public static String getBlockWarning(Player player, Block block)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " placed " + block.toString() + " at X: " + block.getLocation().getBlockX() + ", Y: "
+		return Messages.PREFIX_INFO_WARNING + player.getName() + " placed " + block.getType().toString() + " at X: " + block.getLocation().getBlockX() + ", Y: "
 				+ block.getLocation().getBlockY() + ", Z: " + block.getLocation().getBlockZ() + ".";
 	}
 
@@ -40,7 +40,7 @@ public class WarningMessages
 	/** Warning message when a player uses a water/lava bucket. */
 	public static String getBucketWarning(Player player, Material material, Location location)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " opened a " + material + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY()
+		return Messages.PREFIX_INFO_WARNING + player.getName() + " placed a " + material + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY()
 				+ ", Z: " + location.getBlockZ();
 	}
 	
