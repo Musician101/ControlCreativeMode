@@ -2,8 +2,8 @@
 checkForUpdate: true
 
 # Prevent players from interacting with block based inventories (i.e. Chests, Dispensers, etc.).
-# Use ID's or it won't register
-# Use 0 to allow all blocks and items.
+# Use materials or it won't register
+# Use {} to allow all blocks and items.
 noBlockBasedInventory:
   - dispenser
   - chest
@@ -26,8 +26,8 @@ noEntityBasedInventory:
   - minecart_hopper
   - villager
   
-# Prevent blocks/items from being dropped. Use ID's or it won't register.
-# Use 0 to allow all blocks and items.
+# Prevent blocks/items from being dropped. Use materials or it won't register.
+# Use {} to allow all blocks and items.
 noDrop:
   - bedrock
   - water
@@ -42,8 +42,8 @@ noDrop:
   - lava_bucket
   - potion
 
-# Prevent block placement. Use ID's or it won't register.
-# Use 0 to allow all blocks.
+# Prevent block placement. Use materials or it won't register.
+# Use {} to allow all blocks.
 noPlace:
   - bedrock
   - water
@@ -56,7 +56,7 @@ noPlace:
   - monster_eggs # Silverfish Blocks
   
 # Prevent the use of spawn eggs.
-# To enable all mobs. Simple put - none.
+# To enable all mobs. Simply put - none.
 noSpawn:
   - creeper
   - skeleton
@@ -85,8 +85,8 @@ noSpawn:
   - villager
 
 # Prevent items from being thrown. (i.e. Right click with a chicken egg.)
-# Use ID's or it won't register.
-# Use 0 to allow all throwables.
+# Use materials or it won't register.
+# Use {} to allow all throwables.
 noThrow:
   - snow_ball
   - egg
