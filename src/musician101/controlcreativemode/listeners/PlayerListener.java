@@ -1,6 +1,5 @@
 package musician101.controlcreativemode.listeners;
 
-import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
 
 import org.bukkit.block.Block;
@@ -22,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerListener implements Listener
 {
     ControlCreativeMode plugin;
-    Config config;
     
     /**
      * Constructor.
@@ -30,10 +28,9 @@ public class PlayerListener implements Listener
      * @param plugin References instance.
      * @param config Configuration instance.
      */
-    public PlayerListener(ControlCreativeMode plugin, Config config)
+    public PlayerListener(ControlCreativeMode plugin)
     {
         this.plugin = plugin;
-        this.config = config;
     }
 
     /**
@@ -44,7 +41,7 @@ public class PlayerListener implements Listener
     @EventHandler
 	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event)
 	{
-		PlayerChecks.bucketCheck(plugin, config, event.getBucket(), event.getPlayer(), event);
+		PlayerChecks.bucketCheck(plugin, event.getBucket(), event.getPlayer(), event);
 	}
     
     /**
@@ -55,7 +52,7 @@ public class PlayerListener implements Listener
 	@EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
-    	PlayerChecks.droppedItemCheck(plugin, config, event.getPlayer(), event, event.getItemDrop().getItemStack().getType().toString());
+    	PlayerChecks.droppedItemCheck(plugin, event.getPlayer(), event, event.getItemDrop().getItemStack().getType().toString());
     }
     
     /**
@@ -71,10 +68,10 @@ public class PlayerListener implements Listener
     	ItemStack item = event.getItem();
         Player player = event.getPlayer();
         
-        PlayerChecks.blockBasedInventoryCheck(plugin, config, action, block, item, player, event);
-        PlayerChecks.spawnEggsCheck(plugin, config, action, block, item, player, event);
-        PlayerChecks.throwableItemsCheck(plugin, config, action, item, player, event);
-        PlayerChecks.tntMinecartCheck(plugin, config, action, block, item, player, event);
+        PlayerChecks.blockBasedInventoryCheck(plugin, action, block, item, player, event);
+        PlayerChecks.spawnEggsCheck(plugin, action, block, item, player, event);
+        PlayerChecks.throwableItemsCheck(plugin, action, item, player, event);
+        PlayerChecks.tntMinecartCheck(plugin, action, block, item, player, event);
     }
     
     /**
@@ -85,6 +82,6 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event)
     {
-    	PlayerChecks.entityBasedInventoryCheck(plugin, config, event.getRightClicked(), event.getPlayer(), event);
+    	PlayerChecks.entityBasedInventoryCheck(plugin, event.getRightClicked(), event.getPlayer(), event);
     }
 }

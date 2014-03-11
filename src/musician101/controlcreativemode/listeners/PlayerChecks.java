@@ -2,7 +2,6 @@ package musician101.controlcreativemode.listeners;
 
 import java.util.Arrays;
 
-import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Commands;
 import musician101.controlcreativemode.lib.Messages;
@@ -23,9 +22,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlayerChecks
 {
-	public static void blockBasedInventoryCheck(ControlCreativeMode plugin, Config config, Action action, Block block, ItemStack item, Player player, PlayerInteractEvent event)
+	public static void blockBasedInventoryCheck(ControlCreativeMode plugin, Action action, Block block, ItemStack item, Player player, PlayerInteractEvent event)
 	{
-		if (player.getGameMode() == GameMode.CREATIVE && action == Action.RIGHT_CLICK_BLOCK && config.noBlockBasedInventory.contains((block.getType().toString())))
+		if (player.getGameMode() == GameMode.CREATIVE && action == Action.RIGHT_CLICK_BLOCK && plugin.config.noBlockBasedInventory.contains((block.getType().toString())))
     	{
 			if (!player.hasPermission(Commands.ALLOW_OPEN_CHESTS_PERM))
     		{
@@ -38,7 +37,7 @@ public class PlayerChecks
     		{
     			if (item == null)
     				CCMUtils.warnStaff(plugin, WarningMessages.getBlockInteractWarning(player, block.getType().toString(), block.getLocation()));
-    			else if (item.getType() == Material.MONSTER_EGG && !isSpawnAllowed(config, item.getDurability()))
+    			else if (item.getType() == Material.MONSTER_EGG && !isSpawnAllowed(plugin, item.getDurability()))
     			{
     				if (!player.hasPermission(Commands.ALLOW_SPAWN_PERM))
     				{
@@ -52,13 +51,13 @@ public class PlayerChecks
     	}
 	}
 	
-	public static void bucketCheck(ControlCreativeMode plugin, Config config, Material material, Player player, PlayerBucketEmptyEvent event)
+	public static void bucketCheck(ControlCreativeMode plugin, Material material, Player player, PlayerBucketEmptyEvent event)
 	{
-		if (player.getGameMode() == GameMode.CREATIVE && ((material == Material.LAVA_BUCKET && config.blockLavaBucket) || (material == Material.WATER_BUCKET && config.blockWaterBucket)))
+		if (player.getGameMode() == GameMode.CREATIVE && ((material == Material.LAVA_BUCKET && plugin.config.blockLavaBucket) || (material == Material.WATER_BUCKET && plugin.config.blockWaterBucket)))
 		{
 			if (material == Material.LAVA_BUCKET || material == Material.WATER_BUCKET)
 			{
-				if (config.blockLavaBucket || config.blockWaterBucket)
+				if (plugin.config.blockLavaBucket || plugin.config.blockWaterBucket)
 				{
 					if (!player.hasPermission(Commands.ALLOW_BLOCK_PERM))
 					{
@@ -72,9 +71,9 @@ public class PlayerChecks
 		}
 	}
 	
-	public static void droppedItemCheck(ControlCreativeMode plugin, Config config, Player player, PlayerDropItemEvent event, String material)
+	public static void droppedItemCheck(ControlCreativeMode plugin, Player player, PlayerDropItemEvent event, String material)
 	{
-		if (player.getGameMode() == GameMode.CREATIVE && config.noDrop.contains(material))
+		if (player.getGameMode() == GameMode.CREATIVE && plugin.config.noDrop.contains(material))
     	{
     		if (!player.hasPermission(Commands.ALLOW_DROP_PERM))
 			{
@@ -86,9 +85,9 @@ public class PlayerChecks
     	}
 	}
 	
-	public static void entityBasedInventoryCheck(ControlCreativeMode plugin, Config config, Entity entity, Player player, PlayerInteractEntityEvent event)
+	public static void entityBasedInventoryCheck(ControlCreativeMode plugin, Entity entity, Player player, PlayerInteractEntityEvent event)
 	{
-		if (player.getGameMode() == GameMode.CREATIVE && config.noEntityBasedInventory.contains(entity.getType().toString().toLowerCase()))
+		if (player.getGameMode() == GameMode.CREATIVE && plugin.config.noEntityBasedInventory.contains(entity.getType().toString().toLowerCase()))
     	{
     		if (!player.hasPermission(Commands.ALLOW_OPEN_CHESTS_PERM))
     		{
@@ -100,9 +99,9 @@ public class PlayerChecks
     	}
 	}
 	
-	public static void spawnEggsCheck(ControlCreativeMode plugin, Config config, Action action, Block block, ItemStack item, Player player, PlayerInteractEvent event)
+	public static void spawnEggsCheck(ControlCreativeMode plugin, Action action, Block block, ItemStack item, Player player, PlayerInteractEvent event)
 	{
-		if (player.getGameMode() == GameMode.CREATIVE && action == Action.RIGHT_CLICK_BLOCK && !isSpawnAllowed(config, item.getDurability()))
+		if (player.getGameMode() == GameMode.CREATIVE && action == Action.RIGHT_CLICK_BLOCK && !isSpawnAllowed(plugin, item.getDurability()))
         {
         	if (!player.hasPermission(Commands.ALLOW_SPAWN_PERM))
         	{
@@ -114,9 +113,9 @@ public class PlayerChecks
         }
 	}
 	
-	public static void throwableItemsCheck(ControlCreativeMode plugin, Config config, Action action, ItemStack item, Player player, PlayerInteractEvent event)
+	public static void throwableItemsCheck(ControlCreativeMode plugin, Action action, ItemStack item, Player player, PlayerInteractEvent event)
 	{
-		if (player.getGameMode() == GameMode.CREATIVE && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) && config.noThrow.contains(item.getType().toString()))
+		if (player.getGameMode() == GameMode.CREATIVE && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) && plugin.config.noThrow.contains(item.getType().toString()))
 		{
 			if (!player.hasPermission(Commands.ALLOW_THROW_PERM))
 			{
@@ -128,9 +127,9 @@ public class PlayerChecks
 		}
 	}
 	
-	public static void tntMinecartCheck(ControlCreativeMode plugin, Config config, Action action, Block block, ItemStack item, Player player, PlayerInteractEvent event)
+	public static void tntMinecartCheck(ControlCreativeMode plugin, Action action, Block block, ItemStack item, Player player, PlayerInteractEvent event)
 	{
-		if (player.getGameMode() == GameMode.CREATIVE && action == Action.RIGHT_CLICK_BLOCK && item.getType() == Material.EXPLOSIVE_MINECART && Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS).contains(block.getType()) && config.blockTNTMinecart)
+		if (player.getGameMode() == GameMode.CREATIVE && action == Action.RIGHT_CLICK_BLOCK && item.getType() == Material.EXPLOSIVE_MINECART && Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS).contains(block.getType()) && plugin.config.blockTNTMinecart)
     	{
             if (!player.hasPermission(Commands.ALLOW_BLOCK_PERM))
     		{
@@ -142,7 +141,7 @@ public class PlayerChecks
     	}
 	}
 	
-    public static boolean isSpawnAllowed(Config config, short data)
+    public static boolean isSpawnAllowed(ControlCreativeMode plugin, short data)
     {
     	String mob = "";
     	if (data == 50) mob = "creeper";
@@ -171,7 +170,7 @@ public class PlayerChecks
 		else if (data == 99) mob = "ironGolem";
 		else if (data == 120) mob = "villager";
     	
-    	if (config.noSpawn.contains(mob.toLowerCase()))
+    	if (plugin.config.noSpawn.contains(mob.toLowerCase()))
     		return false;
     	
     	return true;

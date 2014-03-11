@@ -20,7 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class ControlCreativeMode extends JavaPlugin
 {
-	Config config;
+	public Config config;
 	
 	/** Checks if new version is available. */
 	public void versionCheck()
@@ -47,9 +47,9 @@ public class ControlCreativeMode extends JavaPlugin
 		config = new Config(this);
 		versionCheck();
 		
-		getServer().getPluginManager().registerEvents(new BlockListener(this, config), this);
+		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
 		getServer().getPluginManager().registerEvents(new EntityListener(this), this);
-		getServer().getPluginManager().registerEvents(new PlayerListener(this, config), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		
 		getCommand(Commands.CCM_CMD).setExecutor(new CCMCommand(this));
 		getCommand(Commands.CREATIVE_CMD).setExecutor(new CreativeCommand(this));

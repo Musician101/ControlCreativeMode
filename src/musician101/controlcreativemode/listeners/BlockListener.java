@@ -1,6 +1,5 @@
 package musician101.controlcreativemode.listeners;
 
-import musician101.controlcreativemode.Config;
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Commands;
 import musician101.controlcreativemode.lib.Messages;
@@ -23,7 +22,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 public class BlockListener implements Listener
 {
     ControlCreativeMode plugin;
-    Config config;
     
     /**
      * Constructor.
@@ -31,10 +29,9 @@ public class BlockListener implements Listener
      * @param plugin References instance.
      * @param config Configuration instance.
      */
-    public BlockListener(ControlCreativeMode plugin, Config config)
+    public BlockListener(ControlCreativeMode plugin)
     {
         this.plugin = plugin;
-        this.config = config;
     }
 
     /**
@@ -48,7 +45,7 @@ public class BlockListener implements Listener
         Block block = event.getBlock();
         Player player = event.getPlayer();
         
-        if (player.getGameMode() == GameMode.CREATIVE && config.noPlace.contains(block.getType().toString()))
+        if (player.getGameMode() == GameMode.CREATIVE && plugin.config.noPlace.contains(block.getType().toString()))
         {
         	if (!player.hasPermission(Commands.ALLOW_BLOCK_PERM))
         	{
