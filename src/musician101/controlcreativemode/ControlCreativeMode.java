@@ -1,8 +1,6 @@
 package musician101.controlcreativemode;
 
 import musician101.controlcreativemode.commands.CCMCommand;
-import musician101.controlcreativemode.commands.CreativeCommand;
-import musician101.controlcreativemode.commands.SurvivalCommand;
 import musician101.controlcreativemode.lib.Commands;
 import musician101.controlcreativemode.listeners.BlockListener;
 import musician101.controlcreativemode.listeners.EntityListener;
@@ -52,8 +50,6 @@ public class ControlCreativeMode extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		
 		getCommand(Commands.CCM_CMD).setExecutor(new CCMCommand(this));
-		getCommand(Commands.CREATIVE_CMD).setExecutor(new CreativeCommand(this));
-		getCommand(Commands.SURVIVAL_CMD).setExecutor(new SurvivalCommand(this));
     }
 	
 	/** Shuts off the plugin. */

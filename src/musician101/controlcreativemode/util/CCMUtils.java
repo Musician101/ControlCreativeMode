@@ -18,12 +18,12 @@ public class CCMUtils
 	/**
 	 * Display warning messages to all who have the ccm.spy permission node.
 	 */
-	public static void warnStaff(ControlCreativeMode plugin, String warning)
+	public static void warnStaff(ControlCreativeMode plugin, String message)
 	{
-		plugin.getLogger().warning(warning.replace("[CCM] ", ""));
+		plugin.getLogger().warning(message.replace("[CCM] ", ""));
 		for (Player player : Bukkit.getServer().getOnlinePlayers())
 			if (player.hasPermission(Commands.SPY_PERM))
-				player.sendMessage(warning);
+				player.sendMessage(message);
 	}
 	
 	/**
@@ -34,17 +34,18 @@ public class CCMUtils
 	 */
 	public static boolean isInventoryEmpty(Player player)
 	{
-		boolean isEmpty = false;
 		for (ItemStack item : player.getInventory().getContents())
 		{
 			if (item != null)
 				return true;
 		}
+		
 		for (ItemStack item : player.getInventory().getArmorContents())
 		{
 			if (item != null)
 				return true;
 		}
-		return isEmpty;
+		
+		return false;
 	}
 }

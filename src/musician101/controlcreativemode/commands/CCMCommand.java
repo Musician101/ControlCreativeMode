@@ -2,11 +2,14 @@ package musician101.controlcreativemode.commands;
 
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Commands;
+import musician101.controlcreativemode.lib.ErrorMessages;
 import musician101.controlcreativemode.lib.Messages;
 
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * Command executor for the CCM command.
@@ -37,20 +40,39 @@ public class CCMCommand implements CommandExecutor
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if (command.getName().equalsIgnoreCase(Commands.CCM_CMD))
+		if (args.length > 0)
 		{
+			if (!(sender instanceof Player))
+			{
+				sender.sendMessage(ErrorMessages.PLAYER_ONLY);
+				return false;
+			}
+			
 			if (!sender.hasPermission(Commands.USE_PERM))
 			{
 				sender.sendMessage(Messages.NO_PERMISSION_COMMAND);
 				return false;
 			}
-			else
+			
+			if (Commands.CREATIVE_ALIASES.contains(args[0].toLowerCase()))
 			{
-				sender.sendMessage(Messages.PREFIX_INFO_WARNING + "Running version " + plugin.getDescription().getVersion() + " compiled with Bukkit 1.7.2-R0.2.");
+				((Player) sender).setGameMode(GameMode.CREATIVE);
+				sender.sendMessage(Messages.PREFIX + "You are now in Creative.");
 				return true;
 			}
+			else if (Commands.SURVIVAL_ALIASES.contains(args[0].toLowerCase()))
+			{
+				((Player) sender).setGameMode(GameMode.SURVIVAL);
+				sender.sendMessage(Messages.PREFIX + "You are now in Survival.");
+				return true;
+			}
+			
+			sender.sendMessage(Messages.PREFIX + "Error: Invalid argumetns.");
+			return false;
 		}
-		return false;
+		
+		sender.sendMessage(Messages.PREFIX + "Running version " + plugin.getDescription().getVersion() + " compiled with Bukkit 1.7.2-R0.2.");
+		return true;
 	}
 	
 }

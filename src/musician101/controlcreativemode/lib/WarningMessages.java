@@ -20,70 +20,70 @@ public class WarningMessages
 		else
 			attackedEntity = "a " + entity.getType().toString();
 		
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " attacked " + attackedEntity + " at X: " + player.getLocation().getBlockX() + ", Y: "
+		return Messages.PREFIX + player.getName() + " attacked " + attackedEntity + " at X: " + player.getLocation().getBlockX() + ", Y: "
 				+ player.getLocation().getBlockY() + ", Z: " + player.getLocation().getBlockZ() + ".";
 	}
 	
 	/** Warning message when a player places a block. */
 	public static String getBlockWarning(Player player, Block block)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " placed " + block.getType().toString() + " at X: " + block.getLocation().getBlockX() + ", Y: "
+		return Messages.PREFIX + player.getName() + " placed " + block.getType().toString() + " at X: " + block.getLocation().getBlockX() + ", Y: "
 				+ block.getLocation().getBlockY() + ", Z: " + block.getLocation().getBlockZ() + ".";
 	}
 
 	/** Warning message when a player right clicks a block. */
 	public static String getBlockInteractWarning(Player player, String material, Location location)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " opened a " + material + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
+		return Messages.PREFIX + player.getName() + " opened a " + material + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
 	}
 	
 	/** Warning message when a player uses a water/lava bucket. */
 	public static String getBucketWarning(Player player, Material material, Location location)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " placed a " + material + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY()
+		return Messages.PREFIX + player.getName() + " placed a " + material + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY()
 				+ ", Z: " + location.getBlockZ();
 	}
 	
 	/** Warning message when a TNT Minecart is placed. */
 	public static String getCartWarning(Player player, ItemStack item, Location location)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " has placed an " + item.getType().toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
+		return Messages.PREFIX + player.getName() + " has placed an " + item.getType().toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
 	}
 	
 	/** Warning message when a player right clicks a mob. */
 	public static String getEntityInteractWarning(Player player, EntityType entity, Location location)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " has interacted with a " + entity.toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
+		return Messages.PREFIX + player.getName() + " has interacted with a " + entity.toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
 	}
 	
 	/** Warning message when a player drops an item. */
 	public static String getItemDropWarning(Player player, String material, Location location)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " has dropped a " + material + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".";
+		return Messages.PREFIX + player.getName() + " has dropped a " + material + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".";
 	}
 	
 	/** Warning message when a player changes gamemodes with items in their inventory. */
 	public static String getItemKeptWarning(Player player)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " has kept items in their inventory when switching modes.";
+		return Messages.PREFIX + player.getName() + " has kept items in their inventory when switching modes.";
 	}
 	
 	/** Notification message when a player uses /creative or /survival. */
 	public static String getModeMsg(GameMode gm)
 	{
-		return Messages.PREFIX_GAMEMODE + "You are now in " + gm.toString() + ".";
+		return Messages.PREFIX + "You are now in " + gm.toString() + ".";
 	}
 	
 	/** Warning message when a player changes gamemode using the plugin's commands. */
 	public static String getModeWarning(Player player, GameMode gm)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " is now in " + gm.toString() + ".";
+		return Messages.PREFIX + player.getName() + " is now in " + gm.toString() + ".";
 	}
 	
 	/** Warning message when a player right clicks a throwable item. */
 	public static String getThrownItemWarning(Player player, ItemStack item, Location location)
 	{
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " threw a " + item.getType().toString() + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".";
+		return Messages.PREFIX + player.getName() + " threw a " + item.getType().toString() + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".";
 	}
 	
 	/**  Warning message when a player uses a spawn egg. */
@@ -143,6 +143,6 @@ public class WarningMessages
 		else
 			mob = "an UNIDENTIFIED MOB";
 		
-		return Messages.PREFIX_INFO_WARNING + player.getName() + " spawned " + mob + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
+		return Messages.PREFIX + player.getName() + " spawned " + mob + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
 	}
 }
