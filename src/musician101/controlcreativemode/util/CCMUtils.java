@@ -39,8 +39,8 @@ public class CCMUtils
 		return true;
 	}
 	
-	// Really convoluted way to get block/item durabilities.
-	// TODO Find alternate method to achieve ALL available durabilities
+	//Really convoluted way to get block/item durabilities.
+	//TODO Find alternate method to achieve ALL available durabilities
 	public static final List<Integer> getDurabilities(Material material)
 	{ 
 		List<Integer> dura = null;

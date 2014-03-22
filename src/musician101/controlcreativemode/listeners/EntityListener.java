@@ -5,6 +5,7 @@ import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,6 +39,13 @@ public class EntityListener implements Listener
             return;
         }
         
-        CCMUtils.warnStaff(plugin, Constants.getAttackWarning(player, entity));
+        String attacked = "";
+        if (entity instanceof Player)
+        	attacked = ((Player) entity).getName();
+        else
+        	attacked = "a " + entity.getType().toString();
+        
+        Location location = player.getLocation();
+        CCMUtils.warnStaff(plugin, player.getName() + " attacked " + attacked + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".");
     }
 }

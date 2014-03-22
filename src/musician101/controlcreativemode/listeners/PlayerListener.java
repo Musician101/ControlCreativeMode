@@ -7,6 +7,7 @@ import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -50,7 +51,8 @@ public class PlayerListener implements Listener
     			return;
     		}
     		
-    		CCMUtils.warnStaff(plugin, Constants.getBucketWarning(player, bucket, player.getLocation()));
+    		Location location = player.getLocation();
+    		CCMUtils.warnStaff(plugin, player.getName() + " placed " + bucket.toString() + " at X: " + location.getX() + ", Y: " + location.getY() + ", Z: " + location.getZ() + ".");
     	}
     	else if (bucket == Material.WATER_BUCKET)
     	{
@@ -64,7 +66,8 @@ public class PlayerListener implements Listener
     			return;
     		}
     		
-    		CCMUtils.warnStaff(plugin, Constants.getBucketWarning(player, bucket, player.getLocation()));
+    		Location location = player.getLocation();
+    		CCMUtils.warnStaff(plugin, player.getName() + " placed " + bucket.toString() + " at X: " + location.getX() + ", Y: " + location.getY() + ", Z: " + location.getZ() + ".");
     	}
 	}
     
@@ -86,7 +89,8 @@ public class PlayerListener implements Listener
 			return;
 		}
 		
-		CCMUtils.warnStaff(plugin, Constants.getItemDropWarning(player, item.getType().toString(), player.getLocation()));
+		Location location = player.getLocation();
+		CCMUtils.warnStaff(plugin, player.getName() + " has dropped " + item.getType().toString() + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".");
     }
     
     @EventHandler
@@ -113,7 +117,7 @@ public class PlayerListener implements Listener
         		return;
         	}
         	
-        	CCMUtils.warnStaff(plugin, Constants.getBlockInteractWarning(player, block));
+        	CCMUtils.warnStaff(plugin, player.getName() + " opened a " + block.getType().toString() + " at X: " + block.getX() + ", Y: " + block.getY() + ", Z: " + block.getZ() + ".");
         	return;
         }
         
@@ -127,7 +131,8 @@ public class PlayerListener implements Listener
         		return;
         	}
         	
-        	CCMUtils.warnStaff(plugin, Constants.getSpawnWarning(player, ((SpawnEgg) item.getData()).getSpawnedType(), player.getLocation()));
+        	Location location = player.getLocation();
+        	CCMUtils.warnStaff(plugin, player.getName() + " spawned a " + ((SpawnEgg) item.getData()).getSpawnedType().toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".");
         	return;
         }
         
@@ -141,7 +146,8 @@ public class PlayerListener implements Listener
         		return;
         	}
         	
-        	CCMUtils.warnStaff(plugin, Constants.getThrownItemWarning(player, item, player.getLocation()));
+        	Location location = player.getLocation();
+        	CCMUtils.warnStaff(plugin, player.getName() + " threw a " + item.getType().toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".");
         	return;
         }
         
@@ -158,7 +164,8 @@ public class PlayerListener implements Listener
         		return;
         	}
         	
-        	CCMUtils.warnStaff(plugin, Constants.getCartWarning(player, item, player.getLocation()));
+        	Location location = player.getLocation();
+        	CCMUtils.warnStaff(plugin, player.getName() + " has placed an " + item.getType().toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".");
         	return;
         }
     }
@@ -181,6 +188,7 @@ public class PlayerListener implements Listener
     		return;
     	}
     	
-    	CCMUtils.warnStaff(plugin, Constants.getEntityInteractWarning(player, entity.getType(), entity.getLocation()));
+    	Location location = entity.getLocation();
+    	CCMUtils.warnStaff(plugin, player.getName() + " has interacted with a " + entity.toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".");
     }
 }

@@ -2,6 +2,7 @@ package musician101.controlcreativemode.commands;
 
 import musician101.controlcreativemode.ControlCreativeMode;
 import musician101.controlcreativemode.lib.Constants;
+import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -36,6 +37,7 @@ public class CCMCommand implements CommandExecutor
 				
 				plugin.config.reloadConfiguration();
 				sender.sendMessage(Constants.PREFIX + "Config reloaded.");
+				
 				return true;
 			}
 			else if (args[0].equalsIgnoreCase(Constants.HELP_CMD))
@@ -71,16 +73,36 @@ public class CCMCommand implements CommandExecutor
 			return false;
 		}
 		
+		if (!sender.hasPermission(Constants.KEEP_ITEMS_PERM) && !CCMUtils.isInventoryEmpty((Player) sender))
+		{
+			sender.sendMessage(Constants.NO_PERMISSION_INVENTORY);
+			return false;
+		}
+		
 		if (Constants.CREATIVE_ALIASES.contains(gm))
 		{
 			((Player) sender).setGameMode(GameMode.CREATIVE);
 			sender.sendMessage(Constants.PREFIX + "You are now in Creative.");
+			if (!CCMUtils.isInventoryEmpty((Player) sender))
+			{
+				CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Survival with items in their inventory.");
+				return true;
+			}
+			
+			CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Creative.");
 			return true;
 		}
 		else if (Constants.SURVIVAL_ALIASES.contains(gm))
 		{
 			((Player) sender).setGameMode(GameMode.SURVIVAL);
 			sender.sendMessage(Constants.PREFIX + "You are now in Survival.");
+			if (!CCMUtils.isInventoryEmpty((Player) sender))
+			{
+				CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Survival with items in their inventory.");
+				return true;
+			}
+			
+			CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Survival.");
 			return true;
 		}
 		

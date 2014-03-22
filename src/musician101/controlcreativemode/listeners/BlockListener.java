@@ -39,6 +39,6 @@ public class BlockListener implements Listener
     		return;
     	}
     	
-        CCMUtils.warnStaff(plugin, Constants.getBlockWarning(player, block));
+        CCMUtils.warnStaff(plugin, player.getName() + " placed a " + block.getType().toString() + " at X: " + block.getX() + ", Y: " + block.getY() + ", Z: " + block.getZ() + ".");
     }
 }

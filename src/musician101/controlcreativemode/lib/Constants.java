@@ -5,14 +5,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class Constants
 {
@@ -54,74 +46,4 @@ public class Constants
 	public static final String NO_PERMISSION_PLACE = PREFIX + "You do not have permission to place this block.";
 	public static final String NO_PERMISSION_THROW = PREFIX + "You do not have permission to throw this item.";
 	public static final String NO_PERMISSION_SPAWN = PREFIX + "You do not have permission to spawn this mob.";
-	
-	/** Warning messages*/
-	public static String getAttackWarning(Player player, Entity entity)
-	{
-		String attackedEntity = "";
-		if (entity instanceof Player)
-			attackedEntity = ((Player) entity).getName();
-		else
-			attackedEntity = "a " + entity.getType().toString();
-		
-		return player.getName() + " attacked " + attackedEntity + " at X: " + player.getLocation().getBlockX() + ", Y: "
-				+ player.getLocation().getBlockY() + ", Z: " + player.getLocation().getBlockZ() + ".";
-	}
-	
-	public static String getBlockWarning(Player player, Block block)
-	{
-		return player.getName() + " placed " + block.getType().toString() + " at X: " + block.getX() + ", Y: "
-				+ block.getY() + ", Z: " + block.getZ() + ".";
-	}
-
-	public static String getBlockInteractWarning(Player player, Block block)
-	{
-		return player.getName() + " opened a " + block.getType() + " at X: " + block.getX() + ", Y: " + block.getY() + ", Z: " + block.getZ() + ".";
-	}
-	
-	public static String getBucketWarning(Player player, Material material, Location location)
-	{
-		return player.getName() + " placed a " + material.toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY()
-				+ ", Z: " + location.getBlockZ();
-	}
-	
-	public static String getCartWarning(Player player, ItemStack item, Location location)
-	{
-		return player.getName() + " has placed an " + item.getType().toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
-	}
-	
-	public static String getEntityInteractWarning(Player player, EntityType entity, Location location)
-	{
-		return player.getName() + " has interacted with a " + entity.toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
-	}
-	
-	public static String getItemDropWarning(Player player, String material, Location location)
-	{
-		return player.getName() + " has dropped a " + material + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".";
-	}
-	
-	public static String getItemKeptWarning(Player player)
-	{
-		return player.getName() + " has kept items in their inventory when switching modes.";
-	}
-	
-	public static String getModeMsg(GameMode gm)
-	{
-		return "You are now in " + gm.toString() + ".";
-	}
-	
-	public static String getModeWarning(Player player, GameMode gm)
-	{
-		return player.getName() + " is now in " + gm.toString() + ".";
-	}
-	
-	public static String getThrownItemWarning(Player player, ItemStack item, Location location)
-	{
-		return player.getName() + " threw a " + item.getType().toString() + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".";
-	}
-	
-	public static String getSpawnWarning(Player player, EntityType entity, Location location)
-	{	
-		return player.getName() + " spawned a " + entity.toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".";
-	}
 }
