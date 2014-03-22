@@ -73,9 +73,9 @@ public class CCMCommand implements CommandExecutor
 			return false;
 		}
 		
-		if (!sender.hasPermission(Constants.KEEP_ITEMS_PERM) && !CCMUtils.isInventoryEmpty((Player) sender))
+		if (CCMUtils.isInventoryEmpty((Player) sender) && !sender.hasPermission(Constants.KEEP_ITEMS_PERM))
 		{
-			sender.sendMessage(Constants.NO_PERMISSION_INVENTORY);
+			sender.sendMessage(Constants.NON_EMPTY_INV);
 			return false;
 		}
 		
@@ -85,7 +85,7 @@ public class CCMCommand implements CommandExecutor
 			sender.sendMessage(Constants.PREFIX + "You are now in Creative.");
 			if (!CCMUtils.isInventoryEmpty((Player) sender))
 			{
-				CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Survival with items in their inventory.");
+				CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Creative with items in their inventory.");
 				return true;
 			}
 			
