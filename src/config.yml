@@ -5,19 +5,34 @@ checkForUpdate: true
 # Use materials or it won't register
 # Use {} to allow all blocks and items.
 noBlockBasedInventory:
-  - dispenser
-  - chest
-  - furnace
-  - burning_furnace
-  - monster_eggs
-  - enchantment_table
-  - brewing_stand
-  - ender_chest
-  - beacon
-  - anvil
-  - trapped_chest
-  - hopper
-  - dropper
+  dispenser:
+    - 0
+  chest:
+    - 0
+  furnace:
+    - 0
+  burning_furnace:
+    - 0
+  monster_eggs:
+    - 0
+  enchantment_table:
+    - 0
+  brewing_stand:
+    - 0
+  ender_chest:
+    - 0
+  beacon:
+    - 0
+  anvil:
+    - 0
+    - 1
+    - 2
+  trapped_chest:
+    - 0
+  hopper:
+    - 0
+  dropper:
+    - 0
   
 # Prevent players from interacting with entity based inventories (i.e. Storage minecart, Villagers)
 # To enable all entity based mobs, use - none.
@@ -29,69 +44,76 @@ noEntityBasedInventory:
 # Prevent blocks/items from being dropped. Use materials or it won't register.
 # Use {} to allow all blocks and items.
 noDrop:
-  - bedrock
-  - water
-  - stationary_water
-  - lava
-  - stationary_lava
-  - tnt
-  - fire
-  - mob_spawner
-  - monster_eggs # Silverfish Blocks
-  - water_bucket
-  - lava_bucket
-  - potion
+  bedrock:
+    - 0
+  water:
+    - 0
+  stationary_water:
+    - 0
+  lava:
+    - 0
+  stationary_lava:
+    - 0
+  tnt:
+    - 0
+  fire:
+    - 0
+  mob_spawner:
+    - 0
+  monster_eggs: # Silverfish Blocks
+    - all
+  water_bucket:
+    - 0
+  lava_bucket:
+    - 0
+  potion:
+    - all
 
 # Prevent block placement. Use materials or it won't register.
 # Use {} to allow all blocks.
 noPlace:
-  - bedrock
-  - water
-  - stationary_water
-  - lava
-  - stationary_lava
-  - tnt
-  - fire
-  - mob_spawner
-  - monster_eggs # Silverfish Blocks
+  bedrock:
+    - 0
+  water:
+    - 0
+  stationary_water:
+    - 0
+  lava:
+    - 0
+  stationary_lava:
+    - 0
+  tnt:
+    - 0
+  fire:
+    - 0
+  mob_spawner:
+    - 0
+  monster_eggs: # Silverfish Blocks
+    - all
+  water_bucket:
+    - 0
+  lava_bucket:
+    - 0
+  potion:
+    - all
   
 # Prevent the use of spawn eggs.
 # To enable all mobs. Simply put - none.
 noSpawn:
-  - creeper
-  - skeleton
-  - spider
-  - zombie
-  - slime
-  - ghast
-  - zombiePigman
-  - enderman
-  - caveSpider
-  - silverfish
-  - blaze
-  - magmaCube
-  - bat
-  - witch
-  - pig
-  - sheep
-  - cow
-  - chicken
-  - squid
-  - wolf
-  - mooshroom
-  - snowGolem
-  - ocelot
-  - ironGolem
-  - villager
+  - all
 
 # Prevent items from being thrown. (i.e. Right click with a chicken egg.)
 # Use materials or it won't register.
 # Use {} to allow all throwables.
 noThrow:
-  - snow_ball
-  - egg
-  - potion
-  - exp_bottle
+  snow_ball:
+    - 0
+  egg:
+    - 0
+  potion:
+    - 0
+  exp_bottle:
+    - 0
 
 # Prevent bucket water/lava bucket and TNT Minecart usage.
 blockWaterBucket: true

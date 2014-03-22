@@ -1,59 +1,44 @@
 package musician101.controlcreativemode.listeners;
 
 import musician101.controlcreativemode.ControlCreativeMode;
-import musician101.controlcreativemode.lib.Commands;
-import musician101.controlcreativemode.lib.Messages;
-import musician101.controlcreativemode.lib.WarningMessages;
+import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-/**
- * Event handler for block events.
- * 
- * @author Musician101
- */
 public class BlockListener implements Listener
 {
     ControlCreativeMode plugin;
     
-    /**
-     * Constructor.
-     * 
-     * @param plugin References instance.
-     * @param config Configuration instance.
-     */
     public BlockListener(ControlCreativeMode plugin)
     {
         this.plugin = plugin;
     }
 
-    /**
-     * Runs when a block is placed.
-     * 
-     * @param event All info involved in the event.
-     */
-    @EventHandler
+	@EventHandler
     public void onBlockPlace(BlockPlaceEvent event)
     {
         Block block = event.getBlock();
         Player player = event.getPlayer();
+        player.sendMessage(block.getState().getData().toItemStack().getDurability() + "");
+        if (player.getGameMode() != GameMode.CREATIVE)
+        	return;
         
-        if (player.getGameMode() == GameMode.CREATIVE && plugin.config.noPlace.contains(block.getType().toString()))
-        {
-        	if (!player.hasPermission(Commands.ALLOW_BLOCK_PERM))
-        	{
-        		block.setType(Material.AIR);
-        		player.sendMessage(Messages.NO_PERMISSION_PLACE);
-        	}
-        	else
-        		CCMUtils.warnStaff(plugin, WarningMessages.getBlockWarning(player, block));
-        }
+        if (!plugin.config.noPlace.contains(CCMUtils.toItemStack(block)))
+        	return;
+        
+        if (!player.hasPermission(Constants.ALLOW_BLOCK_PERM))
+    	{
+    		event.setCancelled(true);
+    		player.sendMessage(Constants.NO_PERMISSION_PLACE);
+    		return;
+    	}
+    	
+        CCMUtils.warnStaff(plugin, Constants.getBlockWarning(player, block));
     }
 }

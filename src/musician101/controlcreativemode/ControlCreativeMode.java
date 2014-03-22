@@ -1,7 +1,7 @@
 package musician101.controlcreativemode;
 
 import musician101.controlcreativemode.commands.CCMCommand;
-import musician101.controlcreativemode.lib.Commands;
+import musician101.controlcreativemode.lib.Constants;
 import musician101.controlcreativemode.listeners.BlockListener;
 import musician101.controlcreativemode.listeners.EntityListener;
 import musician101.controlcreativemode.listeners.PlayerListener;
@@ -11,16 +11,10 @@ import musician101.controlcreativemode.util.Updater.UpdateType;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * Main class for the plugin.
- * 
- * @author Musician101
- */
 public class ControlCreativeMode extends JavaPlugin
 {
 	public Config config;
 	
-	/** Checks if new version is available. */
 	public void versionCheck()
 	{
 		if (!config.checkForUpdate)
@@ -29,16 +23,14 @@ public class ControlCreativeMode extends JavaPlugin
 		{
 			Updater updater = new Updater(this, 64447, this.getFile(), UpdateType.NO_DOWNLOAD, true);
 			if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE)
-				getLogger().info("A new version is available." + updater.getLatestName());
+				getLogger().info("A new version is available. " + updater.getLatestName());
 			else if (updater.getResult() == UpdateResult.NO_UPDATE)
-				getLogger().info("The current version is the latest." + updater.getLatestName());
+				getLogger().info("The current version is the latest. " + updater.getLatestName());
 			else
 				getLogger().info("Error: Updater check failed.");
 		}
-			
 	}
 	
-	/** Initializes the plugin, checks for config, and register commands and listeners. */
 	@Override
     public void onEnable()
 	{
@@ -49,13 +41,6 @@ public class ControlCreativeMode extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new EntityListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		
-		getCommand(Commands.CCM_CMD).setExecutor(new CCMCommand(this));
-    }
-	
-	/** Shuts off the plugin. */
-	@Override
-	public void onDisable()
-	{
-        getLogger().info("Shutting down.");
+		getCommand(Constants.CCM_CMD).setExecutor(new CCMCommand(this));
     }
 }

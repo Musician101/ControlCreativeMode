@@ -3,12 +3,15 @@ package musician101.controlcreativemode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
-import musician101.controlcreativemode.lib.ErrorMessages;
-import musician101.controlcreativemode.lib.Messages;
+import musician101.controlcreativemode.util.CCMUtils;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 public class Config
 {
@@ -17,18 +20,13 @@ public class Config
 	public boolean blockTNTMinecart;
 	public boolean blockWaterBucket;
 	public boolean checkForUpdate;
-	public List<String> noBlockBasedInventory = new ArrayList<String>();
-	public List<String> noEntityBasedInventory;
-	public List<String> noDrop = new ArrayList<String>();
-	public List<String> noPlace = new ArrayList<String>();
-	public List<String> noSpawn = new ArrayList<String>();
-	public List<String> noThrow = new ArrayList<String>();
+	public List<EntityType> noEntityBasedInventory = new ArrayList<EntityType>();
+	public List<EntityType> noSpawn = new ArrayList<EntityType>();
+	public List<ItemStack> noBlockBasedInventory = new ArrayList<ItemStack>();
+	public List<ItemStack> noDrop = new ArrayList<ItemStack>();
+	public List<ItemStack> noPlace = new ArrayList<ItemStack>();
+	public List<ItemStack> noThrow = new ArrayList<ItemStack>();
 	
-	/**
-	 * Config constructor.
-	 * 
-	 * @param plugin Reference's the plugin's main class.
-	 */
 	public Config(ControlCreativeMode plugin)
 	{
 		this.plugin = plugin;
@@ -41,7 +39,6 @@ public class Config
 		reloadConfiguration();
 	}
 	
-	/** Reloads the server's configuration file. */
 	public void reloadConfiguration()
 	{
 		plugin.reloadConfig();
@@ -50,47 +47,86 @@ public class Config
 		blockTNTMinecart = config.getBoolean("blockTNTMinecart", true);
 		blockWaterBucket = config.getBoolean("blockWaterBucket", true);
 		checkForUpdate = config.getBoolean("checkForUpdate", true);
-		noEntityBasedInventory = config.getStringList("noEntityBasedInventory");
-		noSpawn = config.getStringList("noSpawn");
 		
-		for (String material : config.getStringList("noBlockBasedInventory"))
+		for (String mob : config.getStringList("noEntityBasedInventory"))
 		{
-			if (Material.getMaterial(material.toUpperCase()) != null)
-				noBlockBasedInventory.add(material.toUpperCase());
+			if (mob.equalsIgnoreCase("all"))
+				for (EntityType entity : EntityType.values())
+					noEntityBasedInventory.add(entity);
 			else
-				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
+				noEntityBasedInventory.add(EntityType.valueOf(mob.toUpperCase()));
 		}
 		
-		for (String material : config.getStringList("noDrop"))
-		{
-			if (Material.getMaterial(material.toUpperCase()) != null)
-				noDrop.add(material.toUpperCase());
-			else
-				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
-		}
-		
-		for (String material : config.getStringList("noPlace"))
-		{
-			if (Material.getMaterial(material.toUpperCase()) != null)
-				noPlace.add(material.toUpperCase());
-			else
-				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
-		}
-		
+		/* Includes support for MONSTER_EGG being used to spawn ANY type of Entity
+		 * Example: Chicken, Zombie, Minecart, Item Frame, etc.
+		 */ 
 		for (String mob : config.getStringList("noSpawn"))
 		{
-			if (Messages.MOB_LIST.contains(mob.toLowerCase()))
-				noSpawn.add(mob.toLowerCase());
+			if (mob.equalsIgnoreCase("all"))
+				for (EntityType entity : EntityType.values())
+					noSpawn.add(entity);
 			else
-				plugin.getLogger().warning(ErrorMessages.getMobError(mob));
+				noSpawn.add(EntityType.valueOf(mob.toUpperCase()));
 		}
 		
-		for (String material : config.getStringList("noThrow"))
+		for (Entry<String, Object> entry : config.getConfigurationSection("noBlockBasedInventory").getValues(true).entrySet())
 		{
-			if (Material.getMaterial(material.toUpperCase()) != null)
-				noThrow.add(material.toUpperCase());
-			else
-				plugin.getLogger().warning(ErrorMessages.getMaterialError(material));
+			if (!(entry.getValue() instanceof MemorySection))
+			{
+				for (Object data : (List<?>) entry.getValue())
+				{
+					if (data.equals("all"))
+						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+							noBlockBasedInventory.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
+					else
+						noBlockBasedInventory.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+				}
+			}
+		}
+		
+		for (Entry<String, Object> entry : config.getConfigurationSection("noDrop").getValues(true).entrySet())
+		{
+			if (!(entry.getValue() instanceof MemorySection))
+			{
+				for (Object data : (List<?>) entry.getValue())
+				{
+					if (data.equals("all"))
+						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+							noDrop.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
+					else
+						noDrop.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+				}
+			}
+		}
+		
+		for (Entry<String, Object> entry : config.getConfigurationSection("noPlace").getValues(true).entrySet())
+		{
+			if (!(entry.getValue() instanceof MemorySection))
+			{
+				for (Object data : (List<?>) entry.getValue())
+				{
+					if (data.equals("all"))
+						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+							noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
+					else
+						noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+				}
+			}
+		}
+		
+		for (Entry<String, Object> entry : config.getConfigurationSection("noThrow").getValues(true).entrySet())
+		{
+			if (!(entry.getValue() instanceof MemorySection))
+			{
+				for (Object data : (List<?>) entry.getValue())
+				{
+					if (data.equals("all"))
+						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+							noThrow.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
+					else
+						noThrow.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+				}
+			}
 		}
 	}
 }
