@@ -10,5 +10,4 @@ commands:
    ccm:
       description: Commands for the plugin.
       permissions: ccm.use
-      usage: <command>
       aliases: [ccm]
