@@ -7,7 +7,6 @@ maintainer: Musician101
 prefix: CCM
 
 commands:
-   ccm:
-      description: Commands for the plugin.
-      permissions: ccm.use
-      aliases: [ccm]
+    ccm:
+        description: Commands for the plugin.
+        aliases: [ccm]
