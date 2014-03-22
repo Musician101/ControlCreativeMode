@@ -14,18 +14,17 @@ public class Constants
 	public static final String RELOAD_CMD = "reload";
 	
 	/** Command Permissions*/
-	public static final String BASE_PERMISSION = "ccm.";
 	public static final String ALLOW_PERM = "allow.";
-	public static final String ALLOW_ATTACK_PERM = BASE_PERMISSION + ALLOW_PERM + "attack";
-	public static final String ALLOW_BLOCK_PERM = BASE_PERMISSION + ALLOW_PERM + "block";
-	public static final String ALLOW_DROP_PERM = BASE_PERMISSION + ALLOW_PERM + "drop";
-	public static final String ALLOW_OPEN_CHESTS_PERM = BASE_PERMISSION + ALLOW_PERM + "openchests";
-	public static final String ALLOW_SPAWN_PERM = BASE_PERMISSION + ALLOW_PERM + "spawn";
-	public static final String ALLOW_THROW_PERM = BASE_PERMISSION + ALLOW_PERM + "throw";
-	public static final String KEEP_ITEMS_PERM = BASE_PERMISSION + ALLOW_PERM + "keepitems";
-	public static final String RELOAD_PERM = BASE_PERMISSION + RELOAD_CMD;
-	public static final String SPY_PERM = BASE_PERMISSION + "spy";
-	public static final String USE_PERM = BASE_PERMISSION + "use";
+	public static final String ALLOW_ATTACK_PERM = CCM_CMD + "." + ALLOW_PERM + "attack";
+	public static final String ALLOW_BLOCK_PERM = CCM_CMD + "." + ALLOW_PERM + "block";
+	public static final String ALLOW_DROP_PERM = CCM_CMD + "." + ALLOW_PERM + "drop";
+	public static final String ALLOW_OPEN_CHESTS_PERM = CCM_CMD + "." + ALLOW_PERM + "openchests";
+	public static final String ALLOW_SPAWN_PERM = CCM_CMD + "." + ALLOW_PERM + "spawn";
+	public static final String ALLOW_THROW_PERM = CCM_CMD + "." + ALLOW_PERM + "throw";
+	public static final String KEEP_ITEMS_PERM = CCM_CMD + "." + ALLOW_PERM + "keepitems";
+	public static final String RELOAD_PERM = CCM_CMD + "." + RELOAD_CMD;
+	public static final String SPY_PERM = CCM_CMD + "." + "spy";
+	public static final String USE_PERM = CCM_CMD + "." + "use";
 	
 	/** GameMode Aliases */
 	public static final List<String> CREATIVE_ALIASES = Arrays.asList("creative", "c", "1");
