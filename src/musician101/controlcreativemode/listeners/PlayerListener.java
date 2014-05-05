@@ -93,7 +93,7 @@ public class PlayerListener implements Listener
 		CCMUtils.warnStaff(plugin, player.getName() + " has dropped " + item.getType().toString() + " at X: " + Math.round(location.getX()) + ", Y: " + Math.round(location.getY()) + ", Z: " + Math.round(location.getZ()) + ".");
     }
     
-    @EventHandler
+	@EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
     	Action action = event.getAction();
@@ -135,6 +135,9 @@ public class PlayerListener implements Listener
         	CCMUtils.warnStaff(plugin, player.getName() + " spawned a " + ((SpawnEgg) item.getData()).getSpawnedType().toString() + " at X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ() + ".");
         	return;
         }
+        
+        if (item == null)
+        	return;
         
         /** Throwable Check */
         if (plugin.config.noThrow.contains(new ItemStack(item.getType(), 0, item.getDurability())))
