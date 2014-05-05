@@ -73,13 +73,23 @@ public class Config
 		{
 			if (!(entry.getValue() instanceof MemorySection))
 			{
-				for (Object data : (List<?>) entry.getValue())
+				if (entry.getKey().equalsIgnoreCase("all"))
 				{
-					if (data.equals("all"))
-						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
-							noBlockBasedInventory.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
-					else
-						noBlockBasedInventory.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+					for (Material m : Material.values())
+						if (m.isBlock())
+							for (int dura : CCMUtils.getDurabilities(m))
+								noBlockBasedInventory.add(new ItemStack(m, 0, (short) dura));
+				}
+				else
+				{
+					for (Object data : (List<?>) entry.getValue())
+					{
+						if (data.equals("all"))
+							for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+								noBlockBasedInventory.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
+						else
+							noBlockBasedInventory.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+					}
 				}
 			}
 		}
@@ -88,13 +98,22 @@ public class Config
 		{
 			if (!(entry.getValue() instanceof MemorySection))
 			{
-				for (Object data : (List<?>) entry.getValue())
+				if (entry.getKey().equalsIgnoreCase("all"))
 				{
-					if (data.equals("all"))
-						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
-							noDrop.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
-					else
-						noDrop.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+					for (Material m : Material.values())
+						for (int dura : CCMUtils.getDurabilities(m))
+							noDrop.add(new ItemStack(m, 0, (short) dura));
+				}
+				else
+				{
+					for (Object data : (List<?>) entry.getValue())
+					{
+						if (data.equals("all"))
+							for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+								noDrop.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
+						else
+							noDrop.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+					}
 				}
 			}
 		}
@@ -103,13 +122,23 @@ public class Config
 		{
 			if (!(entry.getValue() instanceof MemorySection))
 			{
-				for (Object data : (List<?>) entry.getValue())
+				if (entry.getKey().equalsIgnoreCase("all"))
 				{
-					if (data.equals("all"))
-						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
-							noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
-					else
-						noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+					for (Material m : Material.values())
+						if (m.isBlock())
+							for (int dura : CCMUtils.getDurabilities(m))
+								noPlace.add(new ItemStack(m, 0, (short) dura));
+				}
+				else
+				{
+					for (Object data : (List<?>) entry.getValue())
+					{
+						if (data.equals("all"))
+							for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+								noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
+						else
+							noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
+					}
 				}
 			}
 		}
