@@ -27,3 +27,11 @@ local.properties
 
 # PDT-specific
 .buildpath
+
+# Maven
+target/
+
+# Dependencies
+au/
+code/
+luc/
