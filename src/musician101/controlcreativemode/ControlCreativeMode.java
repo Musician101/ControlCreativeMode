@@ -15,7 +15,7 @@ public class ControlCreativeMode extends JavaPlugin
 {
 	public Config config;
 	
-	public void versionCheck()
+	private void versionCheck()
 	{
 		if (!config.checkForUpdate)
 			getLogger().info("Update checker is disabled.");
