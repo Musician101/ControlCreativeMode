@@ -1,0 +1,12 @@
+name: ControlCreativeMode
+main: musician101.controlcreativemode.ControlCreativeMode
+version: 1.4
+description: Change from creative and survival
+authors: [boardingamer, Musician101]
+maintainer: Musician101
+prefix: CCM
+
+commands:
+    ccm:
+        description: Commands for the plugin.
+        aliases: [ccm]
