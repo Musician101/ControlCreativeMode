@@ -41,7 +41,7 @@ public class PlayerListener implements Listener
     	
     	if (bucket == Material.LAVA_BUCKET)
     	{
-    		if (!plugin.config.blockLavaBucket)
+    		if (!plugin.config.isLavaBucketBlocked())
     			return;
     		
     		if (!player.hasPermission(Constants.ALLOW_BLOCK_PERM))
@@ -56,7 +56,7 @@ public class PlayerListener implements Listener
     	}
     	else if (bucket == Material.WATER_BUCKET)
     	{
-    		if (!plugin.config.blockWaterBucket)
+    		if (!plugin.config.isWaterBucketBlocked())
     			return;
     		
     		if (!player.hasPermission(Constants.ALLOW_BLOCK_PERM))
@@ -158,7 +158,7 @@ public class PlayerListener implements Listener
         if (!Arrays.asList(Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL, Material.RAILS).contains((block == null ? Material.AIR : block.getType())))
 	        return;
         
-        if (plugin.config.blockTNTMinecart)
+        if (plugin.config.isTNTMinecartBlocked())
         {
         	if (!player.hasPermission(Constants.ALLOW_BLOCK_PERM))
         	{

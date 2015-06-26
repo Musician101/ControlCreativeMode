@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import musician101.controlcreativemode.common.config.AbstractConfig;
-import musician101.controlcreativemode.util.CCMUtils;
+import musician101.controlcreativemode.util.DurabilityEnum;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -98,7 +98,7 @@ public class SpigotConfig extends AbstractConfig
 				{
 					for (Material m : Material.values())
 						if (m.isBlock())
-							for (int dura : CCMUtils.getDurabilities(m))
+							for (int dura = 0; dura < DurabilityEnum.getMaxDurability(m); dura++)
 								noPlace.add(new ItemStack(m, 0, (short) dura));
 				}
 				else
@@ -106,7 +106,7 @@ public class SpigotConfig extends AbstractConfig
 					for (Object data : (List<?>) entry.getValue())
 					{
 						if (data.equals("all"))
-							for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+							for (int dura = 0; dura < DurabilityEnum.getMaxDurability(Material.getMaterial(entry.getKey().toUpperCase())); dura++)
 								noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
 						else
 							noPlace.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));
@@ -122,7 +122,7 @@ public class SpigotConfig extends AbstractConfig
 				for (Object data : (List<?>) entry.getValue())
 				{
 					if (data.equals("all"))
-						for (int dura : CCMUtils.getDurabilities(Material.getMaterial(entry.getKey().toUpperCase())))
+						for (int dura = 0; dura < DurabilityEnum.getMaxDurability(Material.getMaterial(entry.getKey().toUpperCase())); dura++)
 							noThrow.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, (short) dura));
 					else
 						noThrow.add(new ItemStack(Material.getMaterial(entry.getKey().toUpperCase()), 0, Short.valueOf(data.toString())));

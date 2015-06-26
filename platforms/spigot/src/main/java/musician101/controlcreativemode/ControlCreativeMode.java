@@ -17,18 +17,19 @@ public class ControlCreativeMode extends JavaPlugin
 	
 	private void versionCheck()
 	{
-		if (!config.checkForUpdate)
-			getLogger().info("Update checker is disabled.");
-		else if (config.checkForUpdate)
+		if (!config.checkForUpdate())
 		{
-			Updater updater = new Updater(this, 64447, this.getFile(), UpdateType.NO_DOWNLOAD, true);
-			if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE)
-				getLogger().info("A new version is available. " + updater.getLatestName());
-			else if (updater.getResult() == UpdateResult.NO_UPDATE)
-				getLogger().info("The current version is the latest. " + updater.getLatestName());
-			else
-				getLogger().info("Error: Updater check failed.");
+			getLogger().info("Update checker is disabled.");
+			return;
 		}
+		
+		Updater updater = new Updater(this, 64447, this.getFile(), UpdateType.NO_DOWNLOAD, true);
+		if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE)
+			getLogger().info("A new version is available. " + updater.getLatestName());
+		else if (updater.getResult() == UpdateResult.NO_UPDATE)
+			getLogger().info("The current version is the latest. " + updater.getLatestName());
+		else
+			getLogger().info("Error: Updater check failed.");
 	}
 	
 	@Override
