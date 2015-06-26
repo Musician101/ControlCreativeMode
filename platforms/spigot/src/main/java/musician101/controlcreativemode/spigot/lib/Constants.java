@@ -3,7 +3,6 @@ package musician101.controlcreativemode.spigot.lib;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class Constants
@@ -14,24 +13,25 @@ public class Constants
 	public static final String RELOAD_CMD = "reload";
 	
 	/** Command Permissions*/
-	public static final String ALLOW_PERM = "allow.";
-	public static final String ALLOW_ATTACK_PERM = CCM_CMD + "." + ALLOW_PERM + "attack";
-	public static final String ALLOW_BLOCK_PERM = CCM_CMD + "." + ALLOW_PERM + "block";
-	public static final String ALLOW_DROP_PERM = CCM_CMD + "." + ALLOW_PERM + "drop";
-	public static final String ALLOW_OPEN_CHESTS_PERM = CCM_CMD + "." + ALLOW_PERM + "openchests";
-	public static final String ALLOW_SPAWN_PERM = CCM_CMD + "." + ALLOW_PERM + "spawn";
-	public static final String ALLOW_THROW_PERM = CCM_CMD + "." + ALLOW_PERM + "throw";
-	public static final String KEEP_ITEMS_PERM = CCM_CMD + "." + ALLOW_PERM + "keepitems";
-	public static final String RELOAD_PERM = CCM_CMD + "." + RELOAD_CMD;
-	public static final String SPY_PERM = CCM_CMD + "." + "spy";
-	public static final String USE_PERM = CCM_CMD + "." + "use";
+	private static final String CCM_PERM = CCM_CMD + ".";
+	private static final String ALLOW_PERM = CCM_CMD + "allow.";
+	public static final String ALLOW_ATTACK_PERM = ALLOW_PERM + "attack";
+	public static final String ALLOW_BLOCK_PERM = ALLOW_PERM + "block";
+	public static final String ALLOW_DROP_PERM = ALLOW_PERM + "drop";
+	public static final String ALLOW_OPEN_CHESTS_PERM = ALLOW_PERM + "openchests";
+	public static final String ALLOW_SPAWN_PERM = ALLOW_PERM + "spawn";
+	public static final String ALLOW_THROW_PERM = ALLOW_PERM + "throw";
+	public static final String KEEP_ITEMS_PERM = ALLOW_PERM + "keepitems";
+	public static final String RELOAD_PERM = CCM_PERM + RELOAD_CMD;
+	public static final String SPY_PERM = CCM_PERM + "spy";
+	public static final String USE_PERM = CCM_PERM + "use";
 	
 	/** GameMode Aliases */
 	public static final List<String> CREATIVE_ALIASES = Arrays.asList("creative", "c", "1");
 	public static final List<String> SURVIVAL_ALIASES = Arrays.asList("survival", "s", "0");
 	
 	/** Formatting */
-	public static final String PREFIX = ChatColor.DARK_PURPLE + "[" + Bukkit.getPluginManager().getPlugin("ControlCreativeMode").getDescription().getPrefix() + "] ";
+	public static final String PREFIX = ChatColor.DARK_PURPLE + "[CCM] ";
 	
 	/** Error strings */
 	public static final String PLAYER_ONLY = PREFIX + "Error: This is a player command.";
