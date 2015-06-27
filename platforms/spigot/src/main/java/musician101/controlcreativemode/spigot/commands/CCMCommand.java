@@ -1,111 +1,84 @@
 package musician101.controlcreativemode.spigot.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import musician101.controlcreativemode.spigot.ControlCreativeMode;
 import musician101.controlcreativemode.spigot.lib.Constants;
 import musician101.controlcreativemode.spigot.util.CCMUtils;
 
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-public class CCMCommand implements CommandExecutor
+public class CCMCommand extends AbstractSpigotCommand
 {
 	ControlCreativeMode plugin;
 	
 	public CCMCommand(ControlCreativeMode plugin)
 	{
-		this.plugin = plugin;
+		super(plugin, "ccm", "Base command.", Arrays.asList("/ccm [help|reload]"), "ccm", false, CCMUtils.addToList(new ArrayList<AbstractSpigotCommand>(), new ReloadCommand(plugin)));
 	}
 	
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+	public boolean onCommand(CommandSender sender, String[] args)
 	{
 		if (args.length > 0)
 		{
-			if (Constants.CREATIVE_ALIASES.contains(args[0].toLowerCase()) || Constants.SURVIVAL_ALIASES.contains(args[0].toLowerCase()))
-				return gamemodeChange(sender, args[0]);
-			else if (args[0].equalsIgnoreCase(Constants.RELOAD_CMD))
-			{
-				if (!sender.hasPermission(Constants.RELOAD_PERM))
-				{
-					sender.sendMessage(Constants.NO_PERMISSION_COMMAND);
-					return true;
-				}
-				
-				plugin.config.reloadConfiguration();
-				sender.sendMessage(Constants.PREFIX + "Config reloaded.");
-				
-				return true;
-			}
-			else if (args[0].equalsIgnoreCase(Constants.HELP_CMD))
-			{
-				sender.sendMessage(new String[]{"-----" + ChatColor.DARK_PURPLE + "ControlCreativeMode" + ChatColor.WHITE + "-----",
-						"Downloads, Wiki, & Bug Reporting: http://dev.bukkit.org/bukkit-plugins/control-creative-mode/",
-						ChatColor.DARK_PURPLE + "/ccm creative|c|1: " + ChatColor.WHITE + "Change to creative.",
-						ChatColor.DARK_PURPLE + "/ccm survival|s|0: " + ChatColor.WHITE + "Change to survival.",
-						ChatColor.DARK_PURPLE + "/ccm reload: " + ChatColor.WHITE + "Reload the plugin's config."});
-				
-				return true;
-			}
+			for (AbstractSpigotCommand command : getSubCommands())
+				if (command.getName().equalsIgnoreCase(args[0]))
+					return command.onCommand(sender, moveArguments(args));
 			
-			sender.sendMessage(Constants.PREFIX + "Error: Invalid arguments.");
-			return false;
+			if (args[0].equalsIgnoreCase("help"))
+				return new HelpCommand(plugin, this).onCommand(sender, moveArguments(args));
 		}
 		
-		sender.sendMessage(Constants.PREFIX + "Running version " + plugin.getDescription().getVersion() + " compiled with Bukkit 1.7.2-R0.3.");
+		sender.sendMessage(Constants.HEADER);
+		for (AbstractSpigotCommand command : plugin.getCommands())
+			sender.sendMessage(new HelpCommand(plugin, command).getCommandHelpInfo());
+		
 		return true;
 	}
 	
-	private boolean gamemodeChange(CommandSender sender, String gm)
+	public static class ReloadCommand extends AbstractSpigotCommand
 	{
-		if (!(sender instanceof Player))
+		public ReloadCommand(ControlCreativeMode plugin)
 		{
-			sender.sendMessage(Constants.PLAYER_ONLY);
-			return false;
+			super(plugin, "reload", "Reload the config.", Arrays.asList("/ccm", "reload"), "ccm.reload", false, null);
 		}
-		
-		if (!sender.hasPermission(Constants.USE_PERM))
+
+		@Override
+		public boolean onCommand(CommandSender sender, String[] args)
 		{
-			sender.sendMessage(Constants.NO_PERMISSION_COMMAND);
-			return false;
-		}
-		
-		if (CCMUtils.isInventoryEmpty((Player) sender) && !sender.hasPermission(Constants.KEEP_ITEMS_PERM))
-		{
-			sender.sendMessage(Constants.NON_EMPTY_INV);
-			return false;
-		}
-		
-		if (Constants.CREATIVE_ALIASES.contains(gm))
-		{
-			((Player) sender).setGameMode(GameMode.CREATIVE);
-			sender.sendMessage(Constants.PREFIX + "You are now in Creative.");
-			if (!CCMUtils.isInventoryEmpty((Player) sender))
+			if (!canSenderUseCommand(sender))
 			{
-				CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Creative with items in their inventory.");
+				sender.sendMessage(Constants.NO_PERMISSION_COMMAND);
 				return true;
 			}
 			
-			CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Creative.");
+			plugin.config.reloadConfiguration();
+			sender.sendMessage(Constants.PREFIX + "Config reloaded.");
 			return true;
 		}
-		else if (Constants.SURVIVAL_ALIASES.contains(gm))
-		{
-			((Player) sender).setGameMode(GameMode.SURVIVAL);
-			sender.sendMessage(Constants.PREFIX + "You are now in Survival.");
-			if (!CCMUtils.isInventoryEmpty((Player) sender))
-			{
-				CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Survival with items in their inventory.");
-				return true;
-			}
-			
-			CCMUtils.warnStaff(plugin, sender.getName() + " has changed to Survival.");
-			return true;
-		}
+	}
+	
+	public static class HelpCommand extends AbstractSpigotCommand
+	{
+		AbstractSpigotCommand mainCommand;
 		
-		return false;
+		public HelpCommand(ControlCreativeMode plugin, AbstractSpigotCommand mainCommand)
+		{
+			super(plugin, "help", "Display help info for /" + mainCommand.getName(), Arrays.asList("/" + mainCommand.getName(), "help"), "ccm.help", false, null);
+			this.mainCommand = mainCommand;
+		}
+
+		@Override
+		public boolean onCommand(CommandSender sender, String[] args)
+		{
+			sender.sendMessage(Constants.HEADER);
+			sender.sendMessage(mainCommand.getUsage());
+			for (AbstractSpigotCommand command : mainCommand.getSubCommands())
+				sender.sendMessage(command.getCommandHelpInfo());
+			
+			return false;
+		}
 	}
 }

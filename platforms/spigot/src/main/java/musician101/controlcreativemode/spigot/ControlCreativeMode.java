@@ -1,19 +1,27 @@
 package musician101.controlcreativemode.spigot;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import musician101.controlcreativemode.spigot.commands.AbstractSpigotCommand;
 import musician101.controlcreativemode.spigot.commands.CCMCommand;
-import musician101.controlcreativemode.spigot.lib.Constants;
 import musician101.controlcreativemode.spigot.listeners.BlockListener;
+import musician101.controlcreativemode.spigot.listeners.CommandListener;
 import musician101.controlcreativemode.spigot.listeners.EntityListener;
 import musician101.controlcreativemode.spigot.listeners.PlayerListener;
+import musician101.controlcreativemode.spigot.util.CCMUtils;
 import musician101.controlcreativemode.spigot.util.Updater;
 import musician101.controlcreativemode.spigot.util.Updater.UpdateResult;
 import musician101.controlcreativemode.spigot.util.Updater.UpdateType;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ControlCreativeMode extends JavaPlugin
 {
 	public SpigotConfig config;
+	List<AbstractSpigotCommand> commands;
 	
 	private void versionCheck()
 	{
@@ -40,9 +48,25 @@ public class ControlCreativeMode extends JavaPlugin
 		versionCheck();
 		
 		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+		getServer().getPluginManager().registerEvents(new CommandListener(this), this);
 		getServer().getPluginManager().registerEvents(new EntityListener(this), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		
-		getCommand(Constants.CCM_CMD).setExecutor(new CCMCommand(this));
+		commands = CCMUtils.addToList(new ArrayList<AbstractSpigotCommand>(), new CCMCommand(this));
     }
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+	{
+		for (AbstractSpigotCommand cmd : commands)
+			if (command.getName().equalsIgnoreCase(cmd.getName()))
+				return cmd.onCommand(sender, args);
+		
+		return false;
+	}
+	
+	public List<AbstractSpigotCommand> getCommands()
+	{
+		return commands;
+	}
 }

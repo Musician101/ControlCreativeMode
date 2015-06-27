@@ -25,16 +25,12 @@ public class CCMUtils
 	public static boolean isInventoryEmpty(Player player)
 	{
 		for (ItemStack item : player.getInventory().getContents())
-		{
 			if (item != null)
 				return false;
-		}
 		
 		for (ItemStack item : player.getInventory().getArmorContents())
-		{
 			if (item != null)
 				return false;
-		}
 		
 		return true;
 	}
@@ -65,4 +61,13 @@ public class CCMUtils
     	
     	return item;
     }
+    
+    @SuppressWarnings("unchecked")
+	public static <T> List<T> addToList(List<T> list, T... items)
+	{
+		for (T item : items)
+			list.add(item);
+		
+		return list;
+	}
 }
