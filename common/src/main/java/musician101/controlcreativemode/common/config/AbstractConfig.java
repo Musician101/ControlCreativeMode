@@ -7,14 +7,6 @@ public abstract class AbstractConfig
 	boolean blockWaterBucket;
 	boolean checkForUpdate;
 	
-	protected AbstractConfig(boolean blockLavaBucket, boolean blockTNTMinecart, boolean blockWaterBucket, boolean checkForUpdate)
-	{
-		this.blockLavaBucket = blockLavaBucket;
-		this.blockTNTMinecart = blockTNTMinecart;
-		this.blockWaterBucket = blockWaterBucket;
-		this.checkForUpdate = checkForUpdate;
-	}
-	
 	public boolean isLavaBucketBlocked()
 	{
 		return blockLavaBucket;

@@ -35,7 +35,7 @@ public class CCMCommand implements CommandExecutor
 					return true;
 				}
 				
-				plugin.config.reloadConfiguration();
+				plugin.config.loadConfiguration();
 				sender.sendMessage(Constants.PREFIX + "Config reloaded.");
 				
 				return true;

@@ -2,20 +2,40 @@ package musician101.controlcreativemode.forge;
 
 import musician101.controlcreativemode.forge.commands.CCMCommand;
 import musician101.controlcreativemode.forge.lib.Constants;
-import musician101.controlcreativemode.forge.listeners.BlockListener;
-import musician101.controlcreativemode.forge.listeners.EntityListener;
-import musician101.controlcreativemode.forge.listeners.PlayerListener;
-import musician101.controlcreativemode.forge.util.Updater;
-import musician101.controlcreativemode.forge.util.Updater.UpdateResult;
-import musician101.controlcreativemode.forge.util.Updater.UpdateType;
+import musician101.controlcreativemode.forge.lib.Constants.ModInfo;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class ControlCreativeMode extends JavaPlugin
+@Mod(modid=ModInfo.ID, name=ModInfo.NAME, version=ModInfo.VERSION)
+public class ControlCreativeMode
 {
-	public Config config;
+	@Instance(value=ModInfo.ID)
+	public static ControlCreativeMode instance;
 	
-	private void versionCheck()
+	public static ConfigHandler config;
+	public static Logger logger = LogManager.getLogger(ModInfo.NAME);
+	
+	@EventHandler
+    public void preInit(FMLPreInitializationEvent event)
+	{
+		config = new ConfigHandler(event.getModConfigurationDirectory());
+		FMLCommonHandler.instance().bus().register(config);
+		//versionCheck();
+		
+		/*getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+		getServer().getPluginManager().registerEvents(new EntityListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);*/
+		
+		getCommand(Constants.CCM_CMD).setExecutor(new CCMCommand(this));
+    }
+	
+	/*private void versionCheck()
 	{
 		if (!config.checkForUpdate)
 			getLogger().info("Update checker is disabled.");
@@ -29,18 +49,5 @@ public class ControlCreativeMode extends JavaPlugin
 			else
 				getLogger().info("Error: Updater check failed.");
 		}
-	}
-	
-	@Override
-    public void onEnable()
-	{
-		config = new Config(this);
-		versionCheck();
-		
-		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
-		getServer().getPluginManager().registerEvents(new EntityListener(this), this);
-		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-		
-		getCommand(Constants.CCM_CMD).setExecutor(new CCMCommand(this));
-    }
+	}*/
 }

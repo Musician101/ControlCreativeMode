@@ -32,6 +32,4 @@ local.properties
 target/
 
 # Dependencies
-au/
-code/
-luc/
+*.jar

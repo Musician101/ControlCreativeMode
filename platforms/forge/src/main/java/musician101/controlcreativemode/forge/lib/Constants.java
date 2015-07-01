@@ -3,11 +3,15 @@ package musician101.controlcreativemode.forge.lib;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-
 public class Constants
 {
+	public static class ModInfo
+	{
+		public static final String ID = "ccm";
+		public static final String NAME = "Control Creative Mode";
+		public static final String VERSION = "2.0";
+	}
+	
 	/** Command Names */
 	public static final String CCM_CMD = "ccm";
 	public static final String HELP_CMD = "help";
