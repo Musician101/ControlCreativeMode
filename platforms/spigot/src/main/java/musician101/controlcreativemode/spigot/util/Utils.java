@@ -68,6 +68,7 @@ public class Utils
         return item;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasPermission(boolean isBanned, Player player, String permission)
     {
         if (!isBanned && player.hasPermission(permission))

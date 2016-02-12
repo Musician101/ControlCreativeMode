@@ -35,6 +35,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, ConfigurationNode>
 {
@@ -147,6 +148,24 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
             }
         }
 
+        ConfigurationNode bannedEntityDamageNode = config.getNode(Config.BANNED_ENTITY_DAMAGE);
+        if (bannedEntityDamageNode.getValue(Config.ALL) instanceof String)
+        {
+            if (bannedEntityDamageNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                addAllEntities(bannedEntityDamage);
+        }
+        else
+        {
+            try
+            {
+                addEntities(bannedEntityDamage, bannedEntityDamageNode.getList(TypeToken.of(String.class)));
+            }
+            catch (ObjectMappingException e)
+            {
+                logger.error(Messages.CONFIG_LOAD_FAIL);
+            }
+        }
+
         ConfigurationNode bannedEntitySpawnNode = config.getNode(Config.BANNED_ENTITY_SPAWN);
         if (bannedEntitySpawnNode.getValue(Config.ALL) instanceof String)
         {
@@ -164,6 +183,15 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
                 logger.error(Messages.CONFIG_LOAD_FAIL);
             }
         }
+
+        ConfigurationNode bannedItemDropNode = config.getNode(Config.BANNED_ITEM_DROP);
+        if (bannedItemDropNode.getValue(Config.ALL) instanceof String)
+        {
+            if (bannedItemDropNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                addAllItems(bannedItemDrop);
+        }
+        else
+            addItems(bannedItemDrop, bannedItemDropNode);
 
         ConfigurationNode bannedRightClickedNode = config.getNode(Config.BANNED_RIGHT_CLICK);
         if (bannedRightClickedNode.getValue(Config.ALL) instanceof String)
@@ -185,16 +213,13 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     protected void addEntities(List<EntityType> list, List<String> entityTypeNames)
     {
         for (String entityTypeName : entityTypeNames)
-            for (EntityType entityType : Sponge.getRegistry().getAllOf(EntityType.class))
-                if (entityTypeName.equalsIgnoreCase(entityType.getId()))
-                    list.add(entityType);
+            list.addAll(Sponge.getRegistry().getAllOf(EntityType.class).stream().filter(entityType -> entityTypeName.equalsIgnoreCase(entityType.getId())).collect(Collectors.toList()));
     }
 
     @Override
     protected void addAllItems(List<ItemStack> list)
     {
-        for (ItemType itemType : Sponge.getRegistry().getAllOf(ItemType.class))
-            list.add(ItemStack.of(itemType, 1));
+        list.addAll(Sponge.getRegistry().getAllOf(ItemType.class).stream().map(itemType -> ItemStack.of(itemType, 1)).collect(Collectors.toList()));
     }
 
     @Override
@@ -203,67 +228,63 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
         for (Object itemNameObject : configurationNode.getChildrenMap().keySet())
         {
             String itemName = itemNameObject.toString();
-            for (ItemType itemType : Sponge.getRegistry().getAllOf(ItemType.class))
-            {
-                if (itemName.equalsIgnoreCase(itemType.getId()))
+            Sponge.getRegistry().getAllOf(ItemType.class).stream().filter(itemType -> itemName.equalsIgnoreCase(itemType.getId())).forEach(itemType -> {
+                ConfigurationNode itemTypeNode = configurationNode.getNode(itemName);
+                if (itemTypeNode.getValue() instanceof String && itemTypeNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    list.add(ItemStack.of(itemType, 1));
+                else
                 {
-                    ConfigurationNode itemTypeNode = configurationNode.getNode(itemName);
-                    if (itemTypeNode.getValue() instanceof String && itemTypeNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                        list.add(ItemStack.of(itemType, 1));
-                    else
+                    try
                     {
-                        try
+                        for (String variation : itemTypeNode.getList(TypeToken.of(String.class)))
                         {
-                            for (String variation : itemTypeNode.getList(TypeToken.of(String.class)))
-                            {
-                                ItemStack item = ItemStack.of(itemType, 0);
-                                if (item.get(CatalogBlockData.STONE_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.STONE_TYPE, CatalogBlockData.STONE_DATA, Keys.STONE_TYPE);
-                                else if (item.get(CatalogBlockData.DIRT_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.DIRT_TYPE, CatalogBlockData.DIRT_DATA, Keys.DIRT_TYPE);
-                                else if (item.get(CatalogBlockData.TREE_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.TREE_TYPE, CatalogBlockData.TREE_DATA, Keys.TREE_TYPE);
-                                else if (item.get(CatalogBlockData.SAND_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.SAND_TYPE, CatalogBlockData.SAND_DATA, Keys.SAND_TYPE);
-                                else if (item.get(CatalogBlockData.SANDSTONE_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.SANDSTONE_TYPE, CatalogBlockData.SANDSTONE_DATA, Keys.SANDSTONE_TYPE);
-                                else if (item.get(CatalogBlockData.SHRUB_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.SHRUB_TYPE, CatalogBlockData.SHRUB_DATA, Keys.SHRUB_TYPE);
-                                else if (item.get(CatalogBlockData.DYEABLE_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.DYE_COLOR, CatalogBlockData.DYEABLE_DATA, Keys.DYE_COLOR);
-                                else if (item.get(CatalogBlockData.SLAB_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.SLAB_TYPE, CatalogBlockData.SLAB_DATA, Keys.SLAB_TYPE);
-                                else if (item.get(CatalogBlockData.DISGUISED_BLOCK_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.DISGUISED_BLOCK_TYPE, CatalogBlockData.DISGUISED_BLOCK_DATA, Keys.DISGUISED_BLOCK_TYPE);
-                                else if (item.get(CatalogBlockData.BRICK_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.BRICK_TYPE, CatalogBlockData.BRICK_DATA, Keys.BRICK_TYPE);
-                                else if (item.get(CatalogBlockData.WALL_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.WALL_TYPE, CatalogBlockData.WALL_DATA, Keys.WALL_TYPE);
-                                else if (item.get(CatalogBlockData.QUARTZ_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.QUARTZ_TYPE, CatalogBlockData.QUARTZ_DATA, Keys.QUARTZ_TYPE);
-                                else if (item.get(CatalogBlockData.PRISMARINE_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.PRISMARINE_TYPE, CatalogBlockData.PRISMARINE_DATA, Keys.PRISMARINE_TYPE);
-                                else if (item.get(CatalogBlockData.DOUBLE_PLANT_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.DOUBLE_SIZE_PLANT_TYPE, CatalogBlockData.DOUBLE_PLANT_DATA, Keys.DOUBLE_PLANT_TYPE);
-                                else if (item.get(CatalogItemData.COAL_ITEM_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.COAL_TYPE, CatalogItemData.COAL_ITEM_DATA, Keys.COAL_TYPE);
-                                else if (item.get(CatalogItemData.GOLDEN_APPLE_ITEM_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.GOLDEN_APPLE, CatalogItemData.GOLDEN_APPLE_ITEM_DATA, Keys.GOLDEN_APPLE_TYPE);
-                                else if (item.get(CatalogItemData.FISH_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.FISH, CatalogItemData.FISH_DATA, Keys.FISH_TYPE);
-                                else if (item.get(CatalogItemData.COOKED_FISH_ITEM_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.COOKED_FISH, CatalogItemData.COOKED_FISH_ITEM_DATA, Keys.COOKED_FISH);
-                                else if (item.get(CatalogItemData.SPAWNABLE_DATA).isPresent())
-                                    parseItem(itemType, variation, CatalogTypes.ENTITY_TYPE, CatalogItemData.SPAWNABLE_DATA, Keys.SPAWNABLE_ENTITY_TYPE);
-                            }
-                        }
-                        catch (ObjectMappingException e)
-                        {
-                            SpongeCCM.instance().getLogger().error(Messages.CONFIG_LOAD_FAIL);
+                            ItemStack item = ItemStack.of(itemType, 0);
+                            if (item.get(CatalogBlockData.STONE_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.STONE_TYPE, CatalogBlockData.STONE_DATA, Keys.STONE_TYPE));
+                            else if (item.get(CatalogBlockData.DIRT_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.DIRT_TYPE, CatalogBlockData.DIRT_DATA, Keys.DIRT_TYPE));
+                            else if (item.get(CatalogBlockData.TREE_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.TREE_TYPE, CatalogBlockData.TREE_DATA, Keys.TREE_TYPE));
+                            else if (item.get(CatalogBlockData.SAND_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.SAND_TYPE, CatalogBlockData.SAND_DATA, Keys.SAND_TYPE));
+                            else if (item.get(CatalogBlockData.SANDSTONE_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.SANDSTONE_TYPE, CatalogBlockData.SANDSTONE_DATA, Keys.SANDSTONE_TYPE));
+                            else if (item.get(CatalogBlockData.SHRUB_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.SHRUB_TYPE, CatalogBlockData.SHRUB_DATA, Keys.SHRUB_TYPE));
+                            else if (item.get(CatalogBlockData.DYEABLE_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.DYE_COLOR, CatalogBlockData.DYEABLE_DATA, Keys.DYE_COLOR));
+                            else if (item.get(CatalogBlockData.SLAB_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.SLAB_TYPE, CatalogBlockData.SLAB_DATA, Keys.SLAB_TYPE));
+                            else if (item.get(CatalogBlockData.DISGUISED_BLOCK_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.DISGUISED_BLOCK_TYPE, CatalogBlockData.DISGUISED_BLOCK_DATA, Keys.DISGUISED_BLOCK_TYPE));
+                            else if (item.get(CatalogBlockData.BRICK_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.BRICK_TYPE, CatalogBlockData.BRICK_DATA, Keys.BRICK_TYPE));
+                            else if (item.get(CatalogBlockData.WALL_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.WALL_TYPE, CatalogBlockData.WALL_DATA, Keys.WALL_TYPE));
+                            else if (item.get(CatalogBlockData.QUARTZ_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.QUARTZ_TYPE, CatalogBlockData.QUARTZ_DATA, Keys.QUARTZ_TYPE));
+                            else if (item.get(CatalogBlockData.PRISMARINE_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.PRISMARINE_TYPE, CatalogBlockData.PRISMARINE_DATA, Keys.PRISMARINE_TYPE));
+                            else if (item.get(CatalogBlockData.DOUBLE_PLANT_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.DOUBLE_SIZE_PLANT_TYPE, CatalogBlockData.DOUBLE_PLANT_DATA, Keys.DOUBLE_PLANT_TYPE));
+                            else if (item.get(CatalogItemData.COAL_ITEM_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.COAL_TYPE, CatalogItemData.COAL_ITEM_DATA, Keys.COAL_TYPE));
+                            else if (item.get(CatalogItemData.GOLDEN_APPLE_ITEM_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.GOLDEN_APPLE, CatalogItemData.GOLDEN_APPLE_ITEM_DATA, Keys.GOLDEN_APPLE_TYPE));
+                            else if (item.get(CatalogItemData.FISH_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.FISH, CatalogItemData.FISH_DATA, Keys.FISH_TYPE));
+                            else if (item.get(CatalogItemData.COOKED_FISH_ITEM_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.COOKED_FISH, CatalogItemData.COOKED_FISH_ITEM_DATA, Keys.COOKED_FISH));
+                            else if (item.get(CatalogItemData.SPAWNABLE_DATA).isPresent())
+                                list.add(parseItem(itemType, variation, CatalogTypes.ENTITY_TYPE, CatalogItemData.SPAWNABLE_DATA, Keys.SPAWNABLE_ENTITY_TYPE));
                         }
                     }
+                    catch (ObjectMappingException e)
+                    {
+                        SpongeCCM.instance().getLogger().error(Messages.CONFIG_LOAD_FAIL);
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -271,14 +292,11 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key)
     {
         ItemStack.Builder isb = ItemStack.builder().itemType(itemType).quantity(0);
-        for (T type : Sponge.getRegistry().getAllOf(typeClass))
-        {
-            if (type.getId().equalsIgnoreCase(variation))
-            {
-                D data = Sponge.getDataManager().getManipulatorBuilder(dataClass).get().create().set(Sponge.getRegistry().getValueFactory().createValue(key, type));
-                isb.itemData(data);
-            }
-        }
+        Sponge.getRegistry().getAllOf(typeClass).stream().filter(type -> type.getId().equalsIgnoreCase(variation)).forEach(type -> {
+            D data = Sponge.getDataManager().getManipulatorBuilder(dataClass).get().create().set(Sponge.getRegistry().getValueFactory().createValue(key, type));
+            isb.itemData(data);
+        });
+        
         return isb.build();
     }
 

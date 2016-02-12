@@ -22,10 +22,12 @@ public class Reference
         public static final String BANNED_BLOCK_BREAK = "banned_block_break";
         public static final String BANNED_BLOCK_INV = "banned_block_inventory";
         public static final String BANNED_BLOCK_PLACE = "banned_block_place";
+        public static final String BANNED_ENTITY_DAMAGE = "banned_entity_damage";
         public static final String BANNED_ENTITY_INV = "banned_entity_inventory";
         public static final String BANNED_ENTITY_SPAWN = "banned_entity_spawn";
         public static final String BANNED_ITEM_DROP = "banned_item_drop";
         public static final String BANNED_RIGHT_CLICK = "banned_right_click";
+        public static final String UPDATE_CHECK = "check_for_update";
     }
 
     public static class Messages

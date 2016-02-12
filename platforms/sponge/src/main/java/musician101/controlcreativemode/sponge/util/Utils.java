@@ -14,9 +14,7 @@ public class Utils
     public static void warnStaff(String message)
     {
         SpongeCCM.instance().getLogger().warn(message);
-        for (Player player : Sponge.getServer().getOnlinePlayers())
-            if (player.hasPermission(Permissions.WARNING))
-                player.sendMessage(TextUtils.goldText(Messages.PREFIX + message));
+        Sponge.getServer().getOnlinePlayers().stream().filter(player -> player.hasPermission(Permissions.WARNING)).forEach(player -> player.sendMessage(TextUtils.goldText(Messages.PREFIX + message)));
     }
 
     public static String getVariantId(DataContainer dataContainer)
@@ -63,6 +61,7 @@ public class Utils
         return "0";
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasPermission(boolean isBanned, Player player, String permission)
     {
         if (!isBanned && player.hasPermission(permission))

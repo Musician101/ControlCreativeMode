@@ -86,6 +86,7 @@ public class SpigotCCMListener extends AbstractListener<SpigotCCM> implements CC
             return;
 
         Location location = block.getLocation();
+        //noinspection deprecation
         Utils.warnStaff(plugin, Messages.playerAccessedBlockInventory(player.getName(), block.getType().toString(), block.getData() + "", location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 

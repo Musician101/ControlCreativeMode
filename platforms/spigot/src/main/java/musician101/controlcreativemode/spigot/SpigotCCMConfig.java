@@ -29,6 +29,7 @@ public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     {
         plugin.reloadConfig();
         FileConfiguration config = plugin.getConfig();
+        checkForUpdate = config.getBoolean(Config.UPDATE_CHECK, false);
         if (config.get(Config.BANNED_BLOCK_BREAK, Config.ALL) instanceof String)
         {
             if (config.getString(Config.BANNED_BLOCK_BREAK, Config.ALL).equalsIgnoreCase(Config.ALL))
@@ -53,6 +54,14 @@ public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
         else
             addItems(bannedBlockPlace, config.getConfigurationSection(Config.BANNED_BLOCK_PLACE));
 
+        if (config.get(Config.BANNED_ENTITY_DAMAGE, Config.ALL) instanceof String)
+        {
+            if (config.getString(Config.BANNED_ENTITY_DAMAGE, Config.ALL).equalsIgnoreCase(Config.ALL))
+                addAllEntities(bannedEntityDamage);
+        }
+        else
+            addEntities(bannedEntityDamage, config.getStringList(Config.BANNED_ENTITY_DAMAGE));
+
         if (config.get(Config.BANNED_ENTITY_INV, Config.ALL) instanceof String)
         {
             if (config.getString(Config.BANNED_ENTITY_INV, Config.ALL).equalsIgnoreCase(Config.ALL))
@@ -68,6 +77,14 @@ public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
         }
         else
             addEntities(bannedEntitySpawn, config.getStringList(Config.BANNED_ENTITY_SPAWN));
+
+        if (config.get(Config.BANNED_ITEM_DROP, Config.ALL) instanceof String)
+        {
+            if (config.getString(Config.BANNED_ITEM_DROP, Config.ALL).equalsIgnoreCase(Config.ALL))
+                addAllItems(bannedItemDrop);
+        }
+        else
+            addItems(bannedItemDrop, config.getConfigurationSection(Config.BANNED_ITEM_DROP));
 
         if (config.get(Config.BANNED_RIGHT_CLICK, Config.ALL) instanceof String)
         {
