@@ -18,18 +18,18 @@ public class SpongeCCM
     private SpongeCCMConfig config;
     private static SpongeCCM instance;
 
-	@Listener
+    @Listener
     public void preInit(GameStartedServerEvent event)
-	{
-		config = new SpongeCCMConfig();
+    {
+        config = new SpongeCCMConfig();
         logger = LoggerFactory.getLogger(Reference.ID);
         EventManager ev = Sponge.getEventManager();
-		ev.registerListeners(this, new SpongeCCMListener());
-		Sponge.getCommandManager().register(this, new CCMSpongeCommand());
+        ev.registerListeners(this, new SpongeCCMListener());
+        Sponge.getCommandManager().register(this, new CCMSpongeCommand());
         instance = this;
     }
 
-	public Logger getLogger()
+    public Logger getLogger()
     {
         return logger;
     }

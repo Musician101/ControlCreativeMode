@@ -11,13 +11,13 @@ import org.spongepowered.api.entity.living.player.Player;
 
 public class Utils
 {
-	public static void warnStaff(String message)
-	{
-		SpongeCCM.instance().getLogger().warn(message);
-		for (Player player : Sponge.getServer().getOnlinePlayers())
-			if (player.hasPermission(Permissions.WARNING))
-				player.sendMessage(TextUtils.goldText(Messages.PREFIX + message));
-	}
+    public static void warnStaff(String message)
+    {
+        SpongeCCM.instance().getLogger().warn(message);
+        for (Player player : Sponge.getServer().getOnlinePlayers())
+            if (player.hasPermission(Permissions.WARNING))
+                player.sendMessage(TextUtils.goldText(Messages.PREFIX + message));
+    }
 
     public static String getVariantId(DataContainer dataContainer)
     {

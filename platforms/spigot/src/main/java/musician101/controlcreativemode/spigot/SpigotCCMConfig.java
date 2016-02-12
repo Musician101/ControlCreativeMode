@@ -14,21 +14,21 @@ import java.util.List;
 
 public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, ConfigurationSection>
 {
-	private final SpigotCCM plugin;
-	
-	public SpigotCCMConfig(SpigotCCM plugin)
-	{
-		super(new File(plugin.getDataFolder(), "config.yml"));
+    private final SpigotCCM plugin;
+
+    public SpigotCCMConfig(SpigotCCM plugin)
+    {
+        super(new File(plugin.getDataFolder(), "config.yml"));
         this.plugin = plugin;
         plugin.saveDefaultConfig();
-		reload();
-	}
+        reload();
+    }
 
     @Override
-	public void reload()
-	{
-		plugin.reloadConfig();
-		FileConfiguration config = plugin.getConfig();
+    public void reload()
+    {
+        plugin.reloadConfig();
+        FileConfiguration config = plugin.getConfig();
         if (config.get(Config.BANNED_BLOCK_BREAK, Config.ALL) instanceof String)
         {
             if (config.getString(Config.BANNED_BLOCK_BREAK, Config.ALL).equalsIgnoreCase(Config.ALL))
@@ -76,7 +76,7 @@ public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
         }
         else
             addItems(bannedRightClick, config.getConfigurationSection(Config.BANNED_RIGHT_CLICK));
-	}
+    }
 
     @Override
     protected void addAllEntities(List<EntityType> list)

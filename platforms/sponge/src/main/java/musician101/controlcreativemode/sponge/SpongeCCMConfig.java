@@ -38,16 +38,16 @@ import java.util.List;
 
 public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, ConfigurationNode>
 {
-	public SpongeCCMConfig()
-	{
-		super(new File("config/" + Reference.ID, "config.conf"));
-		reload();
-	}
+    public SpongeCCMConfig()
+    {
+        super(new File("config/" + Reference.ID, "config.conf"));
+        reload();
+    }
 
-	@Override
-	public void reload()
-	{
-		Logger logger = SpongeCCM.instance().getLogger();
+    @Override
+    public void reload()
+    {
+        Logger logger = SpongeCCM.instance().getLogger();
         if (!configFile.exists())
         {
             if (!configFile.mkdirs())
@@ -173,7 +173,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
         }
         else
             addItems(bannedRightClick, bannedRightClickedNode);
-	}
+    }
 
     @Override
     protected void addAllEntities(List<EntityType> list)
@@ -268,7 +268,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     }
 
     private <T extends CatalogType, D extends DataManipulator<D, I>, I extends ImmutableDataManipulator<I, D>>
-        ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key)
+    ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key)
     {
         ItemStack.Builder isb = ItemStack.builder().itemType(itemType).quantity(0);
         for (T type : Sponge.getRegistry().getAllOf(typeClass))
@@ -309,7 +309,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
         DataContainer container2 = itemStack2.toContainer();
         for (DataQuery query1 : container1.getKeys(true))
             for (DataQuery query2 : container2.getKeys(true))
-                if(query1 == query2)
+                if (query1 == query2)
                     if (container1.get(query1).get() == container2.get(query2).get())
                         return true;
 
