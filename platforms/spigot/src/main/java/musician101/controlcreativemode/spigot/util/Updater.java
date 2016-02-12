@@ -38,6 +38,7 @@ import org.json.simple.JSONValue;
  * @version 2.1
  */
 
+@SuppressWarnings("All")
 public class Updater {
 
     private Plugin plugin;
