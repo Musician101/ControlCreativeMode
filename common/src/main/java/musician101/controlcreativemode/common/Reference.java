@@ -17,7 +17,6 @@ public class Reference
 
     public static class Config
     {//TODO spigot platform needs to set update check boolean
-        //TODO missing item drop perm
         public static final String ALL = "all";
         public static final String BANNED_BLOCK_BREAK = "banned_block_break";
         public static final String BANNED_BLOCK_INV = "banned_block_inventory";
