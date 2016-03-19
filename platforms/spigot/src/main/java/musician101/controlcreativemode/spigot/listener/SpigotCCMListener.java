@@ -212,6 +212,7 @@ public class SpigotCCMListener extends AbstractListener<SpigotCCM> implements CC
         SpigotCCMConfig config = plugin.getPluginConfig();
         if (itemStack.getType() == Material.MONSTER_EGG)
         {
+            //noinspection deprecation
             EntityType entityType = ((SpawnEgg) itemStack.getData()).getSpawnedType();
             isBanned = config.isEntitySpawnBanned(entityType);
             if (!Utils.hasPermission(isBanned, player, Permissions.ALLOW_ENTITY_SPAWN))
