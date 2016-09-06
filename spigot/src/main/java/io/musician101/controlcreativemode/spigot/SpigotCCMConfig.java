@@ -14,7 +14,6 @@ import java.util.List;
 
 public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, ConfigurationSection>
 {
-    @SuppressWarnings("WeakerAccess")
     public SpigotCCMConfig()
     {
         super(new File(SpigotCCM.instance().getDataFolder(), "config.yml"));

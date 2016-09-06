@@ -12,24 +12,28 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameMode;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.entity.projectile.Projectile;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.entity.living.humanoid.ChangeGameModeEvent;
+import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
 import org.spongepowered.api.event.item.inventory.DropItemEvent;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.Optional;
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
-public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, InteractBlockEvent.Secondary, ChangeBlockEvent.Place, DamageEntityEvent, DropItemEvent.Dispense, InteractEntityEvent.Secondary, ChangeGameModeEvent.TargetPlayer, UseItemStackEvent.Finish>
+public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, InteractBlockEvent.Secondary, ChangeBlockEvent.Place, DamageEntityEvent, DropItemEvent.Dispense, InteractEntityEvent.Secondary, ChangeGameModeEvent.TargetPlayer, UseItemStackEvent.Finish, LaunchProjectileEvent>
 {
+    @SuppressWarnings("unused")
     public SpongeCCMListener()//NOSONAR
     {
 
@@ -47,7 +51,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
             return;
 
         Player player = playerOptional.get();
-        if (player.getGameModeData().get(Keys.GAME_MODE).get() != GameModes.CREATIVE)
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (gmOptional.get() != GameModes.CREATIVE)
             return;
 
         for (Transaction<BlockSnapshot> transaction : event.getTransactions())
@@ -62,7 +70,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
 
             if (isBanned)
             {
-                Location<World> location = blockSnapshot.getLocation().get();
+                Optional<Location<World>> optional = blockSnapshot.getLocation();
+                if (!optional.isPresent())
+                    return;
+
+                Location<World> location = optional.get();
                 Utils.warnStaff(Messages.playerBrokeBlock(player.getName(), blockSnapshot.getState().getType().getId(), Utils.getVariantId(blockSnapshot.toContainer()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
             }
         }
@@ -80,7 +92,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
             return;
 
         Player player = playerOptional.get();
-        if (player.getGameModeData().get(Keys.GAME_MODE).get() != GameModes.CREATIVE)
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (gmOptional.get() != GameModes.CREATIVE)
             return;
 
         BlockSnapshot blockSnapshot = event.getTargetBlock();
@@ -94,7 +110,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
         if (!isBanned)
             return;
 
-        Location<World> location = blockSnapshot.getLocation().get();
+        Optional<Location<World>> optional = blockSnapshot.getLocation();
+        if (!optional.isPresent())
+            return;
+
+        Location<World> location = optional.get();
         Utils.warnStaff(Messages.playerAccessedBlockInventory(player.getName(), blockSnapshot.getState().getType().getId(), Utils.getVariantId(blockSnapshot.toContainer()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
@@ -110,7 +130,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
             return;
 
         Player player = playerOptional.get();
-        if (player.getGameModeData().get(Keys.GAME_MODE).get() != GameModes.CREATIVE)
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (gmOptional.get() != GameModes.CREATIVE)
             return;
 
         for (Transaction<BlockSnapshot> transaction : event.getTransactions())
@@ -125,7 +149,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
 
             if (isBanned)
             {
-                Location<World> location = blockSnapshot.getLocation().get();
+                Optional<Location<World>> optional = blockSnapshot.getLocation();
+                if (!optional.isPresent())
+                    return;
+
+                Location<World> location = optional.get();
                 Utils.warnStaff(Messages.playerPlacedBlock(player.getName(), blockSnapshot.getState().getType().getId(), Utils.getVariantId(blockSnapshot.toContainer()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
             }
         }
@@ -143,7 +171,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
             return;
 
         Player player = playerOptional.get();
-        if (player.getGameModeData().get(Keys.GAME_MODE).get() != GameModes.CREATIVE)
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (gmOptional.get() != GameModes.CREATIVE)
             return;
 
         Entity entity = event.getTargetEntity();
@@ -173,12 +205,20 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
             return;
 
         Player player = playerOptional.get();
-        if (player.getGameModeData().get(Keys.GAME_MODE).get() != GameModes.CREATIVE)
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (gmOptional.get() != GameModes.CREATIVE)
             return;
 
         for (Entity entity : event.getEntities())
         {
-            ItemStack itemStack = ItemStack.builder().fromSnapshot(entity.get(Keys.REPRESENTED_ITEM).get()).build();
+            Optional<ItemStackSnapshot> issOptional = entity.get(Keys.REPRESENTED_ITEM);
+            if (!issOptional.isPresent())
+                continue;
+
+            ItemStack itemStack = ItemStack.builder().fromSnapshot(issOptional.get()).build();
             boolean isBanned = SpongeCCM.instance().getConfig().isItemDropBanned(itemStack);
             if (!hasPermission(isBanned, player, Permissions.ALLOW_ITEM_DROP))
             {
@@ -207,7 +247,11 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
 
         Entity entity = event.getTargetEntity();
         Player player = playerOptional.get();
-        if (player.getUniqueId() == entity.getUniqueId() || player.get(Keys.GAME_MODE).get() != GameModes.CREATIVE)
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (player.getUniqueId() == entity.getUniqueId() || gmOptional.get() != GameModes.CREATIVE)
             return;
 
         EntityType entityType = entity.getType();
@@ -233,7 +277,12 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
             return;
 
         Player player = event.getTargetEntity();
-        Utils.warnStaff(Messages.playerChangeGameMode(player.getName(), event.getGameMode().getId()));
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (gmOptional.get() == GameModes.CREATIVE)
+            Utils.warnStaff(Messages.playerChangeGameMode(player.getName(), event.getGameMode().getId()));
     }
 
     @Listener
@@ -248,10 +297,14 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
             return;
 
         Player player = playerOptional.get();
-        if (player.get(Keys.GAME_MODE).get() != GameModes.CREATIVE)
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
             return;
 
-        ItemStack itemStack = event.getItemStackInUse().createStack();
+        if (gmOptional.get() != GameModes.CREATIVE)
+            return;
+
+        ItemStack itemStack = event.getItemStackInUse().getOriginal().createStack();
         boolean isBanned = SpongeCCM.instance().getConfig().isRightClickBanned(itemStack);
         if (!hasPermission(isBanned, player, Permissions.ALLOW_RIGHT_CLICK))
         {
@@ -266,6 +319,44 @@ public class SpongeCCMListener implements CCMListener<ChangeBlockEvent.Break, In
         Utils.warnStaff(Messages.playerRightItemClick(player.getName(), itemStack.getItem().getId(), Utils.getVariantId(itemStack.toContainer()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
+    @Listener
+    @Override
+    public void onProjectileLaunch(LaunchProjectileEvent event)//NOSONAR
+    {
+        if (event.isCancelled())
+            return;
+
+        Projectile entity = event.getTargetEntity();
+        if (entity.getShooter() instanceof Player)
+            return;
+
+        Player player = (Player) entity.getShooter();
+        Optional<GameMode> gmOptional = player.getGameModeData().get(Keys.GAME_MODE);
+        if (!gmOptional.isPresent())
+            return;
+
+        if (gmOptional.get() != GameModes.CREATIVE)
+            return;
+
+        Optional<ItemStack> itemStack = player.getItemInHand();
+        if (!itemStack.isPresent())
+            return;
+
+        boolean isBanned = SpongeCCM.instance().getConfig().isRightClickBanned(itemStack.get());
+        if (!hasPermission(isBanned, player, Permissions.ALLOW_RIGHT_CLICK))
+        {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!isBanned)
+            return;
+
+        Location<World> location = player.getLocation();
+        Utils.warnStaff(Messages.playerRightItemClick(player.getName(), itemStack.get().getItem().getId(), Utils.getVariantId(itemStack.get().toContainer()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static boolean hasPermission(boolean isBanned, Player player, String permission)
     {
         if (!isBanned && player.hasPermission(permission))

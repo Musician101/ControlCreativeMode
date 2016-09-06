@@ -19,6 +19,7 @@ import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.DataManipulator;
+import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
 import org.spongepowered.api.data.manipulator.ImmutableDataManipulator;
 import org.spongepowered.api.data.manipulator.catalog.CatalogBlockData;
 import org.spongepowered.api.data.manipulator.catalog.CatalogItemData;
@@ -35,9 +36,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("WeakerAccess")
 public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, ConfigurationNode>
 {
     public SpongeCCMConfig()
@@ -76,7 +77,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
                 URLConnection connection = url.openConnection();
                 connection.setUseCaches(false);
                 InputStream input = connection.getInputStream();
-                OutputStream output = new FileOutputStream(configFile);
+                OutputStream output = new FileOutputStream(configFile);//NOSONAR
                 byte[] buf = new byte[1024];
                 int len;
                 while ((len = input.read(buf)) > 0)
@@ -291,14 +292,17 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     }
 
     private <T extends CatalogType, D extends DataManipulator<D, I>, I extends ImmutableDataManipulator<I, D>>
-        ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key)
+        ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key)//NOSONAR
     {
         ItemStack.Builder isb = ItemStack.builder().itemType(itemType).quantity(0);
         Sponge.getRegistry().getAllOf(typeClass).stream().filter(type -> type.getId().equalsIgnoreCase(variation)).forEach(type ->
         {
-            //noinspection OptionalGetWithoutIsPresent
-            D data = Sponge.getDataManager().getManipulatorBuilder(dataClass).get().create().set(Sponge.getRegistry().getValueFactory().createValue(key, type));
-            isb.itemData(data);
+            Optional<DataManipulatorBuilder<D, I>> dmOptional = Sponge.getDataManager().getManipulatorBuilder(dataClass);
+            if (dmOptional.isPresent())
+            {
+                D data = dmOptional.get().create().set(Sponge.getRegistry().getValueFactory().createValue(key, type));
+                isb.itemData(data);
+            }
         });
         
         return isb.build();
@@ -329,10 +333,16 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
         DataContainer container1 = itemStack1.toContainer();
         DataContainer container2 = itemStack2.toContainer();
         for (DataQuery query1 : container1.getKeys(true))
+        {
             for (DataQuery query2 : container2.getKeys(true))
-                //noinspection OptionalGetWithoutIsPresent
-                if (query1 == query2 && container1.get(query1).get() == container2.get(query2).get())
-                    return true;
+            {
+                Optional<Object> optional1 = container1.get(query1);
+                Optional<Object> optional2 = container2.get(query2);
+                if (optional1.isPresent() && optional2.isPresent())
+                    if (query1 == query2 && optional1.get() == optional2.get())//NOSONAR
+                        return true;
+            }
+        }
 
         return false;
     }

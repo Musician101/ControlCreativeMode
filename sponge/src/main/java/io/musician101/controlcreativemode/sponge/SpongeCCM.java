@@ -4,13 +4,17 @@ import io.musician101.common.java.minecraft.sponge.AbstractSpongePlugin;
 import io.musician101.controlcreativemode.common.Reference;
 import io.musician101.controlcreativemode.sponge.commands.CCMSpongeCommand;
 import io.musician101.controlcreativemode.sponge.listener.SpongeCCMListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.plugin.Plugin;
+import org.spongepowered.api.plugin.PluginContainer;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
+@Plugin(id = Reference.ID, name = Reference.NAME, version = Reference.VERSION, authors = {"Musician101"}, description = "Control what players do when they're in Creative Mode.")
 public class SpongeCCM extends AbstractSpongePlugin<SpongeCCMConfig>
 {
     @Listener
@@ -22,16 +26,26 @@ public class SpongeCCM extends AbstractSpongePlugin<SpongeCCMConfig>
         Sponge.getCommandManager().register(this, new CCMSpongeCommand());
     }
 
-    @Nonnull
-    @Override
-    public Optional<?> getInstance()
-    {
-        return Optional.of(Sponge.getPluginManager().fromInstance(this));
-    }
-
     public static SpongeCCM instance()
     {
-        //noinspection OptionalGetWithoutIsPresent
-        return (SpongeCCM) Sponge.getPluginManager().getPlugin(Reference.ID).get();
+        return (SpongeCCM) getPluginContainer();
+    }
+
+    public static PluginContainer getPluginContainer()
+    {
+        Optional<PluginContainer> plugin = Sponge.getPluginManager().getPlugin(Reference.ID);
+        if (plugin.isPresent())
+            return plugin.get();
+
+        return null;
+    }
+
+    @Override
+    public Logger getLogger()
+    {
+        if (getPluginContainer() == null)
+            return LoggerFactory.getLogger(Reference.ID);
+
+        return getPluginContainer().getLogger();
     }
 }

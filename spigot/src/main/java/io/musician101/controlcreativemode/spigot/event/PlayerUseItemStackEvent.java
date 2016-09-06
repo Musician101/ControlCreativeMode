@@ -41,6 +41,7 @@ public class PlayerUseItemStackEvent extends PlayerEvent implements Cancellable
         return handlers;
     }
 
+    @SuppressWarnings("unused")
     public static HandlerList getHandlerList()
     {
         return handlers;

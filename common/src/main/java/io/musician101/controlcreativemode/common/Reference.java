@@ -1,5 +1,6 @@
 package io.musician101.controlcreativemode.common;
 
+//@SuppressWarnings("unused")
 public class Reference
 {
     public static final String DESCRIPTION = "Control what players do when they're in Creative Mode.";
@@ -25,7 +26,7 @@ public class Reference
     }
 
     public static class Config
-    {//TODO spigot platform needs to set update check boolean
+    {
         public static final String ALL = "all";
         public static final String BANNED_BLOCK_BREAK = "banned_block_break";
         public static final String BANNED_BLOCK_INV = "banned_block_inventory";
@@ -43,9 +44,10 @@ public class Reference
         }
     }
 
+    @SuppressWarnings("unused")
     public static class Messages
     {
-        public static final String PREFIX = "[" + ID + "] ";
+        public static final String PREFIX = "[CCM] ";
         public static final String CONFIG_LOAD_FAIL = "The config failed to load.";
         public static final String CONFIG_RELOADED = PREFIX + "Config reloaded.";
         public static final String NO_PERMISSION = PREFIX + "You do not have permission to do that.";

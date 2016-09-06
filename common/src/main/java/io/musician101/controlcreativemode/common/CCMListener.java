@@ -9,9 +9,10 @@ package io.musician101.controlcreativemode.common;
  * @param <E> Entity interact event
  * @param <G> Gamemode change event
  * @param <U> Use item event
+ * @param <L> Projectile launch event
  */
 @SuppressWarnings("unused")
-public interface CCMListener<B, I, P, D, T, E, G, U>
+public interface CCMListener<B, I, P, D, T, E, G, U, L>
 {
     void blockBreak(B event);
 
@@ -28,4 +29,6 @@ public interface CCMListener<B, I, P, D, T, E, G, U>
     void gameModeChange(G event);
 
     void useItem(U event);
+
+    void onProjectileLaunch(L event);
 }

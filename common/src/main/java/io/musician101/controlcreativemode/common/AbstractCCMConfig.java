@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public abstract class AbstractCCMConfig<E, I, S> extends AbstractConfig
 {
     protected boolean checkForUpdate;

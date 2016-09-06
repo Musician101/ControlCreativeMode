@@ -7,6 +7,7 @@ import io.musician101.common.java.minecraft.sponge.command.SpongeCommandUsage;
 import io.musician101.common.java.minecraft.sponge.command.SpongeHelpCommand;
 import io.musician101.controlcreativemode.common.Reference;
 import io.musician101.controlcreativemode.common.Reference.Commands;
+import io.musician101.controlcreativemode.sponge.SpongeCCM;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -32,6 +33,6 @@ public class CCMSpongeCommand extends AbstractSpongeCommand
                 if (command.getName().equalsIgnoreCase(args[0]))
                     return command.process(source, moveArguments(args));
 
-        return new SpongeHelpCommand(this, source).process(source, moveArguments(args));
+        return new SpongeHelpCommand(this, source, SpongeCCM.getPluginContainer()).process(source, moveArguments(args));
     }
 }
