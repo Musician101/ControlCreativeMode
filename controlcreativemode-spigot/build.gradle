@@ -1,0 +1,30 @@
+repositories {
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+
+dependencies {
+    compile project(':controlcreativemode-common')
+    compile 'org.spigotmc:spigot:1.10.2-R0.1-SNAPSHOT'
+    compile 'io.musician101.musicianlibrary.java.minecraft:spigot:3.0-SNAPSHOT'
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand 'version': project.version
+    }
+}
+
+//noinspection GroovyMissingReturnStatement
+shadowJar {
+    dependencies {
+        //noinspection GroovyAssignabilityCheck
+        include(dependency(':controlcreativemode-common'))
+    }
+}

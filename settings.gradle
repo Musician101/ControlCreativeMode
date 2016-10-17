@@ -1,0 +1,3 @@
+rootProject.name = 'controlcreativemode'
+
+include 'controlcreativemode-common', 'controlcreativemode-spigot', 'controlcreativemode-sponge'

@@ -1,0 +1,3 @@
+dependencies {
+    compile 'io.musician101.musicianlibrary.java:minecraft:3.0-SNAPSHOT'
+}
