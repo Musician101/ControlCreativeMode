@@ -14,7 +14,6 @@ public class Reference {
     public static class Commands {
 
         public static final String CCM_CMD = "/ccm";
-        public static final String HELP = "help";
         public static final String RELOAD_DESC = "Reload the plugin's configuration file.";
         public static final String RELOAD_NAME = "reload";
 
