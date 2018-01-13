@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     compile project(':controlcreativemode-common')
-    compile 'io.musician101.musicianlibrary.java.minecraft:sponge:3.0-SNAPSHOT'
+    compile 'io.musician101:musicianlibrary-sponge:3.0-SNAPSHOT'
 }
 
 processResources {
@@ -13,10 +13,8 @@ processResources {
     }
 }
 
-//noinspection GroovyMissingReturnStatement
 shadowJar {
     dependencies {
-        //noinspection GroovyAssignabilityCheck
         include(dependency(':controlcreativemode-common'))
     }
 }

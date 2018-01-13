@@ -1,6 +1,5 @@
 package io.musician101.controlcreativemode.common;
 
-//@SuppressWarnings("unused")
 public class Reference
 {
     public static final String DESCRIPTION = "Control what players do when they're in Creative Mode.";
@@ -44,7 +43,6 @@ public class Reference
         }
     }
 
-    @SuppressWarnings("unused")
     public static class Messages
     {
         public static final String PREFIX = "[CCM] ";
@@ -122,7 +120,6 @@ public class Reference
 
     public static class Permissions
     {
-        @SuppressWarnings("WeakerAccess")
         public static final String CCM = "ccm";
         public static final String ALLOW_BLOCK_BREAK = CCM + ".block_break";
         public static final String ALLOW_BLOCK_INVENTORY = CCM + ".block_inventory";

@@ -5,6 +5,17 @@ import io.musician101.controlcreativemode.common.AbstractCCMConfig;
 import io.musician101.controlcreativemode.common.Reference;
 import io.musician101.controlcreativemode.common.Reference.Config;
 import io.musician101.controlcreativemode.common.Reference.Messages;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -28,17 +39,6 @@ import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, ConfigurationNode>
 {
     public SpongeCCMConfig()
@@ -48,153 +48,153 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     }
 
     @Override
-    public void reload()//NOSONAR
+    public void reload()
     {
-        Logger logger = SpongeCCM.instance().getLogger();
-        if (!configFile.exists())
-        {
-            //noinspection ResultOfMethodCallIgnored
-            configFile.getParentFile().mkdirs();
-            try
+        SpongeCCM.instance().ifPresent(plugin -> {
+          Logger logger = plugin.getLogger();
+            if (!configFile.exists())
             {
-                //noinspection ResultOfMethodCallIgnored
-                configFile.createNewFile();//NOSONAR
-                URL url = SpongeCCM.class.getResource("/config.conf");
-                if (url == null)
+                configFile.getParentFile().mkdirs();
+                try
                 {
-                    logger.error(Messages.CONFIG_LOAD_FAIL);
+                    configFile.createNewFile();
+                    URL url = SpongeCCM.class.getResource("/config.conf");
+                    if (url == null)
+                    {
+                        logger.error(Messages.CONFIG_LOAD_FAIL);
+                        return;
+                    }
+
+                    URLConnection connection = url.openConnection();
+                    connection.setUseCaches(false);
+                    InputStream input = connection.getInputStream();
+                    OutputStream output = new FileOutputStream(configFile);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = input.read(buf)) > 0)
+                        output.write(buf, 0, len);
+
+                    output.close();
+                    input.close();
+                }
+                catch (IOException e)
+                {
+                    logger.warn(Messages.CONFIG_LOAD_FAIL);
                     return;
                 }
-
-                URLConnection connection = url.openConnection();
-                connection.setUseCaches(false);
-                InputStream input = connection.getInputStream();
-                OutputStream output = new FileOutputStream(configFile);//NOSONAR
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = input.read(buf)) > 0)
-                    output.write(buf, 0, len);
-
-                output.close();
-                input.close();
             }
-            catch (IOException e)//NOSONAR
+
+            ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setFile(configFile).build();
+            ConfigurationNode config;
+            try
             {
-                logger.warn(Messages.CONFIG_LOAD_FAIL);
+                config = loader.load();
+            }
+            catch (IOException e)
+            {
+                logger.error(Messages.CONFIG_LOAD_FAIL);
                 return;
             }
-        }
 
-        ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setFile(configFile).build();
-        ConfigurationNode config;
-        try
-        {
-            config = loader.load();
-        }
-        catch (IOException e)//NOSONAR
-        {
-            logger.error(Messages.CONFIG_LOAD_FAIL);
-            return;
-        }
-
-        ConfigurationNode bannedBlockBreakNode = config.getNode(Config.BANNED_BLOCK_BREAK);
-        if (bannedBlockBreakNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedBlockBreakNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllItems(bannedBlockBreak);
-        }
-        else
-            addItems(bannedBlockBreak, bannedBlockBreakNode);
-
-        ConfigurationNode bannedBlockInventoryNode = config.getNode(Config.BANNED_BLOCK_INV);
-        if (bannedBlockInventoryNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedBlockInventoryNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllItems(bannedBlockInventory);
-        }
-        else
-            addItems(bannedBlockInventory, bannedBlockInventoryNode);
-
-        ConfigurationNode bannedBlockPlaceNode = config.getNode(Config.BANNED_BLOCK_PLACE);
-        if (bannedBlockBreakNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedBlockPlaceNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllItems(bannedBlockPlace);
-        }
-        else
-            addItems(bannedBlockPlace, bannedBlockPlaceNode);
-
-        ConfigurationNode bannedEntityInventoryNode = config.getNode(Config.BANNED_ENTITY_INV);
-        if (bannedEntityInventoryNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedEntityInventoryNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllEntities(bannedEntityInventory);
-        }
-        else
-        {
-            try
+            ConfigurationNode bannedBlockBreakNode = config.getNode(Config.BANNED_BLOCK_BREAK);
+            if (bannedBlockBreakNode.getValue(Config.ALL) instanceof String)
             {
-                addEntities(bannedEntityInventory, bannedEntityInventoryNode.getList(TypeToken.of(String.class)));
+                if (bannedBlockBreakNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllItems(bannedBlockBreak);
             }
-            catch (ObjectMappingException e)//NOSONAR
-            {
-                logger.error(Messages.CONFIG_LOAD_FAIL);
-            }
-        }
+            else
+                addItems(bannedBlockBreak, bannedBlockBreakNode);
 
-        ConfigurationNode bannedEntityDamageNode = config.getNode(Config.BANNED_ENTITY_DAMAGE);
-        if (bannedEntityDamageNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedEntityDamageNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllEntities(bannedEntityDamage);
-        }
-        else
-        {
-            try
+            ConfigurationNode bannedBlockInventoryNode = config.getNode(Config.BANNED_BLOCK_INV);
+            if (bannedBlockInventoryNode.getValue(Config.ALL) instanceof String)
             {
-                addEntities(bannedEntityDamage, bannedEntityDamageNode.getList(TypeToken.of(String.class)));
+                if (bannedBlockInventoryNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllItems(bannedBlockInventory);
             }
-            catch (ObjectMappingException e)//NOSONAR
-            {
-                logger.error(Messages.CONFIG_LOAD_FAIL);
-            }
-        }
+            else
+                addItems(bannedBlockInventory, bannedBlockInventoryNode);
 
-        ConfigurationNode bannedEntitySpawnNode = config.getNode(Config.BANNED_ENTITY_SPAWN);
-        if (bannedEntitySpawnNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedEntitySpawnNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllEntities(bannedEntitySpawn);
-        }
-        else
-        {
-            try
+            ConfigurationNode bannedBlockPlaceNode = config.getNode(Config.BANNED_BLOCK_PLACE);
+            if (bannedBlockBreakNode.getValue(Config.ALL) instanceof String)
             {
-                addEntities(bannedEntitySpawn, bannedEntitySpawnNode.getList(TypeToken.of(String.class)));
+                if (bannedBlockPlaceNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllItems(bannedBlockPlace);
             }
-            catch (ObjectMappingException e)//NOSONAR
+            else
+                addItems(bannedBlockPlace, bannedBlockPlaceNode);
+
+            ConfigurationNode bannedEntityInventoryNode = config.getNode(Config.BANNED_ENTITY_INV);
+            if (bannedEntityInventoryNode.getValue(Config.ALL) instanceof String)
             {
-                logger.error(Messages.CONFIG_LOAD_FAIL);
+                if (bannedEntityInventoryNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllEntities(bannedEntityInventory);
             }
-        }
+            else
+            {
+                try
+                {
+                    addEntities(bannedEntityInventory, bannedEntityInventoryNode.getList(TypeToken.of(String.class)));
+                }
+                catch (ObjectMappingException e)
+                {
+                    logger.error(Messages.CONFIG_LOAD_FAIL);
+                }
+            }
 
-        ConfigurationNode bannedItemDropNode = config.getNode(Config.BANNED_ITEM_DROP);
-        if (bannedItemDropNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedItemDropNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllItems(bannedItemDrop);
-        }
-        else
-            addItems(bannedItemDrop, bannedItemDropNode);
+            ConfigurationNode bannedEntityDamageNode = config.getNode(Config.BANNED_ENTITY_DAMAGE);
+            if (bannedEntityDamageNode.getValue(Config.ALL) instanceof String)
+            {
+                if (bannedEntityDamageNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllEntities(bannedEntityDamage);
+            }
+            else
+            {
+                try
+                {
+                    addEntities(bannedEntityDamage, bannedEntityDamageNode.getList(TypeToken.of(String.class)));
+                }
+                catch (ObjectMappingException e)
+                {
+                    logger.error(Messages.CONFIG_LOAD_FAIL);
+                }
+            }
 
-        ConfigurationNode bannedRightClickedNode = config.getNode(Config.BANNED_RIGHT_CLICK);
-        if (bannedRightClickedNode.getValue(Config.ALL) instanceof String)
-        {
-            if (bannedRightClickedNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
-                addAllItems(bannedRightClick);
-        }
-        else
-            addItems(bannedRightClick, bannedRightClickedNode);
+            ConfigurationNode bannedEntitySpawnNode = config.getNode(Config.BANNED_ENTITY_SPAWN);
+            if (bannedEntitySpawnNode.getValue(Config.ALL) instanceof String)
+            {
+                if (bannedEntitySpawnNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllEntities(bannedEntitySpawn);
+            }
+            else
+            {
+                try
+                {
+                    addEntities(bannedEntitySpawn, bannedEntitySpawnNode.getList(TypeToken.of(String.class)));
+                }
+                catch (ObjectMappingException e)
+                {
+                    logger.error(Messages.CONFIG_LOAD_FAIL);
+                }
+            }
+
+            ConfigurationNode bannedItemDropNode = config.getNode(Config.BANNED_ITEM_DROP);
+            if (bannedItemDropNode.getValue(Config.ALL) instanceof String)
+            {
+                if (bannedItemDropNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllItems(bannedItemDrop);
+            }
+            else
+                addItems(bannedItemDrop, bannedItemDropNode);
+
+            ConfigurationNode bannedRightClickedNode = config.getNode(Config.BANNED_RIGHT_CLICK);
+            if (bannedRightClickedNode.getValue(Config.ALL) instanceof String)
+            {
+                if (bannedRightClickedNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
+                    addAllItems(bannedRightClick);
+            }
+            else
+                addItems(bannedRightClick, bannedRightClickedNode);
+        });
     }
 
     @Override
@@ -217,12 +217,12 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     }
 
     @Override
-    protected void addItems(List<ItemStack> list, ConfigurationNode configurationNode)//NOSONAR
+    protected void addItems(List<ItemStack> list, ConfigurationNode configurationNode)
     {
         for (Object itemNameObject : configurationNode.getChildrenMap().keySet())
         {
             String itemName = itemNameObject.toString();
-            Sponge.getRegistry().getAllOf(ItemType.class).stream().filter(itemType -> itemName.equalsIgnoreCase(itemType.getId())).forEach(itemType ->//NOSONAR
+            Sponge.getRegistry().getAllOf(ItemType.class).stream().filter(itemType -> itemName.equalsIgnoreCase(itemType.getId())).forEach(itemType ->
             {
                 ConfigurationNode itemTypeNode = configurationNode.getNode(itemName);
                 if (itemTypeNode.getValue() instanceof String && itemTypeNode.getString(Config.ALL).equalsIgnoreCase(Config.ALL))
@@ -231,7 +231,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
                 {
                     try
                     {
-                        for (String variation : itemTypeNode.getList(TypeToken.of(String.class)))//NOSONAR
+                        for (String variation : itemTypeNode.getList(TypeToken.of(String.class)))
                         {
                             ItemStack item = ItemStack.of(itemType, 0);
                             if (item.get(CatalogBlockData.STONE_DATA).isPresent())
@@ -261,7 +261,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
                             else if (item.get(CatalogBlockData.PRISMARINE_DATA).isPresent())
                                 list.add(parseItem(itemType, variation, CatalogTypes.PRISMARINE_TYPE, CatalogBlockData.PRISMARINE_DATA, Keys.PRISMARINE_TYPE));
                             else if (item.get(CatalogBlockData.DOUBLE_PLANT_DATA).isPresent())
-                                list.add(parseItem(itemType, variation, CatalogTypes.DOUBLE_SIZE_PLANT_TYPE, CatalogBlockData.DOUBLE_PLANT_DATA, Keys.DOUBLE_PLANT_TYPE));
+                                list.add(parseItem(itemType, variation, CatalogTypes.DOUBLE_PLANT_TYPE, CatalogBlockData.DOUBLE_PLANT_DATA, Keys.DOUBLE_PLANT_TYPE));
                             else if (item.get(CatalogItemData.COAL_ITEM_DATA).isPresent())
                                 list.add(parseItem(itemType, variation, CatalogTypes.COAL_TYPE, CatalogItemData.COAL_ITEM_DATA, Keys.COAL_TYPE));
                             else if (item.get(CatalogItemData.GOLDEN_APPLE_ITEM_DATA).isPresent())
@@ -274,9 +274,9 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
                                 list.add(parseItem(itemType, variation, CatalogTypes.ENTITY_TYPE, CatalogItemData.SPAWNABLE_DATA, Keys.SPAWNABLE_ENTITY_TYPE));
                         }
                     }
-                    catch (ObjectMappingException e)//NOSONAR
+                    catch (ObjectMappingException e)
                     {
-                        SpongeCCM.instance().getLogger().error(Messages.CONFIG_LOAD_FAIL);
+                        SpongeCCM.instance().map(SpongeCCM::getLogger).orElseThrow(() -> new NoSuchElementException("SpongeCCM is not loaded!")).error(Messages.CONFIG_LOAD_FAIL);
                     }
                 }
             });
@@ -284,7 +284,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     }
 
     private <T extends CatalogType, D extends DataManipulator<D, I>, I extends ImmutableDataManipulator<I, D>>
-        ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key)//NOSONAR
+        ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key)
     {
         ItemStack.Builder isb = ItemStack.builder().itemType(itemType).quantity(0);
         Sponge.getRegistry().getAllOf(typeClass).stream().filter(type -> type.getId().equalsIgnoreCase(variation)).forEach(type ->
@@ -296,7 +296,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
                 isb.itemData(data);
             }
         });
-        
+
         return isb.build();
     }
 
@@ -314,7 +314,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     protected boolean containsItem(List<ItemStack> list, ItemStack itemStack)
     {
         for (ItemStack is : list)
-            if (itemStack.getItem() == is.getItem() && (is.getQuantity() > 0 || isSameVariant(itemStack, is)))
+            if (itemStack.getType() == is.getType() && (is.getQuantity() > 0 || isSameVariant(itemStack, is)))
                     return true;
 
         return false;
@@ -331,7 +331,7 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
                 Optional<Object> optional1 = container1.get(query1);
                 Optional<Object> optional2 = container2.get(query2);
                 if (optional1.isPresent() && optional2.isPresent())
-                    if (query1 == query2 && optional1.get() == optional2.get())//NOSONAR
+                    if (query1 == query2 && optional1.get() == optional2.get())
                         return true;
             }
         }

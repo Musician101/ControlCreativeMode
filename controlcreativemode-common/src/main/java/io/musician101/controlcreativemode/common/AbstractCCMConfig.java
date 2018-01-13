@@ -1,12 +1,10 @@
 package io.musician101.controlcreativemode.common;
 
-import io.musician101.musicianlibrary.java.minecraft.AbstractConfig;
-
+import io.musician101.musicianlibrary.java.minecraft.config.AbstractConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public abstract class AbstractCCMConfig<E, I, S> extends AbstractConfig
 {
     protected boolean checkForUpdate;

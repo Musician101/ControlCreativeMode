@@ -11,8 +11,7 @@ repositories {
 
 dependencies {
     compile project(':controlcreativemode-common')
-    compile 'org.spigotmc:spigot:1.10.2-R0.1-SNAPSHOT'
-    compile 'io.musician101.musicianlibrary.java.minecraft:spigot:3.0-SNAPSHOT'
+    compile 'io.musician101:musicianlibrary-spigot:3.0-SNAPSHOT'
 }
 
 processResources {
@@ -21,10 +20,8 @@ processResources {
     }
 }
 
-//noinspection GroovyMissingReturnStatement
 shadowJar {
     dependencies {
-        //noinspection GroovyAssignabilityCheck
         include(dependency(':controlcreativemode-common'))
     }
 }

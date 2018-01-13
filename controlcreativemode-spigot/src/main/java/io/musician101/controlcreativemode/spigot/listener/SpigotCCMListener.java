@@ -6,14 +6,14 @@ import io.musician101.controlcreativemode.common.Reference.Permissions;
 import io.musician101.controlcreativemode.spigot.SpigotCCM;
 import io.musician101.controlcreativemode.spigot.SpigotCCMConfig;
 import io.musician101.controlcreativemode.spigot.event.PlayerUseItemStackEvent;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import java.util.Arrays;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -31,17 +31,10 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
-import java.util.List;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 
 public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInteractEvent, BlockPlaceEvent, EntityDamageByEntityEvent, PlayerDropItemEvent, PlayerInteractEntityEvent, PlayerGameModeChangeEvent, PlayerUseItemStackEvent, ProjectileLaunchEvent>, Listener
 {
-    public SpigotCCMListener()
-    {
-        super();
-    }
-
     @EventHandler
     @Override
     public void blockBreak(BlockBreakEvent event)
@@ -65,14 +58,12 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
             return;
 
         Location location = block.getLocation();
-        //noinspection deprecation
-        warnStaff(Messages.playerBrokeBlock(player.getName(), block.getType().toString(),
-                Byte.toString(block.getData()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));//NOSONAR
+        warnStaff(Messages.playerBrokeBlock(player.getName(), block.getType().toString(), Byte.toString(block.getData()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
     @EventHandler
     @Override
-    public void blockInteract(PlayerInteractEvent event)//NOSONAR
+    public void blockInteract(PlayerInteractEvent event)
     {
         if (event.isCancelled())
             return;
@@ -103,9 +94,8 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
             return;
 
         Location location = block.getLocation();
-        //noinspection deprecation
         warnStaff(Messages.playerAccessedBlockInventory(player.getName(), block.getType().toString(),
-                Byte.toString(block.getData()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));//NOSONAR
+                Byte.toString(block.getData()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
     @EventHandler
@@ -131,9 +121,8 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
             return;
 
         Location location = block.getLocation();
-        //noinspection deprecation
         warnStaff(Messages.playerPlacedBlock(player.getName(), block.getType().toString(),
-                Byte.toString(block.getData()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));//NOSONAR
+                Byte.toString(block.getData()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
     @EventHandler
@@ -231,7 +220,7 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
 
     @EventHandler
     @Override
-    public void useItem(PlayerUseItemStackEvent event)//NOSONAR
+    public void useItem(PlayerUseItemStackEvent event)
     {
         if (event.isCancelled())
             return;
@@ -279,13 +268,8 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
 
     private EntityType getEntityTypeFromEgg(ItemStack itemStack)
     {
-        net.minecraft.server.v1_10_R1.ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound tagCompound = stack.getTag();
-        if (tagCompound == null || !tagCompound.hasKey("EntityTag"))
-            return EntityType.UNKNOWN;
-
-        @SuppressWarnings("deprecation") EntityType entityType = EntityType.fromName(tagCompound.getCompound("EntityTag")//NOSONAR
-                .getString("id"));
+        SpawnEggMeta meta = (SpawnEggMeta) itemStack.getItemMeta();
+        EntityType entityType = meta.getSpawnedType();
         if (entityType == null)
             return EntityType.UNKNOWN;
         else
@@ -294,7 +278,7 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
 
     @Override
     @EventHandler
-    public void onProjectileLaunch(ProjectileLaunchEvent event)//NOSONAR
+    public void onProjectileLaunch(ProjectileLaunchEvent event)
     {
         if (event.isCancelled())
             return;
@@ -346,7 +330,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
         warnStaff(Messages.playerPlacedBlock(player.getName(), bucket.getType().toString(), Short.toString(bucket.getDurability()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean hasPermission(boolean isBanned, Player player, String permission)
     {
         if (!isBanned || player.hasPermission(permission))
@@ -358,7 +341,7 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
 
     // Apparently certain blocks have damage values based on which direction they're facing.
     // This sets the proper durability.
-    private ItemStack toItemStack(Block block)//NOSONAR
+    private ItemStack toItemStack(Block block)
     {
         if (block == null)
             return new ItemStack(Material.AIR);

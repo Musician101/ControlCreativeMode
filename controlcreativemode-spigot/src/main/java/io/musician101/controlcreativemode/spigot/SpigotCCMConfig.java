@@ -2,15 +2,17 @@ package io.musician101.controlcreativemode.spigot;
 
 import io.musician101.controlcreativemode.common.AbstractCCMConfig;
 import io.musician101.controlcreativemode.common.Reference.Config;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.ItemStack;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.server.v1_12_R1.Item;
+import net.minecraft.server.v1_12_R1.MinecraftKey;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, ConfigurationSection>
 {
@@ -22,7 +24,7 @@ public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     }
 
     @Override
-    public void reload()//NOSONAR
+    public void reload()
     {
         SpigotCCM.instance().reloadConfig();
         FileConfiguration config = SpigotCCM.instance().getConfig();
@@ -117,18 +119,14 @@ public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     @Override
     protected void addItems(List<ItemStack> list, ConfigurationSection configurationSection)
     {
-        for (String materialName : configurationSection.getValues(false).keySet())
+        for (Material material : Material.values())
         {
-            for (Material material : Material.values())
-            {
-                if (materialName.equalsIgnoreCase(material.toString()))
-                {
-                    if (configurationSection.isString(materialName) && configurationSection.getString(materialName).equalsIgnoreCase(Config.ALL))//NOSONAR
-                        list.add(new ItemStack(material, 1));
-                    else
-                        configurationSection.getShortList(materialName).forEach(damage -> list.add(new ItemStack(material, 0, damage)));
-                }
-            }
+            MinecraftKey key = Item.REGISTRY.b(CraftMagicNumbers.getItem(material));
+            String id = key == null ? "minecraft:air" : key.toString();
+            if (configurationSection.isString(id) && configurationSection.getString(id).equalsIgnoreCase(Config.ALL))
+                list.add(new ItemStack(material, 1));
+            else
+                configurationSection.getShortList(id).forEach(damage -> list.add(new ItemStack(material, 0, damage)));
         }
     }
 
