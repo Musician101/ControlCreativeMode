@@ -15,7 +15,6 @@ public abstract class AbstractCCMConfig<E, I, S> extends AbstractConfig {
     protected final List<E> bannedEntitySpawn = new ArrayList<>();
     protected final List<I> bannedItemDrop = new ArrayList<>();
     protected final List<I> bannedRightClick = new ArrayList<>();
-    protected boolean checkForUpdate;
 
     protected AbstractCCMConfig(File configFile) {
         super(configFile);
@@ -28,10 +27,6 @@ public abstract class AbstractCCMConfig<E, I, S> extends AbstractConfig {
     protected abstract void addEntities(List<E> list, List<String> entityTypeNames);
 
     protected abstract void addItems(List<I> list, S serializer);
-
-    public boolean checkForUpdate() {
-        return checkForUpdate;
-    }
 
     protected abstract boolean containsEntityType(List<E> list, E entityType);
 

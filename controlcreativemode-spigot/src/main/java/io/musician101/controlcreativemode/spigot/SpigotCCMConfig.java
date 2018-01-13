@@ -85,7 +85,6 @@ public class SpigotCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     public void reload() {
         SpigotCCM.instance().reloadConfig();
         FileConfiguration config = SpigotCCM.instance().getConfig();
-        checkForUpdate = config.getBoolean(Config.UPDATE_CHECK, false);
         if (config.get(Config.BANNED_BLOCK_BREAK, Config.ALL) instanceof String) {
             if (config.getString(Config.BANNED_BLOCK_BREAK, Config.ALL).equalsIgnoreCase(Config.ALL)) {
                 addAllItems(bannedBlockBreak);

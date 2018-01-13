@@ -34,7 +34,6 @@ public class Reference {
         public static final String BANNED_ENTITY_SPAWN = "banned_entity_spawn";
         public static final String BANNED_ITEM_DROP = "banned_item_drop";
         public static final String BANNED_RIGHT_CLICK = "banned_right_click";
-        public static final String UPDATE_CHECK = "check_for_update";
 
         private Config() {
 
@@ -47,8 +46,6 @@ public class Reference {
         public static final String PREFIX = "[CCM] ";
         public static final String CONFIG_RELOADED = PREFIX + "Config reloaded.";
         public static final String NO_PERMISSION = PREFIX + "You do not have permission to do that.";
-        public static final String UPDATER_DISABLED = "Update check is disabled.";
-        public static final String UPDATER_FAILED = "Updater check failed.";
 
         private Messages() {
 
@@ -56,14 +53,6 @@ public class Reference {
 
         private static String atLocation(int x, int y, int z) {
             return " at X:" + x + ", Y:" + y + ", Z:" + z;
-        }
-
-        public static String newVersionAvailable(String name) {
-            return "A new version is available. " + name;
-        }
-
-        public static String noNewVersionAvailable(String name) {
-            return "The current version is the latest. " + name;
         }
 
         public static String playerAccessedBlockInventory(String playerName, String blockName, String type, int x, int y, int z) {

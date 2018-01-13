@@ -1,6 +1,3 @@
-# Check for updates.
-check_for_update: true
-
 # Set which blocks can't be broken.
 banned_block_break: "all"
 
