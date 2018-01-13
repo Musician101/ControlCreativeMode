@@ -30,7 +30,6 @@ import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.DataManipulator;
-import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
 import org.spongepowered.api.data.manipulator.ImmutableDataManipulator;
 import org.spongepowered.api.data.manipulator.catalog.CatalogBlockData;
 import org.spongepowered.api.data.manipulator.catalog.CatalogItemData;
@@ -186,11 +185,10 @@ public class SpongeCCMConfig extends AbstractCCMConfig<EntityType, ItemStack, Co
     private <T extends CatalogType, D extends DataManipulator<D, I>, I extends ImmutableDataManipulator<I, D>> ItemStack parseItem(ItemType itemType, String variation, Class<T> typeClass, Class<D> dataClass, Key<Value<T>> key) {
         ItemStack.Builder isb = ItemStack.builder().itemType(itemType).quantity(0);
         Sponge.getRegistry().getAllOf(typeClass).stream().filter(type -> type.getId().equalsIgnoreCase(variation)).forEach(type -> {
-            Optional<DataManipulatorBuilder<D, I>> dmOptional = Sponge.getDataManager().getManipulatorBuilder(dataClass);
-            if (dmOptional.isPresent()) {
-                D data = dmOptional.get().create().set(Sponge.getRegistry().getValueFactory().createValue(key, type));
+            Sponge.getDataManager().getManipulatorBuilder(dataClass).ifPresent(diDataManipulatorBuilder -> {
+                D data = diDataManipulatorBuilder.create().set(Sponge.getRegistry().getValueFactory().createValue(key, type));
                 isb.itemData(data);
-            }
+            });
         });
 
         return isb.build();
