@@ -5,6 +5,7 @@ import io.musician101.controlcreativemode.common.Reference.Messages;
 import io.musician101.controlcreativemode.common.Reference.Permissions;
 import io.musician101.controlcreativemode.sponge.SpongeCCM;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.api.CatalogType;
@@ -53,18 +54,16 @@ public class SpongeCCMListener// implements CCMListener<Break, Secondary, Place,
 
     @Listener
     public void blockBreak(ChangeBlockEvent.Break event, @First Player player, @Getter("getTransactions") List<Transaction<BlockSnapshot>> transactions) {
-        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> {
-            transactions.forEach(transaction -> {
-                BlockSnapshot blockSnapshot = transaction.getOriginal();
-                boolean isBanned = plugin.getConfig().isBlockBreakBanned(ItemStack.builder().fromBlockSnapshot(blockSnapshot).build());
-                if (!hasPermission(isBanned, player, Permissions.ALLOW_BLOCK_BREAK)) {
-                    event.setCancelled(true);
-                    return;
-                }
+        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> transactions.forEach(transaction -> {
+            BlockSnapshot blockSnapshot = transaction.getOriginal();
+            boolean isBanned = plugin.getConfig().isBlockBreakBanned(ItemStack.builder().fromBlockSnapshot(blockSnapshot).build());
+            if (!hasPermission(isBanned, player, Permissions.ALLOW_BLOCK_BREAK)) {
+                event.setCancelled(true);
+                return;
+            }
 
-                blockSnapshot.getLocation().filter(location -> isBanned).ifPresent(location -> warnStaff(plugin, Messages.playerBrokeBlock(player.getName(), blockSnapshot.getState().getType().getId(), getVariantId(blockSnapshot), location.getBlockX(), location.getBlockY(), location.getBlockZ())));
-            });
-        });
+            blockSnapshot.getLocation().filter(location -> isBanned).ifPresent(location -> warnStaff(plugin, Messages.playerBrokeBlock(player.getName(), blockSnapshot.getState().getType().getId(), getVariantId(blockSnapshot), location.getBlockX(), location.getBlockY(), location.getBlockZ())));
+        }));
     }
 
     @Listener
@@ -83,18 +82,16 @@ public class SpongeCCMListener// implements CCMListener<Break, Secondary, Place,
 
     @Listener
     public void blockPlace(ChangeBlockEvent.Place event, @First Player player, @Getter("getTransactions") List<Transaction<BlockSnapshot>> transactions) {
-        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> {
-            transactions.forEach(transaction -> {
-                BlockSnapshot blockSnapshot = transaction.getFinal();
-                boolean isBanned = plugin.getConfig().isBlockPlaceBanned(ItemStack.builder().fromBlockSnapshot(blockSnapshot).build());
-                if (!hasPermission(isBanned, player, Permissions.ALLOW_BLOCK_PLACE)) {
-                    event.setCancelled(true);
-                    return;
-                }
+        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> transactions.forEach(transaction -> {
+            BlockSnapshot blockSnapshot = transaction.getFinal();
+            boolean isBanned = plugin.getConfig().isBlockPlaceBanned(ItemStack.builder().fromBlockSnapshot(blockSnapshot).build());
+            if (!hasPermission(isBanned, player, Permissions.ALLOW_BLOCK_PLACE)) {
+                event.setCancelled(true);
+                return;
+            }
 
-                blockSnapshot.getLocation().filter(location -> isBanned).ifPresent(location -> warnStaff(plugin, Messages.playerPlacedBlock(player.getName(), blockSnapshot.getState().getType().getId(), getVariantId(blockSnapshot), location.getBlockX(), location.getBlockY(), location.getBlockZ())));
-            });
-        });
+            blockSnapshot.getLocation().filter(location -> isBanned).ifPresent(location -> warnStaff(plugin, Messages.playerPlacedBlock(player.getName(), blockSnapshot.getState().getType().getId(), getVariantId(blockSnapshot), location.getBlockX(), location.getBlockY(), location.getBlockZ())));
+        }));
     }
 
     @Listener
@@ -116,22 +113,18 @@ public class SpongeCCMListener// implements CCMListener<Break, Secondary, Place,
 
     @Listener
     public void dropItem(DropItemEvent.Dispense event, @First Player player, @Getter("getEntities") List<Entity> entities) {
-        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> {
-            entities.forEach(entity -> {
-                entity.get(Keys.REPRESENTED_ITEM).map(itemStackSnapshot -> ItemStack.builder().fromSnapshot(itemStackSnapshot).build()).ifPresent(itemStack -> {
-                    boolean isBanned = plugin.getConfig().isItemDropBanned(itemStack);
-                    if (!hasPermission(isBanned, player, Permissions.ALLOW_ITEM_DROP)) {
-                        event.setCancelled(true);
-                        return;
-                    }
+        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> entities.forEach(entity -> entity.get(Keys.REPRESENTED_ITEM).map(itemStackSnapshot -> ItemStack.builder().fromSnapshot(itemStackSnapshot).build()).ifPresent(itemStack -> {
+            boolean isBanned = plugin.getConfig().isItemDropBanned(itemStack);
+            if (!hasPermission(isBanned, player, Permissions.ALLOW_ITEM_DROP)) {
+                event.setCancelled(true);
+                return;
+            }
 
-                    if (isBanned) {
-                        Location<World> location = player.getLocation();
-                        warnStaff(plugin, Messages.playerDroppedItem(player.getName(), itemStack.getType().getId(), getVariantId(itemStack), itemStack.getQuantity(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
-                    }
-                });
-            });
-        });
+            if (isBanned) {
+                Location<World> location = player.getLocation();
+                warnStaff(plugin, Messages.playerDroppedItem(player.getName(), itemStack.getType().getId(), getVariantId(itemStack), itemStack.getQuantity(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+            }
+        })));
     }
 
     @Listener
@@ -212,22 +205,18 @@ public class SpongeCCMListener// implements CCMListener<Break, Secondary, Place,
         }
 
         Player player = (Player) entity.getShooter();
-        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> {
-            Sponge.getRegistry().getAllOf(HandType.class).forEach(handType -> {
-                player.getItemInHand(handType).filter(itemStack -> itemStack.getType() != ItemTypes.AIR).ifPresent(itemStack -> {
-                    boolean isBanned = plugin.getConfig().isRightClickBanned(itemStack);
-                    if (!hasPermission(isBanned, player, Permissions.ALLOW_RIGHT_CLICK)) {
-                        event.setCancelled(true);
-                        return;
-                    }
+        player.getGameModeData().get(Keys.GAME_MODE).filter(gameMode -> gameMode == GameModes.CREATIVE).flatMap(gameMode -> SpongeCCM.instance()).ifPresent(plugin -> Sponge.getRegistry().getAllOf(HandType.class).forEach(handType -> player.getItemInHand(handType).filter(itemStack -> itemStack.getType() != ItemTypes.AIR).ifPresent(itemStack -> {
+            boolean isBanned = plugin.getConfig().isRightClickBanned(itemStack);
+            if (!hasPermission(isBanned, player, Permissions.ALLOW_RIGHT_CLICK)) {
+                event.setCancelled(true);
+                return;
+            }
 
-                    if (isBanned) {
-                        Location<World> location = player.getLocation();
-                        warnStaff(plugin, Messages.playerRightItemClick(player.getName(), itemStack.getType().getId(), getVariantId(itemStack), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
-                    }
-                });
-            });
-        });
+            if (isBanned) {
+                Location<World> location = player.getLocation();
+                warnStaff(plugin, Messages.playerRightItemClick(player.getName(), itemStack.getType().getId(), getVariantId(itemStack), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+            }
+        })));
     }
 
     @Listener
