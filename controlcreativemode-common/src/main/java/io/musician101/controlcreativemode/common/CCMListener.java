@@ -1,7 +1,7 @@
 package io.musician101.controlcreativemode.common;
 
-public interface CCMListener<B, I, P, D, T, E, G, U, L>
-{
+public interface CCMListener<B, I, P, D, T, E, G, U, L> {
+
     void blockBreak(B event);
 
     void blockInteract(I event);
@@ -21,7 +21,7 @@ public interface CCMListener<B, I, P, D, T, E, G, U, L>
 
     void gameModeChange(G event);
 
-    void useItem(U event);
-
     void onProjectileLaunch(L event);
+
+    void useItem(U event);
 }

@@ -14,13 +14,15 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
-@Plugin(id = Reference.ID, name = Reference.NAME, version = Reference.VERSION, authors = {"Musician101"},
-        dependencies = {@Dependency(id = "io.musician101.common.java.minecraft.sponge", version = "3.0-SNAPSHOT")},
-        description = "Control what players do when they're in Creative Mode.")
-public class SpongeCCM extends AbstractSpongePlugin<SpongeCCMConfig>
-{
+@Plugin(id = Reference.ID, name = Reference.NAME, version = Reference.VERSION, authors = {"Musician101"}, dependencies = {@Dependency(id = "io.musician101.common.java.minecraft.sponge", version = "3.0-SNAPSHOT")}, description = "Control what players do when they're in Creative Mode.")
+public class SpongeCCM extends AbstractSpongePlugin<SpongeCCMConfig> {
+
     @Inject
     private PluginContainer pluginContainer;
+
+    public static Optional<SpongeCCM> instance() {
+        return Sponge.getPluginManager().getPlugin(Reference.ID).flatMap(PluginContainer::getInstance).filter(SpongeCCM.class::isInstance).map(SpongeCCM.class::cast);
+    }
 
     @Nonnull
     @Override
@@ -29,15 +31,9 @@ public class SpongeCCM extends AbstractSpongePlugin<SpongeCCMConfig>
     }
 
     @Listener
-    public void preInit(GamePreInitializationEvent event)
-    {
+    public void preInit(GamePreInitializationEvent event) {
         config = new SpongeCCMConfig();
         Sponge.getEventManager().registerListeners(this, new SpongeCCMListener());
         Sponge.getCommandManager().register(this, SpongeCCMCommands.ccm());
-    }
-
-    public static Optional<SpongeCCM> instance()
-    {
-        return Sponge.getPluginManager().getPlugin(Reference.ID).flatMap(PluginContainer::getInstance).filter(SpongeCCM.class::isInstance).map(SpongeCCM.class::cast);
     }
 }

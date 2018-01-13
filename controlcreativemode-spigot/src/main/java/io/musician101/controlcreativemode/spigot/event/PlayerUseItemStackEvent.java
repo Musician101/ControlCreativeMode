@@ -6,43 +6,37 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerUseItemStackEvent extends PlayerEvent implements Cancellable
-{
-    private static final HandlerList handlers = new HandlerList();
-    private boolean isCancelled = false;
-    private final ItemStack itemStack;
+public class PlayerUseItemStackEvent extends PlayerEvent implements Cancellable {
 
-    public PlayerUseItemStackEvent(ItemStack itemStack, Player player)
-    {
+    private static final HandlerList handlers = new HandlerList();
+    private final ItemStack itemStack;
+    private boolean isCancelled = false;
+
+    public PlayerUseItemStackEvent(ItemStack itemStack, Player player) {
         super(player);
         this.itemStack = itemStack;
     }
 
-    @Override
-    public boolean isCancelled()
-    {
-        return isCancelled;
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     @Override
-    public void setCancelled(boolean isCancelled)
-    {
-        this.isCancelled = isCancelled;
+    public HandlerList getHandlers() {
+        return handlers;
     }
 
-    public ItemStack getItem()
-    {
+    public ItemStack getItem() {
         return itemStack;
     }
 
     @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
+    public boolean isCancelled() {
+        return isCancelled;
     }
 
-    public static HandlerList getHandlerList()
-    {
-        return handlers;
+    @Override
+    public void setCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 }
