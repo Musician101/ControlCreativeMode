@@ -1,6 +1,5 @@
 package io.musician101.controlcreativemode.spigot.listener;
 
-import io.musician101.controlcreativemode.common.CCMListener;
 import io.musician101.controlcreativemode.common.Reference.Messages;
 import io.musician101.controlcreativemode.common.Reference.Permissions;
 import io.musician101.controlcreativemode.spigot.SpigotCCM;
@@ -33,10 +32,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
-public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInteractEvent, BlockPlaceEvent, EntityDamageByEntityEvent, PlayerDropItemEvent, PlayerInteractEntityEvent, PlayerGameModeChangeEvent, PlayerUseItemStackEvent, ProjectileLaunchEvent>, Listener {
+public class SpigotCCMListener implements Listener {
 
     @EventHandler
-    @Override
     public void blockBreak(BlockBreakEvent event) {
         if (event.isCancelled()) {
             return;
@@ -63,7 +61,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
     }
 
     @EventHandler
-    @Override
     public void blockInteract(PlayerInteractEvent event) {
         if (event.isCancelled()) {
             return;
@@ -100,7 +97,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
     }
 
     @EventHandler
-    @Override
     public void blockPlace(BlockPlaceEvent event) {
         if (event.isCancelled()) {
             return;
@@ -127,7 +123,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
     }
 
     @EventHandler
-    @Override
     public void damageEntity(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player)) {
             return;
@@ -151,7 +146,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
     }
 
     @EventHandler
-    @Override
     public void dropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         if (player.getGameMode() != GameMode.CREATIVE) {
@@ -175,7 +169,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
     }
 
     @EventHandler
-    @Override
     public void entityInteract(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();
         Player player = event.getPlayer();
@@ -199,7 +192,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
     }
 
     @EventHandler
-    @Override
     public void gameModeChange(PlayerGameModeChangeEvent event) {
         if (!isInventoryEmpty(event.getPlayer())) {
             warnStaff(Messages.playerChangeGameMode(event.getPlayer().getName(), event.getNewGameMode().toString()));
@@ -265,7 +257,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
         warnStaff(Messages.playerPlacedBlock(player.getName(), bucket.getType().toString(), Short.toString(bucket.getDurability()), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
-    @Override
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (event.isCancelled()) {
@@ -305,7 +296,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
         }
 
         List<Material> materials = Arrays.asList(Material.STONE, Material.DIRT, Material.WOOD, Material.SAPLING, Material.SAND, Material.LOG, Material.LEAVES, Material.SPONGE, Material.SANDSTONE, Material.LONG_GRASS, Material.WOOL, Material.RED_ROSE, Material.DOUBLE_STEP, Material.STEP, Material.STAINED_GLASS, Material.MONSTER_EGGS, Material.SMOOTH_BRICK, Material.WOOD_DOUBLE_STEP, Material.WOOD_STEP, Material.COBBLE_WALL, Material.QUARTZ_BLOCK, Material.STAINED_CLAY, Material.STAINED_GLASS_PANE, Material.LEAVES_2, Material.LOG_2, Material.PRISMARINE, Material.CARPET, Material.DOUBLE_PLANT, Material.RED_SANDSTONE, Material.COAL, Material.GOLDEN_APPLE, Material.RAW_FISH, Material.INK_SACK, Material.MONSTER_EGG, Material.SKULL_ITEM);
-
         ItemStack item = block.getState().getData().toItemStack();
         if (!materials.contains(item.getType())) {
             item.setDurability((short) 0);
@@ -314,14 +304,19 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
         // As an item it has 3 durabilities (0-2).
         // As a block it has 6 durabilities (1-2,5-6,9-10).
         if (item.getType() == Material.ANVIL) {
-            if (item.getDurability() == 1 || item.getDurability() == 2) {
-                item.setDurability((short) 0);
-            }
-            else if (item.getDurability() == 3 || item.getDurability() == 4) {
-                item.setDurability((short) 1);
-            }
-            else if (item.getDurability() == 9 || item.getDurability() == 10) {
-                item.setDurability((short) 2);
+            switch (item.getDurability()) {
+                case 1:
+                case 2:
+                    item.setDurability((short) 0);
+                    break;
+                case 3:
+                case 4:
+                    item.setDurability((short) 1);
+                    break;
+                case 9:
+                case 10:
+                    item.setDurability((short) 2);
+                    break;
             }
         }
 
@@ -329,7 +324,6 @@ public class SpigotCCMListener implements CCMListener<BlockBreakEvent, PlayerInt
     }
 
     @EventHandler
-    @Override
     public void useItem(PlayerUseItemStackEvent event) {
         if (event.isCancelled()) {
             return;
