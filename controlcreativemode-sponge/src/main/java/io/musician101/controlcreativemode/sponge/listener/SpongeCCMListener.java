@@ -157,12 +157,12 @@ public class SpongeCCMListener// implements CCMListener<Break, Secondary, Place,
     }
 
     private String getVariantId(ItemStack itemStack) {
-        return StringUtils.join(itemStack.getKeys().stream().filter(key -> key.getValueToken().isSupertypeOf(TypeToken.of(CatalogType.class))).map(key -> ((CatalogType) itemStack.get((Key) key).get()).getId()).collect(Collectors.toList()), ":");
+        return StringUtils.join(itemStack.getKeys().stream().filter(key -> key.getValueToken().isSupertypeOf(TypeToken.of(CatalogType.class))).map(key -> itemStack.get((Key) key)).filter(Optional::isPresent).map(value -> ((CatalogType) value.get()).getId()).collect(Collectors.toList()), ":");
     }
 
     //TODO need to test this to see if it actually works
     private String getVariantId(BlockSnapshot blockSnapshot) {
-        return StringUtils.join(blockSnapshot.getKeys().stream().filter(key -> key.getValueToken().isSupertypeOf(TypeToken.of(CatalogType.class))).map(key -> ((CatalogType) blockSnapshot.get((Key) key).get()).getId()).collect(Collectors.toList()), ":");
+        return StringUtils.join(blockSnapshot.getKeys().stream().filter(key -> key.getValueToken().isSupertypeOf(TypeToken.of(CatalogType.class))).map(key -> blockSnapshot.get((Key) key)).filter(Optional::isPresent).map(value -> ((CatalogType) value.get()).getId()).collect(Collectors.toList()), ":");
         /*if (blockSnapshot.supports(Keys.STONE_TYPE))
             return blockSnapshot.get(Keys.STONE_TYPE).get().getId();
         else if (blockSnapshot.supports(Keys.DIRT_TYPE))
